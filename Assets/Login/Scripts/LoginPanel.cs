@@ -14,6 +14,11 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] GameObject noticePopUp;
     [SerializeField] GameObject okPopUp;
     [SerializeField] GameObject checkIdPopUp;
+    [SerializeField] GameObject enterIdPopUp;
+
+    [SerializeField] GameObject chatManager;
+    [SerializeField] GameObject chatingArea;
+    [SerializeField] GameObject loginPanel;
 
     private MySqlConnection connection;
     private MySqlDataReader reader;
@@ -23,6 +28,7 @@ public class LoginPanel : MonoBehaviour
         noticePopUp.SetActive(false);
         okPopUp.SetActive(false);
         checkIdPopUp.SetActive(false);
+        enterIdPopUp.SetActive(false);
     }
 
     private void Start()
@@ -56,6 +62,12 @@ public class LoginPanel : MonoBehaviour
         {
             string id = idInputField.text;
             string password = passwordInputField.text;
+
+            if (string.IsNullOrEmpty(id))
+            {
+                enterIdPopUp.SetActive(true);
+                return;
+            }
 
             string sqlCommand = string.Format("SELECT ID FROM user_info WHERE ID ='{0}'", id);
 
@@ -106,6 +118,12 @@ public class LoginPanel : MonoBehaviour
             string id = idInputField.text;
             string password = passwordInputField.text;
 
+            if (string.IsNullOrEmpty(id))
+            {
+                checkIdPopUp.SetActive(true);
+                return;
+            }
+
             string sqlCommand = string.Format("SELECT ID,Password FROM user_info WHERE ID ='{0}'", id);
             MySqlCommand cmd = new MySqlCommand(sqlCommand, connection);
             reader = cmd.ExecuteReader();
@@ -123,6 +141,8 @@ public class LoginPanel : MonoBehaviour
                     {
                         PhotonNetwork.LocalPlayer.NickName = id;
                         PhotonNetwork.ConnectUsingSettings();
+
+                        ActiveChatManager();
 
                         if (!reader.IsClosed)
                             reader.Close();
@@ -150,6 +170,14 @@ public class LoginPanel : MonoBehaviour
             Debug.Log(e.Message);
         }
     }
+
+    public void ActiveChatManager()
+    {
+        chatManager.SetActive(true);
+        chatingArea.SetActive(true);
+        loginPanel.SetActive(false);
+    }
+
     public void Quit()
     {
 #if UNITY_EDITOR
