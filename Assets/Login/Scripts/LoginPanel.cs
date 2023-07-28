@@ -34,7 +34,8 @@ public class LoginPanel : MonoBehaviour
     {
         try
         {
-            string serverInfo = "Server=127.0.0.1; Database=crazyarcade; Uid=root; Pwd=pkb7018; Port=3306; CharSet=utf8;";
+            //string serverInfo = "Server=192.168.0.135; Database=crazyarcade; Uid=root; Pwd=pkb7018; Port=3306; CharSet=utf8;";
+            string serverInfo = "Server=127.0.0.1; Database=userdata; Uid=root; Pwd=1234; Port=3306; CharSet=utf8;";
             connection = new MySqlConnection(serverInfo);
             connection.Open();
 
@@ -150,6 +151,7 @@ public class LoginPanel : MonoBehaviour
             Debug.Log(e.Message);
         }
     }
+
     public void Quit()
     {
 #if UNITY_EDITOR
