@@ -2,6 +2,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Resources;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +16,7 @@ public class RoomEntry : MonoBehaviour
     [SerializeField]
     private TMP_Text roomNumber;
     [SerializeField]
-    private TMP_Text roomState;
+    private Image roomState;
     [SerializeField]
     private TMP_Text currentPlayer;
     [SerializeField]
@@ -32,7 +33,7 @@ public class RoomEntry : MonoBehaviour
         roomName.text = info.Name;
         currentPlayer.text = string.Format("{0} / {1}", info.PlayerCount, info.MaxPlayers);
         joinRoomButton.interactable = info.PlayerCount < info.MaxPlayers;
-        roomState.text = (info.PlayerCount < info.MaxPlayers) ? "Waiting" : "Full";
+        roomState.sprite = (info.PlayerCount < info.MaxPlayers) ? Resources.Load<Sprite>("Waiting") : Resources.Load<Sprite>("Full");
         roomId = number;
         roomNumber.text = number.ToString();
     }
