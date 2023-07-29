@@ -23,19 +23,18 @@ public class RoomEntry : MonoBehaviour
     [SerializeField]
     private Button infoButton;
 
+    private int roomId;
     private RoomInfo info;
 
-    private List<RoomInfo> currRoomList;
-
-    public void Initialized(RoomInfo roomInfo)
+    public void Initialized(RoomInfo roomInfo, int number)
     {
         info = roomInfo;
         roomName.text = info.Name;
         currentPlayer.text = string.Format("{0} / {1}", info.PlayerCount, info.MaxPlayers);
         joinRoomButton.interactable = info.PlayerCount < info.MaxPlayers;
         roomState.text = (info.PlayerCount < info.MaxPlayers) ? "Waiting" : "Full";
-        roomNumber.text = currRoomList.Count.ToString();
-        currRoomList.Add(info);
+        roomId = number;
+        roomNumber.text = number.ToString();
     }
 
     public void OnJoinButtonClicked()

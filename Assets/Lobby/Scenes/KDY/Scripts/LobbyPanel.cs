@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class LobbyPanel : MonoBehaviour
 {
@@ -45,7 +46,9 @@ public class LobbyPanel : MonoBehaviour
             if (room.RemovedFromList || !room.IsVisible || !room.IsOpen)
             {
                 if (roomDictionary.ContainsKey(room.Name))
+                {
                     roomDictionary.Remove(room.Name);
+                }
 
                 continue;
             }
@@ -57,10 +60,12 @@ public class LobbyPanel : MonoBehaviour
                 roomDictionary.Add(room.Name, room);
         }
 
+        int cnt = 0;
+
         foreach (RoomInfo room in roomDictionary.Values)
         {
             RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
-            entry.Initialized(room);
+            entry.Initialized(room, ++cnt);
         }
     }
 
@@ -95,6 +100,9 @@ public class LobbyPanel : MonoBehaviour
         int maxPlayer = (string.IsNullOrEmpty(maxPlayerInputField.text)) ? 8 : int.Parse(maxPlayerInputField.text);
         maxPlayer = Mathf.Clamp(maxPlayer, 1, 8);
 
-        PhotonNetwork.CreateRoom(roomName, new RoomOptions() { MaxPlayers = maxPlayer }, null);
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = maxPlayer;
+
+        PhotonNetwork.CreateRoom(roomName, roomOptions, null);
     }
 }
