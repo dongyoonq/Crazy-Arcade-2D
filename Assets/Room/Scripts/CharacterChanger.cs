@@ -10,7 +10,7 @@ public interface IChangeableCharacter
 
 public class CharacterChanger : MonoBehaviour
 {
-	public static UnityAction<CharacterData> OnChangedCharacter;
+	public static UnityAction< CharacterData> OnChangedCharacter;
 
 	public void ChooseCharacter(CharacterData data)
 	{

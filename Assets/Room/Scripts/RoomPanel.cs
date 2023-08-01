@@ -1,17 +1,18 @@
 using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameRoom : MonoBehaviour
+public class RoomPanel : MonoBehaviourPun
 {
-	[SerializeField] 
+	[SerializeField]
+	private RoomInfo roomInfo;
+
+	[SerializeField]
 	private RectTransform playerContent;
-	
+
 	[SerializeField]
 	private Button startButton;
 
@@ -76,11 +77,16 @@ public class GameRoom : MonoBehaviour
 		if (index == 8)
 			return;
 
-		WaitingPlayer waitingPlayer = playerContent.GetComponentsInParent<WaitingPlayer>()[index];
+		WaitingPlayer waitingPlayer = playerContent.GetComponentsInChildren<WaitingPlayer>()[index];
 		waitingPlayer.SetPlayer(player);
+		waitingPlayer.OnChangedOtherPlayerCharacter += UpdateOtherPlayerCharacter;
 		playerDictionary.Add(player.ActorNumber, waitingPlayer);
 	}
 
+	private void UpdateOtherPlayerCharacter(int actorNumber, CharacterData data)
+	{
+		playerDictionary[actorNumber].playerImg.sprite = data.Character;
+	}
 
 
 	private WaitingPlayer GetPalyerEntry(Player chkPlayer)
@@ -93,10 +99,6 @@ public class GameRoom : MonoBehaviour
 		//startButton.gameObject.SetActive()
 	}
 
-	
-
-	
-
 	/// <summary>
 	/// 모든 플레이어가 ready 상태가 되면 start button 활성 처리
 	/// </summary>
@@ -106,7 +108,7 @@ public class GameRoom : MonoBehaviour
 		{
 			int readyCount = PhotonNetwork.PlayerList.Count(x => x.GetReady());
 
-			if(readyCount > 1) //방장 혼자 있을 때는 게임 시작 못하게 막음
+			if (readyCount > 1) //방장 혼자 있을 때는 게임 시작 못하게 막음
 			{
 				if (readyCount == PhotonNetwork.PlayerList.Length)
 					startButton.onClick.AddListener(() => StartGame());

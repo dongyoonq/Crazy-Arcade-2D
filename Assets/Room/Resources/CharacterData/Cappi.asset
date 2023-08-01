@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eb3d9ed9455d2e42bd1868935633a7c, type: 3}
   m_Name: Cappi
   m_EditorClassIdentifier: 
+  Name: Cappi
   Character: {fileID: 21300000, guid: d1c4a859d3da15d4cae5e291faa0b510, type: 3}
   Description: {fileID: 21300000, guid: 850800630cfe38743a6258970bfcdab2, type: 3}

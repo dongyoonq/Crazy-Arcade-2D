@@ -1,3 +1,5 @@
+using ExitGames.Client.Photon.StructWrapping;
+using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,30 +8,24 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class WaitingPlayer : MonoBehaviour, IChangeableCharacter
+public class WaitingPlayer : MonoBehaviourPun, IChangeableCharacter
 {
 	[SerializeField]
-	private Image WaitingView;
+	private SlotController slotController;
 
 	[SerializeField]
-	private Image CloseView;
-	
-	[SerializeField] 
-	private Image StateDisable;
+	private PlayerWaitState playerWaitState;
+
+	public Image playerImg;
 
 	[SerializeField]
-	private Image StateEnable;
-
-	[SerializeField] 
-	private Image StateMaster;
-
-	[SerializeField]
-	private Image PlayerImg;
-
-	[SerializeField]
-	private TMP_Text txtPlayerId;
+	private TMP_Text playerId;
 
 	public Player player { get; private set; }
+
+	public UnityAction<int, CharacterData> OnChangedOtherPlayerCharacter;
+
+	private bool IsEmptySlot;
 
 	private void Awake()
 	{
@@ -39,19 +35,16 @@ public class WaitingPlayer : MonoBehaviour, IChangeableCharacter
 	public void SetPlayer(Player player)
 	{
 		this.player = player;
+		
+		playerWaitState.SetPlayerState(player.IsMasterClient);
 
-		txtPlayerId.text = player.NickName;
+		playerId.text = player.NickName;
+		playerImg.gameObject.SetActive(true);
 
-		bool isMaster = player.IsMasterClient;
-
-		StateMaster.gameObject.SetActive(isMaster);
-		StateDisable.gameObject.SetActive(!isMaster);
-		StateEnable.gameObject.SetActive(!isMaster);
-
-		if(player.IsLocal)
-		{
+		if (player.IsLocal)
 			CharacterChanger.OnChangedCharacter += OnChangeCharacter;
-		}
+
+ 		slotController.SetButtonAction();
 	}
 
 	/// <summary>
@@ -59,17 +52,20 @@ public class WaitingPlayer : MonoBehaviour, IChangeableCharacter
 	/// </summary>
 	public void UpdateReadyInfo()
 	{
-		if(player.IsMasterClient == false)
-		{
-			bool isReady = player.GetReady();
-
-			StateEnable.gameObject.SetActive(isReady);
-			StateDisable.gameObject.SetActive(!isReady);
-		}
+		if(player.IsMasterClient == false) 
+			playerWaitState.UpdateReadyInfo(player.GetReady());
 	}
 
 	public void OnChangeCharacter(CharacterData data)
+	{ 
+		playerImg.sprite = data.Character;
+		photonView.RPC("ChangedOtherCharacter", RpcTarget.Others, player.ActorNumber, data.Name);
+	}
+
+	[PunRPC]
+	private void ChangedOtherCharacter(int actorNum, string dataName)
 	{
-		PlayerImg.sprite = data.Character;
+		CharacterData data  = Resources.Load<CharacterData>($"CharacterData/{dataName}");
+		OnChangedOtherPlayerCharacter?.Invoke(actorNum, data);
 	}
 }

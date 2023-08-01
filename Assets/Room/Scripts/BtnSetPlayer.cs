@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class BtnSetPlayer : MonoBehaviour
 {
-
 	[SerializeField]
     private CharacterData characterInfo;
 
