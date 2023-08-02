@@ -1,8 +1,10 @@
+using MySql.Data.MySqlClient;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.UI;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
@@ -14,14 +16,23 @@ public class LobbyPanel : MonoBehaviour
     [SerializeField]
     private RectTransform roomContent;
     [SerializeField]
-    private GameObject createRoomPanel;
-
+    private Canvas popUpCanvas;
     [SerializeField]
-    private TMP_InputField roomNameInputField;
+    private TMP_Text playerName;
     [SerializeField]
-    private TMP_InputField maxPlayerInputField;
+    private TMP_Text playerLevel;
+    [SerializeField]
+    private TMP_Text playerExp;
 
+    private MySqlDataReader reader;
+    private CreateRoomPanel createRoomPanel;
     private Dictionary<string, RoomInfo> roomDictionary;
+
+    private void Update()
+    {
+        playerName.text = PhotonNetwork.NickName;
+        ReadSqlData();
+    }
 
     private void Awake()
     {
@@ -31,6 +42,27 @@ public class LobbyPanel : MonoBehaviour
     private void OnDisable()
     {
         roomDictionary.Clear();
+    }
+
+    public void ReadSqlData()
+    {
+        string sqlCommand = string.Format("SELECT Level,Exp FROM user_info WHERE ID ='{0}'", PhotonNetwork.NickName);
+        MySqlCommand cmd = new MySqlCommand(sqlCommand, LoginPanel.connection);
+        reader = cmd.ExecuteReader();
+
+        if (reader.HasRows)
+        {
+            while (reader.Read())
+            {
+                playerLevel.text = string.Format("Lv.  {0}", reader["Level"].ToString());
+                playerExp.text = reader["Exp"].ToString();
+            }
+
+            if (!reader.IsClosed)
+                reader.Close();
+
+            return;
+        }
     }
 
     public void UpdateRoomList(List<RoomInfo> roomList)
@@ -76,12 +108,15 @@ public class LobbyPanel : MonoBehaviour
 
     public void OnCreateRoomButtonClicked()
     {
-        createRoomPanel.SetActive(true);
+        createRoomPanel = Instantiate(Resources.Load<CreateRoomPanel>("Prefabs/CreateRoom"));
+        createRoomPanel.transform.SetParent(popUpCanvas.transform, false);
+        createRoomPanel.okBtn.onClick.AddListener(OnCreateRoomConfirmButtonClicked);
+        createRoomPanel.cancelBtn.onClick.AddListener(OnCreateRoomCancelButtonClicked);
     }
 
     public void OnCreateRoomCancelButtonClicked()
     {
-        createRoomPanel.SetActive(false);
+        Destroy(createRoomPanel.gameObject);
     }
 
     public void OnCreateRoomConfirmButtonClicked()
@@ -91,18 +126,23 @@ public class LobbyPanel : MonoBehaviour
 
     public void CreateRoom()
     {
-        createRoomPanel.SetActive(false);
-
-        string roomName = roomNameInputField.text;
+        string roomName = createRoomPanel.roomNameInput.text;
         if (string.IsNullOrEmpty(roomName))
             roomName = $"Room {Random.Range(0, 1000)}";
 
-        int maxPlayer = (string.IsNullOrEmpty(maxPlayerInputField.text)) ? 8 : int.Parse(maxPlayerInputField.text);
-        maxPlayer = Mathf.Clamp(maxPlayer, 1, 8);
+        int maxPlayer = 8;
 
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = maxPlayer;
 
+        if (createRoomPanel.passwordToggle.isOn)
+        {
+            roomOptions.CustomRoomProperties = new PhotonHashtable() { { "Password", createRoomPanel.passwordInput.text } };
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { "Password" };
+        }
+
         PhotonNetwork.CreateRoom(roomName, roomOptions, null);
+
+        Destroy(createRoomPanel.gameObject);
     }
 }

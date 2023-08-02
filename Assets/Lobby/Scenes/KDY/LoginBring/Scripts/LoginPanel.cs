@@ -15,7 +15,7 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] GameObject okPopUp;
     [SerializeField] GameObject checkIdPopUp;
 
-    private MySqlConnection connection;
+    public static MySqlConnection connection;
     private MySqlDataReader reader;
 
     private void OnEnable()
@@ -79,7 +79,7 @@ public class LoginPanel : MonoBehaviour
                 if (!reader.IsClosed)
                     reader.Close();
 
-                sqlCommand = string.Format("INSERT INTO user_info(Id, Password, Exp, Money) VALUES ('{0}', '{1}', '{2}', '{3}');", id, password, 0f, 0f);
+                sqlCommand = string.Format("INSERT INTO user_info(Id, Password, Level, Exp, Money) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}');", id, password, 1, 0f, 0f);
 
                 cmd = new MySqlCommand(sqlCommand, connection);
                 if (cmd.ExecuteNonQuery() == 1)
