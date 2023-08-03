@@ -3254,7 +3254,6 @@ GameObject:
   - component: {fileID: 7986823479633298459}
   - component: {fileID: 7905461192741743951}
   - component: {fileID: 164569344225472249}
-  - component: {fileID: 5958251688886532660}
   m_Layer: 5
   m_Name: CreateRoomPanel
   m_TagString: Untagged
@@ -3324,23 +3323,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5958251688886532660
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8765690409887681055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbc967f98db2aaf46b9702c1a3099eb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomNameInput: {fileID: 3630139118799598953}
-  passwordInput: {fileID: 2997070808298128377}
-  passwordToggle: {fileID: 128099411301557194}
-  okBtn: {fileID: 5636533616098621013}
-  cancelBtn: {fileID: 1716697172318503000}
 --- !u!1 &8941395545724129627
 GameObject:
   m_ObjectHideFlags: 0

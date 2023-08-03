@@ -3,26 +3,23 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
-using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.UI;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class LobbyPanel : MonoBehaviour
 {
-    [SerializeField]
-    private RoomEntry roomEntryPrefab;
-    [SerializeField]
-    private RectTransform roomContent;
-    [SerializeField]
-    private Canvas popUpCanvas;
-    [SerializeField]
-    private TMP_Text playerName;
-    [SerializeField]
-    private TMP_Text playerLevel;
-    [SerializeField]
-    private TMP_Text playerExp;
+    [SerializeField] private RoomEntry roomEntryPrefab;
+    [SerializeField] private RectTransform roomContent;
+    [SerializeField] private Canvas popUpCanvas;
+    [SerializeField] private TMP_Text playerName;
+    [SerializeField] private TMP_Text playerLevel;
+    [SerializeField] private TMP_Text playerExp;
+
+    [SerializeField] RectTransform playerContent;
+    [SerializeField] LobbyPlayer playerPrefab;
 
     private MySqlDataReader reader;
     private CreateRoomPanel createRoomPanel;
@@ -62,6 +59,22 @@ public class LobbyPanel : MonoBehaviour
                 reader.Close();
 
             return;
+        }
+    }
+
+    public void UpdatePlayerList()
+    {
+        // Clear Player List
+        for (int i = 0; i < playerContent.childCount; i++)
+            Destroy(playerContent.GetChild(i).gameObject);
+
+        Debug.Log(string.Format("{0}", PhotonNetwork.PlayerList.Length));
+
+        // Update Player List
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            LobbyPlayer entry = Instantiate(playerPrefab, playerContent);
+            entry.Initialized(player);
         }
     }
 
@@ -134,6 +147,9 @@ public class LobbyPanel : MonoBehaviour
 
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = maxPlayer;
+
+        roomOptions.CustomRoomProperties = new PhotonHashtable() { { "RoomName", roomName } };
+        roomOptions.CustomRoomPropertiesForLobby = new string[] { "RoomName" };
 
         if (createRoomPanel.passwordToggle.isOn)
         {

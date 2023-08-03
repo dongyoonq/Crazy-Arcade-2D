@@ -39,7 +39,7 @@ public class RoomEntry : MonoBehaviour
     public void Initialized(RoomInfo roomInfo, int number)
     {
         info = roomInfo;
-        roomName.text = info.Name;
+        roomName.text = info.CustomProperties["RoomName"].ToString();
         currentPlayer.text = string.Format("{0} / {1}", info.PlayerCount, info.MaxPlayers);
         joinRoomButton.interactable = info.PlayerCount < info.MaxPlayers;
         roomState.sprite = (info.PlayerCount < info.MaxPlayers) ? Resources.Load<Sprite>("Waiting") : Resources.Load<Sprite>("Full");
@@ -48,7 +48,7 @@ public class RoomEntry : MonoBehaviour
         if (roomInfo.CustomProperties.ContainsKey("Password"))
         {
             isPasswordRoom = true;
-            roomPassword = (string)roomInfo.CustomProperties["Password"];
+            roomPassword = (string)info.CustomProperties["Password"];
         }
     }
 

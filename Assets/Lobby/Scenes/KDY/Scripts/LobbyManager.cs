@@ -107,11 +107,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         SetActivePanel(Panel.Lobby);
+        lobbyPanel.UpdatePlayerList();
     }
 
     public override void OnLeftLobby()
     {
         SetActivePanel(Panel.Login);
+        lobbyPanel.UpdatePlayerList();
     }
 
     private void SetActivePanel(Panel panel)
