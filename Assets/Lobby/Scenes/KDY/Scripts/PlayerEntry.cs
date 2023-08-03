@@ -6,26 +6,29 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerEntry : MonoBehaviour
+namespace KDY
 {
-    [SerializeField] private TMP_Text playerName;
-    [SerializeField] private TMP_Text playerReady;
-    [SerializeField] private Button playerReadyButton;
-
-    private Player player;
-
-    public void Initialized(Player player)
+    public class PlayerEntry : MonoBehaviour
     {
-        this.player = player;
-        playerName.text = player.NickName;
-        playerReady.text = player.GetReady() ? "Ready" : "";
-        playerReadyButton.gameObject.SetActive(player.IsLocal);
-    }
+        [SerializeField] private TMP_Text playerName;
+        [SerializeField] private TMP_Text playerReady;
+        [SerializeField] private Button playerReadyButton;
 
-    public void OnReadyButtonClicked()
-    {
-        bool ready = player.GetReady();
-        ready = !ready;
-        player.SetReady(ready);
+        private Player player;
+
+        public void Initialized(Player player)
+        {
+            this.player = player;
+            playerName.text = player.NickName;
+            playerReady.text = player.GetReady() ? "Ready" : "";
+            playerReadyButton.gameObject.SetActive(player.IsLocal);
+        }
+
+        public void OnReadyButtonClicked()
+        {
+            bool ready = player.GetReady();
+            ready = !ready;
+            player.SetReady(ready);
+        }
     }
 }

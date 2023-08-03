@@ -4,14 +4,17 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class LobbyPlayer : MonoBehaviour
+namespace KDY
 {
-    [SerializeField] TMP_Text playerName;
-    private Player player;
-
-    public void Initialized(Player player)
+    public class LobbyPlayer : MonoBehaviour
     {
-        this.player = player;
-        playerName.text = player.NickName;
+        [SerializeField] TMP_Text playerName;
+        private Player player;
+
+        public void Initialized(Player player)
+        {
+            this.player = player;
+            playerName.text = player.NickName;
+        }
     }
 }
