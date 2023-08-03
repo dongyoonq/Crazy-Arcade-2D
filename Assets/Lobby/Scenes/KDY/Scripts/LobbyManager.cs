@@ -12,8 +12,8 @@ namespace KDY
     {
         public enum Panel { Login, Lobby, Room }
 
-        [SerializeField]
-        private LoginPanel loginPanel;
+        //[SerializeField]
+        //private LoginPanel loginPanel;
         [SerializeField]
         private RoomPanel roomPanel;
         [SerializeField]
