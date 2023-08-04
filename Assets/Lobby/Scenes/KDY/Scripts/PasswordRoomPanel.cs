@@ -4,8 +4,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PasswordRoomPanel : MonoBehaviour
+namespace KDY
 {
-    [SerializeField] public TMP_InputField passwordInput;
-    [SerializeField] public Button confirmBtn;
+    public class PasswordRoomPanel : MonoBehaviour
+    {
+        [SerializeField] public TMP_InputField passwordInput;
+        [SerializeField] public Button confirmBtn;
+    }
 }

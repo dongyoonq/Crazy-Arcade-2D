@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb0235a30ed8e645bd88285ed9644aa, type: 3}
+  m_Name: Factory02Data
+  m_EditorClassIdentifier: 
+  maps:
+  - map: {fileID: 0}
+    title: "\uD329\uD1A0\uB9AC 02"
+    maxPlayer: 8
+    level: 3
+    popularity: 1
+    rank: 0
+    info: "\uAC01\uC885 \uBB3C\uD48D\uC120\uC744 \uB9CC\uB4DC\uB294 \uACF5\uC7A5\uC785\uB2C8\uB2E4.
+      \uD558\uC218\uAD6C\uB97C \uD1B5\uD574 \uAC11\uC790\uAE30 \uD280\uC5B4\uB098\uC624\uB294
+      \uBB3C\uC904\uAE30\uB97C \uC870\uC2EC\uD558\uC138\uC694."
+    favorites: 0
+    mapImg: {fileID: 0}
+    star1: {fileID: 942568707, guid: 155b23651989d384d8dab99f2e7f712b, type: 3}
+    star2: {fileID: 365158072, guid: 155b23651989d384d8dab99f2e7f712b, type: 3}

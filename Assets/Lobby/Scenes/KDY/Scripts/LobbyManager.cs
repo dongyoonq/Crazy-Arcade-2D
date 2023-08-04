@@ -6,118 +6,121 @@ using Unity.VisualScripting;
 using UnityEngine;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
-public class LobbyManager : MonoBehaviourPunCallbacks
+namespace KDY
 {
-    public enum Panel { Login, Lobby, Room }
-
-    [SerializeField]
-    private LoginPanel loginPanel;
-    [SerializeField]
-    private RoomPanel roomPanel;
-    [SerializeField]
-    private LobbyPanel lobbyPanel;
-
-    private void Start()
+    public class LobbyManager : MonoBehaviourPunCallbacks
     {
-        if (PhotonNetwork.IsConnected)
-            OnConnectedToMaster();
-        else if (PhotonNetwork.InRoom)
-            OnJoinedRoom();
-        else if (PhotonNetwork.InLobby)
-            OnJoinedLobby();
-        else
-            OnDisconnected(DisconnectCause.None);
+        public enum Panel { Login, Lobby, Room }
 
-        SetActivePanel(Panel.Login);
-    }
+        [SerializeField]
+        private LoginPanel loginPanel;
+        [SerializeField]
+        private RoomPanel roomPanel;
+        [SerializeField]
+        private LobbyPanel lobbyPanel;
 
-    public override void OnConnectedToMaster()
-    {
-        PhotonNetwork.JoinLobby();
-    }
+        private void Start()
+        {
+            if (PhotonNetwork.IsConnected)
+                OnConnectedToMaster();
+            else if (PhotonNetwork.InRoom)
+                OnJoinedRoom();
+            else if (PhotonNetwork.InLobby)
+                OnJoinedLobby();
+            else
+                OnDisconnected(DisconnectCause.None);
 
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        SetActivePanel(Panel.Login);
-    }
+            SetActivePanel(Panel.Login);
+        }
 
-    public override void OnCreateRoomFailed(short returnCode, string message)
-    {
-        SetActivePanel(Panel.Lobby);
-        Debug.Log(string.Format("Create room failed with error({0}) : {1}", returnCode, message));
-    }
+        public override void OnConnectedToMaster()
+        {
+            PhotonNetwork.JoinLobby();
+        }
 
-    public override void OnJoinedRoom()
-    {
-        SetActivePanel(Panel.Room);
+        public override void OnDisconnected(DisconnectCause cause)
+        {
+            SetActivePanel(Panel.Login);
+        }
 
-        PhotonNetwork.LocalPlayer.SetReady(false);
-        PhotonNetwork.LocalPlayer.SetLoad(false);
+        public override void OnCreateRoomFailed(short returnCode, string message)
+        {
+            SetActivePanel(Panel.Lobby);
+            Debug.Log(string.Format("Create room failed with error({0}) : {1}", returnCode, message));
+        }
 
-        PhotonNetwork.AutomaticallySyncScene = true;
-        roomPanel.UpdatePlayerList();
-    }
+        public override void OnJoinedRoom()
+        {
+            SetActivePanel(Panel.Room);
 
-    public override void OnJoinRoomFailed(short returnCode, string message)
-    {
-        SetActivePanel(Panel.Lobby);
-        Debug.Log(string.Format("Join room failed with error({0}) : {1}", returnCode, message));
-    }
+            PhotonNetwork.LocalPlayer.SetReady(false);
+            PhotonNetwork.LocalPlayer.SetLoad(false);
 
-    public override void OnJoinRandomFailed(short returnCode, string message)
-    {
-        Debug.Log(string.Format("Join random room failed with error({0}) : {1}", returnCode, message));
-        Debug.Log("Create room instead");
+            PhotonNetwork.AutomaticallySyncScene = true;
+            roomPanel.UpdatePlayerList();
+        }
 
-        string roomName = string.Format("Room {0}", Random.Range(0, 1000));
-        PhotonNetwork.CreateRoom(roomName, new RoomOptions() { MaxPlayers = 8 });
-    }
+        public override void OnJoinRoomFailed(short returnCode, string message)
+        {
+            SetActivePanel(Panel.Lobby);
+            Debug.Log(string.Format("Join room failed with error({0}) : {1}", returnCode, message));
+        }
 
-    public override void OnLeftRoom()
-    {
-        PhotonNetwork.AutomaticallySyncScene = false;
-        SetActivePanel(Panel.Lobby);
-    }
+        public override void OnJoinRandomFailed(short returnCode, string message)
+        {
+            Debug.Log(string.Format("Join random room failed with error({0}) : {1}", returnCode, message));
+            Debug.Log("Create room instead");
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        lobbyPanel.UpdateRoomList(roomList);
-    }
+            string roomName = string.Format("Room {0}", Random.Range(0, 1000));
+            PhotonNetwork.CreateRoom(roomName, new RoomOptions() { MaxPlayers = 8 });
+        }
 
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        roomPanel.UpdatePlayerList();
-    }
+        public override void OnLeftRoom()
+        {
+            PhotonNetwork.AutomaticallySyncScene = false;
+            SetActivePanel(Panel.Lobby);
+        }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer)
-    {
-        roomPanel.UpdatePlayerList();
-    }
+        public override void OnRoomListUpdate(List<RoomInfo> roomList)
+        {
+            lobbyPanel.UpdateRoomList(roomList);
+        }
 
-    public override void OnMasterClientSwitched(Player newMasterClient)
-    {
-        roomPanel.UpdatePlayerList();
-    }
+        public override void OnPlayerEnteredRoom(Player newPlayer)
+        {
+            roomPanel.UpdatePlayerList();
+        }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
-    {
-        roomPanel.UpdatePlayerList();
-    }
+        public override void OnPlayerLeftRoom(Player otherPlayer)
+        {
+            roomPanel.UpdatePlayerList();
+        }
 
-    public override void OnJoinedLobby()
-    {
-        SetActivePanel(Panel.Lobby);
-    }
+        public override void OnMasterClientSwitched(Player newMasterClient)
+        {
+            roomPanel.UpdatePlayerList();
+        }
 
-    public override void OnLeftLobby()
-    {
-        SetActivePanel(Panel.Login);
-    }
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
+        {
+            roomPanel.UpdatePlayerList();
+        }
 
-    private void SetActivePanel(Panel panel)
-    {
-        loginPanel.gameObject?.SetActive(panel == Panel.Login);
-        roomPanel.gameObject?.SetActive(panel == Panel.Room);
-        lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby);
+        public override void OnJoinedLobby()
+        {
+            SetActivePanel(Panel.Lobby);
+        }
+
+        public override void OnLeftLobby()
+        {
+            SetActivePanel(Panel.Login);
+        }
+
+        private void SetActivePanel(Panel panel)
+        {
+            loginPanel.gameObject?.transform.GetChild(0).gameObject.SetActive(panel == Panel.Login);
+            roomPanel.gameObject?.SetActive(panel == Panel.Room);
+            lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby);
+        }
     }
 }
