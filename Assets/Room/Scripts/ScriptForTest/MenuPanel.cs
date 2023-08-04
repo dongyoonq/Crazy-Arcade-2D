@@ -39,7 +39,7 @@ namespace RoomUI.ScriptForTest
 			int maxPlayer = maxPlayerInputField.text == "" ? 8 : int.Parse(maxPlayerInputField.text);
 			maxPlayer = Mathf.Clamp(maxPlayer, 1, 8); //1~8까지만 설정 가능하도록 제한함
 
-			PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = maxPlayer }); //옵션으로 최대 인원수를 제한함
+			PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = (byte)maxPlayer }); //옵션으로 최대 인원수를 제한함
 																							//RoomOptions이 종류가 엄청 다양함. + 옵션은 언제든 교체 가능함.
 																							//=> RoomOptions를 활용해서 다양한 방 설정이 가능함.
 
