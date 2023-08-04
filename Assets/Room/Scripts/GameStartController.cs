@@ -6,45 +6,49 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using RoomUI.Utils;
 
-public class GameStartController : MonoBehaviourPun
+namespace RoomUI
 {
-	public BtnReady BtnGameReady;
-
-	[SerializeField]
-	private Toggle autoReady;
-
-	public UnityAction<Player, bool> OnChangeReadyState;
-
-	private void Awake()
+	public class GameStartController : MonoBehaviourPun
 	{
-		BtnGameReady.ReadyBtn.onClick.AddListener(() => ClickedReadyButton());
-		autoReady.onValueChanged.AddListener((isChecked) => CheckedAutoReady(isChecked));
-	}
+		public BtnReady BtnGameReady;
 
-	private void CheckedAutoReady(bool isChecked)
-	{
-		if (isChecked)
+		[SerializeField]
+		private Toggle autoReady;
+
+		public UnityAction<Player, bool> OnChangeReadyState;
+
+		private void Awake()
+		{
+			BtnGameReady.ReadyBtn.onClick.AddListener(() => ClickedReadyButton());
+			autoReady.onValueChanged.AddListener((isChecked) => CheckedAutoReady(isChecked));
+		}
+
+		private void CheckedAutoReady(bool isChecked)
+		{
+			if (isChecked)
+			{
+				if (PhotonNetwork.IsMasterClient == false)
+					UpdatePlayerState(true);
+			}
+		}
+
+		private void ClickedReadyButton()
 		{
 			if (PhotonNetwork.IsMasterClient == false)
-				UpdatePlayerState(true);
-		}
-	}
+			{
+				bool isReady = !PhotonNetwork.LocalPlayer.GetReady();
 
-	private void ClickedReadyButton()
-	{
-		if (PhotonNetwork.IsMasterClient == false)
+				PhotonNetwork.LocalPlayer.SetReady(isReady);
+				UpdatePlayerState(isReady);
+			}
+
+		}
+
+		private void UpdatePlayerState(bool isReady)
 		{
-			bool isReady = !PhotonNetwork.LocalPlayer.GetReady();
-
-			PhotonNetwork.LocalPlayer.SetReady(isReady);
-			UpdatePlayerState(isReady);
+			OnChangeReadyState?.Invoke(PhotonNetwork.LocalPlayer, isReady);
 		}
-			
-	}
-
-	private void UpdatePlayerState(bool isReady)
-	{
-		OnChangeReadyState?.Invoke(PhotonNetwork.LocalPlayer, isReady);
 	}
 }

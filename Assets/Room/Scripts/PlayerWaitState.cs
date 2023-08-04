@@ -6,37 +6,40 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class PlayerWaitState : MonoBehaviour
+namespace RoomUI
 {
-	[SerializeField]
-	private Image StateDisable;
-
-	[SerializeField]
-	private Image StateEnable;
-
-	[SerializeField]
-	private Image StateMaster;
-
-	public void SetPlayerState(bool isMaster)
+	public class PlayerWaitState : MonoBehaviour
 	{
-		StateMaster.gameObject.SetActive(isMaster);
-		StateDisable.gameObject.SetActive(!isMaster);
-		StateEnable.gameObject.SetActive(!isMaster);
-	}
+		[SerializeField]
+		private Image StateDisable;
 
-	/// <summary>
-	/// 게임 준비 활성 여부 업데이트
-	/// </summary>
-	public void UpdateReadyInfo(bool isReady)
-	{
-		StateEnable.gameObject.SetActive(isReady);
-		StateDisable.gameObject.SetActive(!isReady);
-	}
+		[SerializeField]
+		private Image StateEnable;
 
-	public void UpdateMasterInfo()
-	{
-		StateMaster.gameObject.SetActive(true);
-		StateDisable.gameObject.SetActive(false);
-		StateEnable.gameObject.SetActive(false);
+		[SerializeField]
+		private Image StateMaster;
+
+		public void SetPlayerState(bool isMaster)
+		{
+			StateMaster.gameObject.SetActive(isMaster);
+			StateDisable.gameObject.SetActive(!isMaster);
+			StateEnable.gameObject.SetActive(!isMaster);
+		}
+
+		/// <summary>
+		/// 게임 준비 활성 여부 업데이트
+		/// </summary>
+		public void UpdateReadyInfo(bool isReady)
+		{
+			StateEnable.gameObject.SetActive(isReady);
+			StateDisable.gameObject.SetActive(!isReady);
+		}
+
+		public void UpdateMasterInfo()
+		{
+			StateMaster.gameObject.SetActive(true);
+			StateDisable.gameObject.SetActive(false);
+			StateEnable.gameObject.SetActive(false);
+		}
 	}
 }

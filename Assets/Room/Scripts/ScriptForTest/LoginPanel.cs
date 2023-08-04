@@ -2,29 +2,32 @@ using Photon.Pun;
 using TMPro;
 using UnityEngine;
 
-public class LoginPanel : MonoBehaviour
+namespace RoomUI.ScriptForTest
 {
-    [SerializeField] TMP_InputField idInputField;
-
-	private void OnEnable()
+	public class LoginPanel : MonoBehaviour
 	{
-		idInputField.text = GetRandomId();
-	}
+		[SerializeField] TMP_InputField idInputField;
 
-	public void Login()
-	{
-		if (idInputField.text.Trim() == "")
+		private void OnEnable()
 		{
-			Debug.LogError("Invalid player name");
-			return;
+			idInputField.text = GetRandomId();
 		}
 
-		PhotonNetwork.LocalPlayer.NickName = idInputField.text; //LocalPlayer = 나 자신에 대한 정보(서버 접속자에 대한 정보). NickName을 지정해야함. 
-		PhotonNetwork.ConnectUsingSettings();
-	}
+		public void Login()
+		{
+			if (idInputField.text.Trim() == "")
+			{
+				Debug.LogError("Invalid player name");
+				return;
+			}
 
-	private string GetRandomId()
-	{
-		return string.Format("Player {0}", Random.Range(1000, 10000));
+			PhotonNetwork.LocalPlayer.NickName = idInputField.text; //LocalPlayer = 나 자신에 대한 정보(서버 접속자에 대한 정보). NickName을 지정해야함. 
+			PhotonNetwork.ConnectUsingSettings();
+		}
+
+		private string GetRandomId()
+		{
+			return string.Format("Player {0}", Random.Range(1000, 10000));
+		}
 	}
 }

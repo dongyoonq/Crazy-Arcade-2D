@@ -4,25 +4,28 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChangedPassword : MonoBehaviour
+namespace RoomUI
 {
-    [SerializeField]
-    private Toggle isPrivateRoom;
-
-    [SerializeField]
-    private TMP_InputField inputPassword;
-
-	[SerializeField]
-	private Image passwordBackImg;
-
-	private void Awake()
+	public class ChangedPassword : MonoBehaviour
 	{
-		isPrivateRoom.onValueChanged.AddListener((isChecked) => ClickedCheckBox(isChecked));
-	}
+		[SerializeField]
+		private Toggle isPrivateRoom;
 
-	private void ClickedCheckBox(bool isChecked)
-	{
-		inputPassword.gameObject.SetActive(isChecked);
-		passwordBackImg.gameObject.SetActive(!isChecked);
+		[SerializeField]
+		private TMP_InputField inputPassword;
+
+		[SerializeField]
+		private Image passwordBackImg;
+
+		private void Awake()
+		{
+			isPrivateRoom.onValueChanged.AddListener((isChecked) => ClickedCheckBox(isChecked));
+		}
+
+		private void ClickedCheckBox(bool isChecked)
+		{
+			inputPassword.gameObject.SetActive(isChecked);
+			passwordBackImg.gameObject.SetActive(!isChecked);
+		}
 	}
 }

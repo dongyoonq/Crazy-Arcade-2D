@@ -3,13 +3,16 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LobbyPanel : MonoBehaviour
+namespace RoomUI.ScriptForTest
 {
-    [SerializeField] RectTransform roomContent;
-    [SerializeField] RoomEntry roomEntryPrefab;
-
-    public void LeaveLobby()
+    public class LobbyPanel : MonoBehaviour
     {
-        
+        [SerializeField] RectTransform roomContent;
+        [SerializeField] RoomEntry roomEntryPrefab;
+
+        public void LeaveLobby()
+        {
+
+        }
     }
 }

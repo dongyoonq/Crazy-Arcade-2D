@@ -9,151 +9,154 @@ using UnityEngine;
 using UnityEngine.UI;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
-public enum RoomMode
+namespace RoomUI
 {
-	Manner,
-	Free,
-	Random
-}
-
-public class RoomData
-{
-	public RoomData(int number, string name, RoomMode mode = RoomMode.Manner, bool isPrivateRoom = false, string password = "")
+	public enum RoomMode
 	{
-		Number = number;
-		Name = name;
-
-		Mode = mode;
-		IsPrivateRoom = isPrivateRoom;
-		Password = password;
+		Manner,
+		Free,
+		Random
 	}
 
-	/// <summary>
-	/// 방 고유 번호 
-	/// </summary>
-	public int Number { get; private set; }
-
-	/// <summary>
-	/// 방 이름
-	/// </summary>
-	public string Name { get; set; }
-
-	/// <summary>
-	/// 방 모드
-	/// </summary>
-	public RoomMode Mode { get; set; }
-
-	/// <summary>
-	/// 비밀방 설정 여부
-	/// </summary>
-	public bool IsPrivateRoom { get; set; }
-
-	/// <summary>
-	/// 방 비밀번호
-	/// </summary>
-	public string Password { get; set; }
-}
-
-public class RoomInfo : MonoBehaviourPun
-{
-	private const string UI_PATH = "RoomInfoUI/ChangedRoomInfo";
-
-	[SerializeField]
-	private TMP_Text roomNumber;
-
-	[SerializeField]
-	private TMP_Text roomName;
-
-	[SerializeField]
-	private Image roomMode;
-
-	[SerializeField]
-	private List<Sprite> roomModeIcons;
-
-	[SerializeField]
-	private Image roomPassword;
-
-	[SerializeField]
-	private Button changedRoomInfo;
-
-	private RoomData roomData;
-	private ChangedRoomInfo roomInfo;
-
-	private void Awake()
+	public class RoomData
 	{
-		if (PhotonNetwork.IsMasterClient)
-			SetMasterRoomInfo();
-		else
+		public RoomData(int number, string name, RoomMode mode = RoomMode.Manner, bool isPrivateRoom = false, string password = "")
 		{
+			Number = number;
+			Name = name;
+
+			Mode = mode;
+			IsPrivateRoom = isPrivateRoom;
+			Password = password;
+		}
+
+		/// <summary>
+		/// 방 고유 번호 
+		/// </summary>
+		public int Number { get; private set; }
+
+		/// <summary>
+		/// 방 이름
+		/// </summary>
+		public string Name { get; set; }
+
+		/// <summary>
+		/// 방 모드
+		/// </summary>
+		public RoomMode Mode { get; set; }
+
+		/// <summary>
+		/// 비밀방 설정 여부
+		/// </summary>
+		public bool IsPrivateRoom { get; set; }
+
+		/// <summary>
+		/// 방 비밀번호
+		/// </summary>
+		public string Password { get; set; }
+	}
+
+	public class RoomInfo : MonoBehaviourPun
+	{
+		private const string UI_PATH = "RoomInfoUI/ChangedRoomInfo";
+
+		[SerializeField]
+		private TMP_Text roomNumber;
+
+		[SerializeField]
+		private TMP_Text roomName;
+
+		[SerializeField]
+		private Image roomMode;
+
+		[SerializeField]
+		private List<Sprite> roomModeIcons;
+
+		[SerializeField]
+		private Image roomPassword;
+
+		[SerializeField]
+		private Button changedRoomInfo;
+
+		private RoomData roomData;
+		private ChangedRoomInfo roomInfo;
+
+		private void Awake()
+		{
+			if (PhotonNetwork.IsMasterClient)
+				SetMasterRoomInfo();
+			else
+			{
+				Color color = changedRoomInfo.image.color;
+				color.a = 0.35f;
+				changedRoomInfo.image.color = color;
+			}
+		}
+
+		private void OnEnable()
+		{
+			int num = int.Parse(PhotonNetwork.CurrentRoom.Name);
+			string name = GetRoomProperty("RoomName", $"Room{num}");
+			string pwd = GetRoomProperty("Password", "");
+			bool isPrivate = pwd.Trim() != "";
+
+			roomData = new RoomData(num, name, isPrivateRoom: isPrivate, password: pwd);
+
+			roomNumber.text = string.Format("{0:D3}", roomData.Number);
+			SetRoomInfo(roomData);
+		}
+
+		public void SetMasterRoomInfo()
+		{
+			changedRoomInfo.onClick.AddListener(() => OpenChangedRoomInfoUI());
+
 			Color color = changedRoomInfo.image.color;
-			color.a = 0.35f;
+			color.a = 0;
 			changedRoomInfo.image.color = color;
 		}
-	}
 
-	private void OnEnable()
-	{
-		int num = int.Parse(PhotonNetwork.CurrentRoom.Name);
-		string name = GetRoomProperty("RoomName", $"Room{num}");
-		string pwd = GetRoomProperty("Password", "");
-		bool isPrivate = pwd.Trim() != "";
-
-		roomData = new RoomData(num, name, isPrivateRoom: isPrivate, password: pwd);
-
-		roomNumber.text = string.Format("{0:D3}", roomData.Number);
-		SetRoomInfo(roomData);
-	}
-
-	public void SetMasterRoomInfo()
-	{
-		changedRoomInfo.onClick.AddListener(() => OpenChangedRoomInfoUI());
-
-		Color color = changedRoomInfo.image.color;
-		color.a = 0;
-		changedRoomInfo.image.color = color;
-	}
-
-	private void OpenChangedRoomInfoUI()
-	{
-		if(roomInfo == null)
+		private void OpenChangedRoomInfoUI()
 		{
-			ChangedRoomInfo roomInfo = Resources.Load<ChangedRoomInfo>(UI_PATH);
-			roomInfo.RoomData = roomData;
-			roomInfo.OnClosedView += SetRoomInfo;
+			if (roomInfo == null)
+			{
+				ChangedRoomInfo roomInfo = Resources.Load<ChangedRoomInfo>(UI_PATH);
+				roomInfo.RoomData = roomData;
+				roomInfo.OnClosedView += SetRoomInfo;
+			}
 		}
-	}
 
 
-	private void SetRoomInfo(RoomData data)
-	{
-		roomData = data;
-			 
-		roomName.text = roomData.Name;
+		private void SetRoomInfo(RoomData data)
+		{
+			roomData = data;
 
-		roomMode.sprite = roomModeIcons[(int)roomData.Mode];
-		roomPassword.gameObject.SetActive(roomData.IsPrivateRoom);
+			roomName.text = roomData.Name;
 
-		//SetRoomProperty("RoomName", roomData.Name);
-		//SetRoomProperty("Password", roomData.Password);
+			roomMode.sprite = roomModeIcons[(int)roomData.Mode];
+			roomPassword.gameObject.SetActive(roomData.IsPrivateRoom);
 
-		if (roomInfo != null) roomInfo = null;
-	}
+			//SetRoomProperty("RoomName", roomData.Name);
+			//SetRoomProperty("Password", roomData.Password);
 
-	private string GetRoomProperty(string propertyKey, string returnVal)
-	{
-		PhotonHashtable property = PhotonNetwork.CurrentRoom.CustomProperties;
+			if (roomInfo != null) roomInfo = null;
+		}
 
-		if (property.ContainsKey(propertyKey))
-			return property[propertyKey].ToString();
-		else
-			return string.Empty;
-	}
+		private string GetRoomProperty(string propertyKey, string returnVal)
+		{
+			PhotonHashtable property = PhotonNetwork.CurrentRoom.CustomProperties;
 
-	private void SetRoomProperty(string propertyKey, string value)
-	{
-		PhotonHashtable property = PhotonNetwork.CurrentRoom.CustomProperties;
+			if (property.ContainsKey(propertyKey))
+				return property[propertyKey].ToString();
+			else
+				return string.Empty;
+		}
 
-		property[propertyKey] = value;
-		PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+		private void SetRoomProperty(string propertyKey, string value)
+		{
+			PhotonHashtable property = PhotonNetwork.CurrentRoom.CustomProperties;
+
+			property[propertyKey] = value;
+			PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+		}
 	}
 }

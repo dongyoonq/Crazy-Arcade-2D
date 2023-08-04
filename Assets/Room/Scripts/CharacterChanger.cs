@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public interface IChangeableCharacter
+namespace RoomUI
 {
-	void OnChangeCharacter(CharacterData data);
-}
-
-public class CharacterChanger : MonoBehaviour
-{
-	public static UnityAction< CharacterData> OnChangedCharacter;
-
-	public void ChooseCharacter(CharacterData data)
+	public interface IChangeableCharacter
 	{
-		OnChangedCharacter?.Invoke(data);
+		void OnChangeCharacter(CharacterData data);
+	}
+
+	public class CharacterChanger : MonoBehaviour
+	{
+		public static UnityAction<CharacterData> OnChangedCharacter;
+
+		public void ChooseCharacter(CharacterData data)
+		{
+			OnChangedCharacter?.Invoke(data);
+		}
 	}
 }

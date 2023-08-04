@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "CharacterData", menuName = "Room/Character")]
-public class CharacterData : ScriptableObject
+namespace RoomUI
 {
-	public string Name;
+	[CreateAssetMenu(fileName = "CharacterData", menuName = "Room/Character")]
+	public class CharacterData : ScriptableObject
+	{
+		public string Name;
 
-	public Sprite Character;
+		public Sprite Character;
 
-	public Sprite Description;
+		public Sprite Description;
+	}
 }

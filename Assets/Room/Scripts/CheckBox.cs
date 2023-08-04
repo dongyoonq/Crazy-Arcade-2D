@@ -4,44 +4,47 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class CheckBox : MonoBehaviour
+namespace RoomUI
 {
-	[SerializeField]
-	private Button CheckButton;
-
-	[SerializeField]
-    private Image CheckMark;
-
-	public UnityAction<bool> OnClickCheckBox;
-
-	private bool isChecked;
-
-	private void Awake()
+	public class CheckBox : MonoBehaviour
 	{
-		CheckButton.onClick.AddListener(() => ClickedCheckBtn());
-	}
+		[SerializeField]
+		private Button CheckButton;
 
-	private void ClickedCheckBtn()
-	{
-		isChecked = !isChecked;
-		CheckMark.gameObject.SetActive(isChecked);
+		[SerializeField]
+		private Image CheckMark;
 
-		OnClickCheckBox?.Invoke(isChecked);
-	}
+		public UnityAction<bool> OnClickCheckBox;
 
-	public void SetCheck()
-	{
-		SetCheckBoxStatet(true);
-	}
+		private bool isChecked;
 
-	public void SetUnChecke()
-	{
-		SetCheckBoxStatet(false);
-	}
+		private void Awake()
+		{
+			CheckButton.onClick.AddListener(() => ClickedCheckBtn());
+		}
 
-	private void SetCheckBoxStatet(bool check)
-	{
-		isChecked = check;
-		CheckMark.gameObject.SetActive(isChecked);
+		private void ClickedCheckBtn()
+		{
+			isChecked = !isChecked;
+			CheckMark.gameObject.SetActive(isChecked);
+
+			OnClickCheckBox?.Invoke(isChecked);
+		}
+
+		public void SetCheck()
+		{
+			SetCheckBoxStatet(true);
+		}
+
+		public void SetUnChecke()
+		{
+			SetCheckBoxStatet(false);
+		}
+
+		private void SetCheckBoxStatet(bool check)
+		{
+			isChecked = check;
+			CheckMark.gameObject.SetActive(isChecked);
+		}
 	}
 }

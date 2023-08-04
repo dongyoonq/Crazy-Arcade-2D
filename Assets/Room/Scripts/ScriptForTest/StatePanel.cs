@@ -3,29 +3,32 @@ using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 
-public class StatePanel : MonoBehaviour
+namespace RoomUI.ScriptForTest
 {
-    [SerializeField] RectTransform content;
-    [SerializeField] TMP_Text logPrefab;
-
-    private ClientState state;
-
-    void Update()
+    public class StatePanel : MonoBehaviour
     {
-        if (state == PhotonNetwork.NetworkClientState)
-            return;
+        [SerializeField] RectTransform content;
+        [SerializeField] TMP_Text logPrefab;
 
-        state = PhotonNetwork.NetworkClientState;
+        private ClientState state;
 
-        TMP_Text newLog = Instantiate(logPrefab, content);
-        newLog.text = string.Format("[Photon] {0} : {1}", System.DateTime.Now.ToString("HH:mm:ss.ff"), state);
-        Debug.Log(string.Format("[Photon] {0}", state));
-    }
+        void Update()
+        {
+            if (state == PhotonNetwork.NetworkClientState)
+                return;
 
-    public void AddMessage(string message)
-    {
-        TMP_Text newLog = Instantiate(logPrefab, content);
-        newLog.text = string.Format("[Photon] {0} : {1}", System.DateTime.Now.ToString("HH:mm:ss.ff"), message);
-        Debug.Log(string.Format("[Photon] {0}", message));
+            state = PhotonNetwork.NetworkClientState;
+
+            TMP_Text newLog = Instantiate(logPrefab, content);
+            newLog.text = string.Format("[Photon] {0} : {1}", System.DateTime.Now.ToString("HH:mm:ss.ff"), state);
+            Debug.Log(string.Format("[Photon] {0}", state));
+        }
+
+        public void AddMessage(string message)
+        {
+            TMP_Text newLog = Instantiate(logPrefab, content);
+            newLog.text = string.Format("[Photon] {0} : {1}", System.DateTime.Now.ToString("HH:mm:ss.ff"), message);
+            Debug.Log(string.Format("[Photon] {0}", message));
+        }
     }
 }

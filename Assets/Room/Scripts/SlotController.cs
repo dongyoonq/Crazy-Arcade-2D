@@ -5,49 +5,52 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class SlotController : MonoBehaviourPunCallbacks
+namespace RoomUI
 {
-	[SerializeField] 
-	private Image OpenSlot;
-
-	[SerializeField]
-	private Image CloseSlot;
-
-	[SerializeField]
-	private Button BtnChangeSlot;
-
-	private bool isSlotOpen;
-	public bool IsSlotOpen { get { return IsSlotOpen; } }
-
-	private void Awake()
+	public class SlotController : MonoBehaviourPunCallbacks
 	{
-		BtnChangeSlot.onClick.AddListener(ChangedSlotState);
-	}
+		[SerializeField]
+		private Image OpenSlot;
 
-	/// <summary>
-	/// ½½·Ô ´Ý±â ±â´É Á¦°Å
-	/// </summary>
-	public void RemoveCloseSlot()
-	{
-		BtnChangeSlot.onClick.RemoveAllListeners();
-	}
+		[SerializeField]
+		private Image CloseSlot;
 
-	/// <summary>
-	/// ½½·Ô ´Ý±â ±â´É Ãß°¡
-	/// </summary>
-	public void AddCloseSlot()
-	{
-		BtnChangeSlot.onClick.AddListener(ChangedSlotState);
-	}
+		[SerializeField]
+		private Button BtnChangeSlot;
 
-	private void ChangedSlotState()
-	{
-		if(PhotonNetwork.IsMasterClient)
+		private bool isSlotOpen;
+		public bool IsSlotOpen { get { return IsSlotOpen; } }
+
+		private void Awake()
 		{
-			isSlotOpen = !isSlotOpen;
-
-			OpenSlot.gameObject.SetActive(isSlotOpen);
-			CloseSlot.gameObject.SetActive(!isSlotOpen);
+			BtnChangeSlot.onClick.AddListener(ChangedSlotState);
 		}
-	}	
+
+		/// <summary>
+		/// ½½·Ô ´Ý±â ±â´É Á¦°Å
+		/// </summary>
+		public void RemoveCloseSlot()
+		{
+			BtnChangeSlot.onClick.RemoveAllListeners();
+		}
+
+		/// <summary>
+		/// ½½·Ô ´Ý±â ±â´É Ãß°¡
+		/// </summary>
+		public void AddCloseSlot()
+		{
+			BtnChangeSlot.onClick.AddListener(ChangedSlotState);
+		}
+
+		private void ChangedSlotState()
+		{
+			if (PhotonNetwork.IsMasterClient)
+			{
+				isSlotOpen = !isSlotOpen;
+
+				OpenSlot.gameObject.SetActive(isSlotOpen);
+				CloseSlot.gameObject.SetActive(!isSlotOpen);
+			}
+		}
+	}
 }

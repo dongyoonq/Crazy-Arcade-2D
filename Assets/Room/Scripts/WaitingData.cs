@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "WaitingData", menuName = "Room/Waiting")]
-public class WaitingData : ScriptableObject
+namespace RoomUI
 {
-	public Image WaitingView;
+	[CreateAssetMenu(fileName = "WaitingData", menuName = "Room/Waiting")]
+	public class WaitingData : ScriptableObject
+	{
+		public Image WaitingView;
 
-	public Image CloseView;
+		public Image CloseView;
 
-	public Image StateEnable;
+		public Image StateEnable;
 
-	public Image StateDisable;
+		public Image StateDisable;
 
-	public Image StateMaster;
+		public Image StateMaster;
+	}
 }

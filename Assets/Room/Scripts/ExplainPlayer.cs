@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ExplainPlayer : MonoBehaviour, IChangeableCharacter
+namespace RoomUI
 {
-	private Image imgCharacterExplain;
-
-	private void Awake()
+	public class ExplainPlayer : MonoBehaviour, IChangeableCharacter
 	{
-		imgCharacterExplain = gameObject.GetComponent<Image>();
-	}
+		private Image imgCharacterExplain;
 
-	private void Start()
-	{
-		CharacterChanger.OnChangedCharacter += OnChangeCharacter;
-	}
+		private void Awake()
+		{
+			imgCharacterExplain = gameObject.GetComponent<Image>();
+		}
 
-	public void OnChangeCharacter(CharacterData data)
-	{
-		imgCharacterExplain.sprite = data.Description;
+		private void Start()
+		{
+			CharacterChanger.OnChangedCharacter += OnChangeCharacter;
+		}
+
+		public void OnChangeCharacter(CharacterData data)
+		{
+			imgCharacterExplain.sprite = data.Description;
+		}
 	}
 }

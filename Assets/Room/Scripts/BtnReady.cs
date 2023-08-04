@@ -4,23 +4,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BtnReady : MonoBehaviourPun
+namespace RoomUI
 {
-	[SerializeField]
-	private Sprite Ready_Master;
-
-	[SerializeField]
-	private Sprite Ready_Player;
-
-	public Button ReadyBtn;
-
-	private void Awake()
+	public class BtnReady : MonoBehaviourPun
 	{
-		SetReadyBtnImg();
+		[SerializeField]
+		private Sprite Ready_Master;
+
+		[SerializeField]
+		private Sprite Ready_Player;
+
+		public Button ReadyBtn;
+
+		private void Awake()
+		{
+			SetReadyBtnImg();
+		}
+
+		public void SetReadyBtnImg()
+		{
+			ReadyBtn.image.sprite = PhotonNetwork.IsMasterClient ? Ready_Master : Ready_Player;
+		}
 	}
 
-	public void SetReadyBtnImg()
-	{
-		ReadyBtn.image.sprite = PhotonNetwork.IsMasterClient ? Ready_Master : Ready_Player;
-	}
+
 }

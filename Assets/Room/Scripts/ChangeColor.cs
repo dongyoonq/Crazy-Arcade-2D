@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChangeColor : MonoBehaviour
+namespace RoomUI
 {
-	private Renderer renderer;
-
-	public Color changedColor = Color.white;
-
-	private void Start()
+	public class ChangeColor : MonoBehaviour
 	{
-		renderer = GetComponent<Renderer>();
-		renderer.material.color = changedColor;
+		private Renderer renderer;
+
+		public Color changedColor = Color.white;
+
+		private void Start()
+		{
+			renderer = GetComponent<Renderer>();
+			renderer.material.color = changedColor;
+		}
 	}
 }

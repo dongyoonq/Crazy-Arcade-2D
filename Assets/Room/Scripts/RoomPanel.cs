@@ -7,180 +7,184 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
+using RoomUI.Utils;
 
-public class RoomPanel : MonoBehaviourPunCallbacks
+namespace RoomUI
 {
-	[SerializeField]
-	private RoomInfo roomInfo;
-
-	[SerializeField]
-	private RectTransform playerContent;
-
-	[SerializeField]
-	private GameStartController gameStartController;
-
-	private Dictionary<int, WaitingPlayer> playerDictionary;
-
-	private bool isPassableStarting;
-
-	private void Awake()
+	public class RoomPanel : MonoBehaviourPunCallbacks
 	{
-		playerDictionary = new Dictionary<int, WaitingPlayer>();
+		[SerializeField]
+		private RoomInfo roomInfo;
 
-		gameStartController.BtnGameReady.ReadyBtn.onClick.AddListener(() => StartGame());
-	}
+		[SerializeField]
+		private RectTransform playerContent;
 
-	private void OnEnable()
-	{
-		SetInPlayer();
-		CheckPlayerReadyState();
-	}
+		[SerializeField]
+		private GameStartController gameStartController;
 
-	private void OnDisable()
-	{
-		foreach (int actorNumber in playerDictionary.Keys)
+		private Dictionary<int, WaitingPlayer> playerDictionary;
+
+		private bool isPassableStarting;
+
+		private void Awake()
 		{
-			Destroy(playerDictionary[actorNumber].gameObject);
+			playerDictionary = new Dictionary<int, WaitingPlayer>();
+
+			gameStartController.BtnGameReady.ReadyBtn.onClick.AddListener(() => StartGame());
 		}
-		playerDictionary.Clear();
-	}
 
-	public void EntryPlayer(Player player)
-	{
-		InstantiatePlayer(player);
-		CheckPlayerReadyState();
-	}
-
-	public void LeavePlayer(Player leavePlayer)
-	{
-		Destroy(playerDictionary[leavePlayer.ActorNumber].gameObject);
-		playerDictionary.Remove(leavePlayer.ActorNumber);
-		CheckPlayerReadyState();
-	}
-
-	private void AddPlayer()
-	{
-		if(playerContent.childCount < 8)
-			Instantiate<WaitingPlayer>(Resources.Load<WaitingPlayer>("WaitingPlayer"), playerContent);
-	}
-
-	public void UpdatePlayerState(Player player)
-	{
-		GetPalyerEntry(player)?.UpdateReadyInfo();
-
-		if (PhotonNetwork.IsMasterClient)
+		private void OnEnable()
+		{
+			SetInPlayer();
 			CheckPlayerReadyState();
-	}
+		}
 
-	public void UpdatePlayerState(Player player, bool isReady)
-	{
-		GetPalyerEntry(player)?.UpdateReadyInfo(isReady);
+		private void OnDisable()
+		{
+			foreach (int actorNumber in playerDictionary.Keys)
+			{
+				Destroy(playerDictionary[actorNumber].gameObject);
+			}
+			playerDictionary.Clear();
+		}
 
-		if (PhotonNetwork.IsMasterClient)
-			CheckPlayerReadyState();
-	}
-
-	/// <summary>
-	/// ÀÌ¹Ì Á¢¼ÓÇØ ÀÖ´Â »ç¿ëÀÚ + º»ÀÎ »ý¼º
-	/// </summary>
-	private void SetInPlayer()
-	{
-		foreach (Player player in PhotonNetwork.PlayerList)
+		public void EntryPlayer(Player player)
 		{
 			InstantiatePlayer(player);
+			CheckPlayerReadyState();
 		}
-	}
 
-	private void InstantiatePlayer(Player player)
-	{
-		int index = playerDictionary.Count();
-
-		if (index == 8)
-			return;
-
-		WaitingPlayer waitingPlayer = playerContent.GetComponentsInChildren<WaitingPlayer>()[index];
-		waitingPlayer.SetPlayer(player);
-		waitingPlayer.OnChangedOtherPlayerCharacter += UpdateOtherPlayerCharacter;
-		waitingPlayer.OnChangedOtherPlayerState += UpdateOtherPlayerState;
-		waitingPlayer.OnChangedMasterPlayerState += UpdateMasterPlayerState;
-		playerDictionary.Add(player.ActorNumber, waitingPlayer);
-
-		if (player.IsLocal)
-			gameStartController.OnChangeReadyState += UpdatePlayerState;
-	}
-
-	private void UpdateOtherPlayerCharacter(int actorNumber, CharacterData data)
-	{
-		playerDictionary[actorNumber].playerImg.sprite = data.Character;
-	}
-
-	private void UpdateOtherPlayerState(int actorNumber, bool isReady)
-	{
-		playerDictionary[actorNumber].WaitState.UpdateReadyInfo(isReady);
-	}
-
-	private void UpdateMasterPlayerState(int actorNumber)
-	{
-		playerDictionary[actorNumber].WaitState.UpdateMasterInfo();
-	}
-
-
-	private WaitingPlayer GetPalyerEntry(Player chkPlayer)
-	{
-		return playerContent.GetComponentsInChildren<WaitingPlayer>().Where(x => x.player.ActorNumber == chkPlayer.ActorNumber).FirstOrDefault();
-	}
-
-	public void UpdateActiveStartButton(int actorNumber)
-	{
-		//startButton.gameObject.SetActive()
-	}
-
-	/// <summary>
-	/// ¸ðµç ÇÃ·¹ÀÌ¾î°¡ ready »óÅÂ°¡ µÇ¸é start button È°¼º Ã³¸®
-	/// </summary>
-	public void CheckPlayerReadyState()
-	{
-		isPassableStarting = false;
-
-		if (PhotonNetwork.IsMasterClient) //¹æÀåÀÌ ¾Æ´Ï¸é ±»ÀÌ È®ÀÎÇÒ ÇÊ¿ä´Â ¾øÀ½. 
+		public void LeavePlayer(Player leavePlayer)
 		{
-			int readyCount = PhotonNetwork.PlayerList.Count(x => x.GetReady());
+			Destroy(playerDictionary[leavePlayer.ActorNumber].gameObject);
+			playerDictionary.Remove(leavePlayer.ActorNumber);
+			CheckPlayerReadyState();
+		}
 
-			if (readyCount > 1) //¹æÀå È¥ÀÚ ÀÖÀ» ¶§´Â °ÔÀÓ ½ÃÀÛ ¸øÇÏ°Ô ¸·À½
+		private void AddPlayer()
+		{
+			if (playerContent.childCount < 8)
+				Instantiate<WaitingPlayer>(Resources.Load<WaitingPlayer>("WaitingPlayer"), playerContent);
+		}
+
+		public void UpdatePlayerState(Player player)
+		{
+			GetPalyerEntry(player)?.UpdateReadyInfo();
+
+			if (PhotonNetwork.IsMasterClient)
+				CheckPlayerReadyState();
+		}
+
+		public void UpdatePlayerState(Player player, bool isReady)
+		{
+			GetPalyerEntry(player)?.UpdateReadyInfo(isReady);
+
+			if (PhotonNetwork.IsMasterClient)
+				CheckPlayerReadyState();
+		}
+
+		/// <summary>
+		/// ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		/// </summary>
+		private void SetInPlayer()
+		{
+			foreach (Player player in PhotonNetwork.PlayerList)
 			{
-				isPassableStarting = (readyCount == PhotonNetwork.PlayerList.Length);
+				InstantiatePlayer(player);
 			}
 		}
-	}
 
-	public void SwitchedMasterPlayer(Player newMaster)
-	{
-		roomInfo.SetMasterRoomInfo();
-		playerDictionary[newMaster.ActorNumber].UpdateMasterInfo();
-		gameStartController.BtnGameReady.SetReadyBtnImg();
-		CheckPlayerReadyState();
-	}
-
-	/// <summary>
-	/// °ÔÀÓ ¾ÀÀ¸·Î ÀÌµ¿
-	/// </summary>
-	public void StartGame()
-	{
-		if(isPassableStarting)
+		private void InstantiatePlayer(Player player)
 		{
-			PhotonNetwork.CurrentRoom.IsOpen = false;
-			PhotonNetwork.CurrentRoom.IsVisible = false;
+			int index = playerDictionary.Count();
 
-			//PhotonNetwork.LoadLevel("GameScene");
-			Debug.Log("°ÔÀÓ½ÃÀÛ!!");
+			if (index == 8)
+				return;
+
+			WaitingPlayer waitingPlayer = playerContent.GetComponentsInChildren<WaitingPlayer>()[index];
+			waitingPlayer.SetPlayer(player);
+			waitingPlayer.OnChangedOtherPlayerCharacter += UpdateOtherPlayerCharacter;
+			waitingPlayer.OnChangedOtherPlayerState += UpdateOtherPlayerState;
+			waitingPlayer.OnChangedMasterPlayerState += UpdateMasterPlayerState;
+			playerDictionary.Add(player.ActorNumber, waitingPlayer);
+
+			if (player.IsLocal)
+				gameStartController.OnChangeReadyState += UpdatePlayerState;
 		}
-	}
 
-	/// <summary>
-	/// ¹æ ¶°³ª±â
-	/// </summary>
-	public void LeaveRoom()
-	{
-		PhotonNetwork.LeaveRoom(); //Æ÷Åæ ³×Æ®¿öÅ©¿¡ ¹æ ³ª°£´Ù°í ½ÅÃ»ÇÏ±â   
+		private void UpdateOtherPlayerCharacter(int actorNumber, CharacterData data)
+		{
+			playerDictionary[actorNumber].playerImg.sprite = data.Character;
+		}
+
+		private void UpdateOtherPlayerState(int actorNumber, bool isReady)
+		{
+			playerDictionary[actorNumber].WaitState.UpdateReadyInfo(isReady);
+		}
+
+		private void UpdateMasterPlayerState(int actorNumber)
+		{
+			playerDictionary[actorNumber].WaitState.UpdateMasterInfo();
+		}
+
+
+		private WaitingPlayer GetPalyerEntry(Player chkPlayer)
+		{
+			return playerContent.GetComponentsInChildren<WaitingPlayer>().Where(x => x.player.ActorNumber == chkPlayer.ActorNumber).FirstOrDefault();
+		}
+
+		public void UpdateActiveStartButton(int actorNumber)
+		{
+			//startButton.gameObject.SetActive()
+		}
+
+		/// <summary>
+		/// ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ready ï¿½ï¿½ï¿½Â°ï¿½ ï¿½Ç¸ï¿½ start button È°ï¿½ï¿½ Ã³ï¿½ï¿½
+		/// </summary>
+		public void CheckPlayerReadyState()
+		{
+			isPassableStarting = false;
+
+			if (PhotonNetwork.IsMasterClient) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. 
+			{
+				int readyCount = PhotonNetwork.PlayerList.Count(x => x.GetReady());
+
+				if (readyCount > 1) //ï¿½ï¿½ï¿½ï¿½ È¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½
+				{
+					isPassableStarting = (readyCount == PhotonNetwork.PlayerList.Length);
+				}
+			}
+		}
+
+		public void SwitchedMasterPlayer(Player newMaster)
+		{
+			roomInfo.SetMasterRoomInfo();
+			playerDictionary[newMaster.ActorNumber].UpdateMasterInfo();
+			gameStartController.BtnGameReady.SetReadyBtnImg();
+			CheckPlayerReadyState();
+		}
+
+		/// <summary>
+		/// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+		/// </summary>
+		public void StartGame()
+		{
+			if (isPassableStarting)
+			{
+				PhotonNetwork.CurrentRoom.IsOpen = false;
+				PhotonNetwork.CurrentRoom.IsVisible = false;
+
+				//PhotonNetwork.LoadLevel("GameScene");
+				Debug.Log("ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½!!");
+			}
+		}
+
+		/// <summary>
+		/// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		/// </summary>
+		public void LeaveRoom()
+		{
+			PhotonNetwork.LeaveRoom(); //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ù°ï¿½ ï¿½ï¿½Ã»ï¿½Ï±ï¿½   
+		}
 	}
 }
