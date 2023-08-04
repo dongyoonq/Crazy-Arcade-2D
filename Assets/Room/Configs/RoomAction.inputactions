@@ -1,0 +1,34 @@
+{
+    "name": "RoomAction",
+    "maps": [
+        {
+            "name": "Chat",
+            "id": "341715e3-bbaa-46f5-a9ba-d0aa64670d50",
+            "actions": [
+                {
+                    "name": "SendMessage",
+                    "type": "Button",
+                    "id": "b9025375-7113-4ef5-a96b-55dfd647d1f1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "454547fb-eaa4-4d9b-8041-9f6dd4b8fa2b",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SendMessage",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb0235a30ed8e645bd88285ed9644aa, type: 3}
+  m_Name: Camp02Data
+  m_EditorClassIdentifier: 
+  maps:
+  - map: {fileID: 0}
+    title: "\uCEA0\uD504 02"
+    maxPlayer: 4
+    level: 1
+    popularity: 5
+    rank: 0
+    info: "\uD0F1\uD06C\uB97C \uD0C0\uBA74 \uBB3C\uD48D\uC120\uC744 \uD391\uD391\uD391
+      \uC3E0 \uC218 \uC788\uB294 \uCEA0\uD504\uC785\uB2C8\uB2E4. \uB2FF\uAE30\uB9CC
+      \uD558\uBA74 \uBB3C\uD48D\uC120\uC774 \uD130\uC9C0\uB294 \uBFB0\uC871\uD55C
+      \uD540\uC744 \uC870\uC2EC\uD558\uC138\uC694."
+    favorites: 0
+    mapImg: {fileID: 0}
+    star1: {fileID: 942568707, guid: 155b23651989d384d8dab99f2e7f712b, type: 3}
+    star2: {fileID: 365158072, guid: 155b23651989d384d8dab99f2e7f712b, type: 3}
