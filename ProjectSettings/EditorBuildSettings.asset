@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Lobby/Scenes/KDY/Lobby_Test.unity
-    guid: 69b43c92332abb84e89ed0689d5fd3e6
+    path: Assets/Lobby/Scenes/SYJ/Lobby_Test.unity
+    guid: 2c59a5e995b1dc1409b287dc6447851e
   m_configObjects: {}
