@@ -11,10 +11,7 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] private TMP_InputField idInputField;
     [SerializeField] private TMP_InputField passwordInputField;
 
-    [SerializeField] GameObject noticePopUp;
-    [SerializeField] GameObject okPopUp;
-    [SerializeField] GameObject checkIdPopUp;
-    [SerializeField] GameObject enterIdPopUp;
+    [SerializeField] NoticePopUpUI noticePopUp;
 
     [SerializeField] GameObject chatManager;
     [SerializeField] GameObject chatingArea;
@@ -30,11 +27,7 @@ public class LoginPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        noticePopUp.SetActive(false);
-        okPopUp.SetActive(false);
-        checkIdPopUp.SetActive(false);
-        enterIdPopUp.SetActive(false);
-        speakerPopUp.SetActive(false);
+        noticePopUp.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -71,7 +64,8 @@ public class LoginPanel : MonoBehaviour
 
             if (string.IsNullOrEmpty(id))
             {
-                enterIdPopUp.SetActive(true);
+                noticePopUp.notice.text = "아이디를 입력해주세요.";
+                GameManager.UI.ShowPopUpUI<PopUpUI>("UI/NoticePopUp");
                 return;
             }
 
@@ -84,7 +78,8 @@ public class LoginPanel : MonoBehaviour
             {
                 Debug.Log("ID is already exist");
 
-                noticePopUp.SetActive(true);
+                noticePopUp.notice.text = "해당 아이디는 이미 사용중입니다.";
+                noticePopUp.gameObject.SetActive(true);
 
                 if (!reader.IsClosed)
                     reader.Close();
@@ -102,8 +97,8 @@ public class LoginPanel : MonoBehaviour
                 if (cmd.ExecuteNonQuery() == 1)
                 {
                     Debug.Log("Success");
-                    okPopUp.SetActive(true);
-                    //OnLoginButtonClicked();
+                    noticePopUp.notice.text = "회원가입이 완료되었습니다.\n로그인 후 이용하세요.";
+                    noticePopUp.gameObject.SetActive(true);
                 }
                 else
                 {
@@ -126,7 +121,8 @@ public class LoginPanel : MonoBehaviour
 
             if (string.IsNullOrEmpty(id))
             {
-                checkIdPopUp.SetActive(true);
+                noticePopUp.notice.text = "아이디와 비밀번호를 확인해주세요.";
+                noticePopUp.gameObject.SetActive(true);
                 return;
             }
 
@@ -157,7 +153,10 @@ public class LoginPanel : MonoBehaviour
                     else
                     {
                         Debug.Log("Wrong Password");
-                        checkIdPopUp.SetActive(true);
+                        noticePopUp.notice.text = "아이디와 비밀번호를 확인해주세요.";
+                        noticePopUp.gameObject.SetActive(true);
+                        // GameManager.UI.ShowPopUpUI<PopUpUI>("UI/NoticePopUp");
+
                         if (!reader.IsClosed)
                             reader.Close();
                         return;

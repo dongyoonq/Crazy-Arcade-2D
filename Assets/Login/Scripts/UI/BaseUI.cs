@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static UnityEngine.InputSystem.HID.HID;
+using UnityEngine.UI;
+// using static UnityEngine.InputSystem.HID.HID;
 
 public class BaseUI : MonoBehaviour
 {
