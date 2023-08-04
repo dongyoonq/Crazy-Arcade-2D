@@ -95,7 +95,7 @@ namespace RoomUI
 
 		private void OnEnable()
 		{
-			int num = int.Parse(PhotonNetwork.CurrentRoom.Name);
+			int num = (int)PhotonNetwork.CurrentRoom.CustomProperties["RoomId"];
 			string name = GetRoomProperty("RoomName", $"Room{num}");
 			string pwd = GetRoomProperty("Password", "");
 			bool isPrivate = pwd.Trim() != "";

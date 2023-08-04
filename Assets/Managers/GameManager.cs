@@ -2,7 +2,6 @@ using I18N.Common;
 using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
-using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

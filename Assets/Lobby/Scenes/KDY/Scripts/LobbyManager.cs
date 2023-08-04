@@ -15,7 +15,7 @@ namespace KDY
         [SerializeField]
         private LoginPanel loginPanel;
         [SerializeField]
-        private RoomPanel roomPanel;
+        private RoomUI.RoomPanel roomPanel;
         [SerializeField]
         private LobbyPanel lobbyPanel;
 
@@ -57,7 +57,7 @@ namespace KDY
             PhotonNetwork.LocalPlayer.SetLoad(false);
 
             PhotonNetwork.AutomaticallySyncScene = true;
-            roomPanel.UpdatePlayerList();
+            //roomPanel.UpdatePlayerList();
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)
@@ -88,22 +88,23 @@ namespace KDY
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
-            roomPanel.UpdatePlayerList();
+            roomPanel.EntryPlayer(newPlayer);
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            roomPanel.UpdatePlayerList();
+            roomPanel.LeavePlayer(otherPlayer);
         }
 
         public override void OnMasterClientSwitched(Player newMasterClient)
         {
-            roomPanel.UpdatePlayerList();
+            if (newMasterClient.IsMasterClient)
+                roomPanel.SwitchedMasterPlayer(newMasterClient);
         }
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
         {
-            roomPanel.UpdatePlayerList();
+            roomPanel.UpdatePlayerState(targetPlayer);
         }
 
         public override void OnJoinedLobby()

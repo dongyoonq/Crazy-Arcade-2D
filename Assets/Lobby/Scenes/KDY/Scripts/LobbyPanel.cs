@@ -139,7 +139,7 @@ namespace KDY
             foreach (RoomInfo room in roomDictionary.Values)
             {
                 RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
-                entry.Initialized(room, ++cnt);
+                entry.Initialized(room, cnt++);
             }
         }
 
@@ -177,18 +177,35 @@ namespace KDY
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = maxPlayer;
 
-            roomOptions.CustomRoomProperties = new PhotonHashtable() { { "RoomName", roomName } };
-            roomOptions.CustomRoomPropertiesForLobby = new string[] { "RoomName" };
+            roomOptions.CustomRoomProperties = new PhotonHashtable() { { "RoomName", roomName }, { "RoomId", GetRoomNumber() } };
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { "RoomName", "RoomId" };
 
             if (createRoomPanel.passwordToggle.isOn)
             {
-                roomOptions.CustomRoomProperties = new PhotonHashtable() { { "Password", createRoomPanel.passwordInput.text } };
-                roomOptions.CustomRoomPropertiesForLobby = new string[] { "Password" };
+                roomOptions.CustomRoomProperties = new PhotonHashtable() {
+                    { "RoomName", roomName },
+                    { "Password", createRoomPanel.passwordInput.text },
+                    { "RoomId", GetRoomNumber() }
+                };
+
+                roomOptions.CustomRoomPropertiesForLobby = new string[] { "RoomName", "Password", "RoomId" };
             }
 
             PhotonNetwork.CreateRoom(roomName, roomOptions, null);
 
             Destroy(createRoomPanel.gameObject);
+        }
+
+        private int GetRoomNumber()
+        {
+            int cnt = 0;
+
+            foreach (RoomInfo room in roomDictionary.Values)
+            {
+                cnt++;
+            }
+
+            return cnt;
         }
     }
 }

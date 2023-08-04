@@ -28,7 +28,6 @@ namespace KDY
 
         PasswordRoomPanel passwordPanel;
 
-        private int roomId;
         private string roomPassword;
         private bool isPasswordRoom;
         private RoomInfo info;
@@ -45,7 +44,6 @@ namespace KDY
             currentPlayer.text = string.Format("{0} / {1}", info.PlayerCount, info.MaxPlayers);
             joinRoomButton.interactable = info.PlayerCount < info.MaxPlayers;
             roomState.sprite = (info.PlayerCount < info.MaxPlayers) ? Resources.Load<Sprite>("Waiting") : Resources.Load<Sprite>("Full");
-            roomId = number;
             roomNumber.text = number.ToString();
             if (roomInfo.CustomProperties.ContainsKey("Password"))
             {
