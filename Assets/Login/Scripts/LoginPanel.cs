@@ -20,6 +20,11 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] GameObject chatingArea;
     [SerializeField] GameObject loginPanel;
 
+    [SerializeField] GameObject chatingView;
+    [SerializeField] GameObject chatingHide;
+
+    [SerializeField] GameObject speakerPopUp;
+
     private MySqlConnection connection;
     private MySqlDataReader reader;
 
@@ -29,6 +34,7 @@ public class LoginPanel : MonoBehaviour
         okPopUp.SetActive(false);
         checkIdPopUp.SetActive(false);
         enterIdPopUp.SetActive(false);
+        speakerPopUp.SetActive(false);
     }
 
     private void Start()
@@ -187,5 +193,35 @@ public class LoginPanel : MonoBehaviour
 #else
             Application.Quit();
 #endif
+    }
+
+    private bool chatingHideButtonCheck = true;
+
+    public void OnUpButtonClicked()
+    {
+        if (chatingHideButtonCheck == false)
+        {
+            chatingHide.transform.Translate(Vector3.up * 330);
+            chatingView.SetActive(true);
+        }
+        chatingHideButtonCheck = true;
+    }
+
+    public void OnDownButtonClicked()
+    {
+        if (chatingHideButtonCheck == true)
+        {
+            chatingHide.transform.Translate(Vector3.down * 330);
+            chatingView.SetActive(false);
+        }
+        chatingHideButtonCheck = false;
+    }
+
+    public void OnSpeakerButtonClicked()
+    {
+        if (speakerPopUp.active == false)
+        {
+            speakerPopUp.SetActive(true);
+        }
     }
 }
