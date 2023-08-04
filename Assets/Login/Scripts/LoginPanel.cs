@@ -39,7 +39,7 @@ public class LoginPanel : MonoBehaviour
     {
         try
         {
-            string serverInfo = "Server=127.0.0.1; Database=crazyarcade; Uid=root; Pwd=pkb7018; Port=3306; CharSet=utf8;";
+            string serverInfo = "Server=127.0.0.1; Database=userdata; Uid=root; Pwd=1234; Port=3306; CharSet=utf8;";
             connection = new MySqlConnection(serverInfo);
             connection.Open();
 
