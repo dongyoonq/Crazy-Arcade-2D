@@ -115,7 +115,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 	public override void OnMasterClientSwitched(Player newMasterClient)
 	{
 		if (newMasterClient.IsMasterClient)
-			roomPanel.CheckPlayerReadyState();
+			roomPanel.SwitchedMasterPlayer(newMasterClient);
 	}
 
 	/// <summary>

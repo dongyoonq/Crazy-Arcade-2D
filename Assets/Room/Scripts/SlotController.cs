@@ -27,9 +27,17 @@ public class SlotController : MonoBehaviourPunCallbacks
 	/// <summary>
 	/// ½½·Ô ´Ý±â ±â´É Á¦°Å
 	/// </summary>
-	public void SetButtonAction()
+	public void RemoveCloseSlot()
 	{
 		BtnChangeSlot.onClick.RemoveAllListeners();
+	}
+
+	/// <summary>
+	/// ½½·Ô ´Ý±â ±â´É Ãß°¡
+	/// </summary>
+	public void AddCloseSlot()
+	{
+		BtnChangeSlot.onClick.AddListener(ChangedSlotState);
 	}
 
 	private void ChangedSlotState()

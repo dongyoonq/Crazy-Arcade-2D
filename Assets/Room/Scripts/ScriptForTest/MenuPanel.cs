@@ -53,7 +53,7 @@ public class MenuPanel : MonoBehaviour
 
 	public void RandomMatching()
 	{
-		string roomNm = $"Room {Random.Range(1000, 10000)}";
+		string roomNm = "001";// $"Room {Random.Range(1000, 10000)}";
 		RoomOptions roomOps = new RoomOptions { MaxPlayers = 8 };
 		PhotonNetwork.JoinRandomOrCreateRoom(roomName: roomNm, roomOptions: roomOps); //랜덤 매칭으로 들어가려고 했는데 방이 없으면, 방을 만들어서 들어가도록 함.
 	}

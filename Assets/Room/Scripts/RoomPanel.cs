@@ -1,11 +1,14 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
-public class RoomPanel : MonoBehaviourPun
+public class RoomPanel : MonoBehaviourPunCallbacks
 {
 	[SerializeField]
 	private RoomInfo roomInfo;
@@ -14,13 +17,17 @@ public class RoomPanel : MonoBehaviourPun
 	private RectTransform playerContent;
 
 	[SerializeField]
-	private Button startButton;
+	private GameStartController gameStartController;
 
 	private Dictionary<int, WaitingPlayer> playerDictionary;
+
+	private bool isPassableStarting;
 
 	private void Awake()
 	{
 		playerDictionary = new Dictionary<int, WaitingPlayer>();
+
+		gameStartController.BtnGameReady.ReadyBtn.onClick.AddListener(() => StartGame());
 	}
 
 	private void OnEnable()
@@ -51,9 +58,23 @@ public class RoomPanel : MonoBehaviourPun
 		CheckPlayerReadyState();
 	}
 
+	private void AddPlayer()
+	{
+		if(playerContent.childCount < 8)
+			Instantiate<WaitingPlayer>(Resources.Load<WaitingPlayer>("WaitingPlayer"), playerContent);
+	}
+
 	public void UpdatePlayerState(Player player)
 	{
 		GetPalyerEntry(player)?.UpdateReadyInfo();
+
+		if (PhotonNetwork.IsMasterClient)
+			CheckPlayerReadyState();
+	}
+
+	public void UpdatePlayerState(Player player, bool isReady)
+	{
+		GetPalyerEntry(player)?.UpdateReadyInfo(isReady);
 
 		if (PhotonNetwork.IsMasterClient)
 			CheckPlayerReadyState();
@@ -80,12 +101,27 @@ public class RoomPanel : MonoBehaviourPun
 		WaitingPlayer waitingPlayer = playerContent.GetComponentsInChildren<WaitingPlayer>()[index];
 		waitingPlayer.SetPlayer(player);
 		waitingPlayer.OnChangedOtherPlayerCharacter += UpdateOtherPlayerCharacter;
+		waitingPlayer.OnChangedOtherPlayerState += UpdateOtherPlayerState;
+		waitingPlayer.OnChangedMasterPlayerState += UpdateMasterPlayerState;
 		playerDictionary.Add(player.ActorNumber, waitingPlayer);
+
+		if (player.IsLocal)
+			gameStartController.OnChangeReadyState += UpdatePlayerState;
 	}
 
 	private void UpdateOtherPlayerCharacter(int actorNumber, CharacterData data)
 	{
 		playerDictionary[actorNumber].playerImg.sprite = data.Character;
+	}
+
+	private void UpdateOtherPlayerState(int actorNumber, bool isReady)
+	{
+		playerDictionary[actorNumber].WaitState.UpdateReadyInfo(isReady);
+	}
+
+	private void UpdateMasterPlayerState(int actorNumber)
+	{
+		playerDictionary[actorNumber].WaitState.UpdateMasterInfo();
 	}
 
 
@@ -104,18 +140,25 @@ public class RoomPanel : MonoBehaviourPun
 	/// </summary>
 	public void CheckPlayerReadyState()
 	{
+		isPassableStarting = false;
+
 		if (PhotonNetwork.IsMasterClient) //방장이 아니면 굳이 확인할 필요는 없음. 
 		{
 			int readyCount = PhotonNetwork.PlayerList.Count(x => x.GetReady());
 
 			if (readyCount > 1) //방장 혼자 있을 때는 게임 시작 못하게 막음
 			{
-				if (readyCount == PhotonNetwork.PlayerList.Length)
-					startButton.onClick.AddListener(() => StartGame());
-				else
-					startButton.onClick.RemoveListener(() => StartGame());
+				isPassableStarting = (readyCount == PhotonNetwork.PlayerList.Length);
 			}
 		}
+	}
+
+	public void SwitchedMasterPlayer(Player newMaster)
+	{
+		roomInfo.SetMasterRoomInfo();
+		playerDictionary[newMaster.ActorNumber].UpdateMasterInfo();
+		gameStartController.BtnGameReady.SetReadyBtnImg();
+		CheckPlayerReadyState();
 	}
 
 	/// <summary>
@@ -123,11 +166,14 @@ public class RoomPanel : MonoBehaviourPun
 	/// </summary>
 	public void StartGame()
 	{
-		PhotonNetwork.CurrentRoom.IsOpen = false;
-		PhotonNetwork.CurrentRoom.IsVisible = false;
+		if(isPassableStarting)
+		{
+			PhotonNetwork.CurrentRoom.IsOpen = false;
+			PhotonNetwork.CurrentRoom.IsVisible = false;
 
-		//PhotonNetwork.LoadLevel("GameScene");
-		Debug.Log("게임시작!!");
+			//PhotonNetwork.LoadLevel("GameScene");
+			Debug.Log("게임시작!!");
+		}
 	}
 
 	/// <summary>
