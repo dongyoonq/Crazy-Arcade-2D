@@ -12,8 +12,8 @@ namespace KDY
     {
         public enum Panel { Login, Lobby, Room }
 
-        //[SerializeField]
-        //private LoginPanel loginPanel;
+        [SerializeField]
+        private LoginPanel loginPanel;
         [SerializeField]
         private RoomPanel roomPanel;
         [SerializeField]
@@ -109,18 +109,16 @@ namespace KDY
         public override void OnJoinedLobby()
         {
             SetActivePanel(Panel.Lobby);
-            lobbyPanel.UpdatePlayerList();
         }
 
         public override void OnLeftLobby()
         {
             SetActivePanel(Panel.Login);
-            lobbyPanel.UpdatePlayerList();
         }
 
         private void SetActivePanel(Panel panel)
         {
-            loginPanel.gameObject?.SetActive(panel == Panel.Login);
+            loginPanel.gameObject?.transform.GetChild(0).gameObject.SetActive(panel == Panel.Login);
             roomPanel.gameObject?.SetActive(panel == Panel.Room);
             lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby);
         }

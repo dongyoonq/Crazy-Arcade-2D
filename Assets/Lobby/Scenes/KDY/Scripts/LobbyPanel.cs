@@ -1,6 +1,8 @@
 using MySql.Data.MySqlClient;
+using Photon.Chat;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,19 +25,46 @@ namespace KDY
         [SerializeField] RectTransform playerContent;
         [SerializeField] LobbyPlayer playerPrefab;
 
+        private MySqlConnection connection;
         private MySqlDataReader reader;
+
         private CreateRoomPanel createRoomPanel;
         private Dictionary<string, RoomInfo> roomDictionary;
+
+        private void Awake()
+        {
+            roomDictionary = new Dictionary<string, RoomInfo>();
+        }
+
+        private void Start()
+        {
+            ConnectDataBase();
+        }
+
+        private void ConnectDataBase()
+        {
+            try
+            {
+                string serverInfo = "Server=127.0.0.1; Database=userdata; Uid=root; Pwd=1234; Port=3306; CharSet=utf8;";
+                connection = new MySqlConnection(serverInfo);
+                connection.Open();
+
+                Debug.Log("DataBase Connect Success");
+            }
+            catch (InvalidCastException e)
+            {
+                Debug.Log(e.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
+        }
 
         private void Update()
         {
             playerName.text = PhotonNetwork.NickName;
             ReadSqlData();
-        }
-
-        private void Awake()
-        {
-            roomDictionary = new Dictionary<string, RoomInfo>();
         }
 
         private void OnDisable()
@@ -46,7 +75,7 @@ namespace KDY
         public void ReadSqlData()
         {
             string sqlCommand = string.Format("SELECT Level,Exp FROM user_info WHERE ID ='{0}'", PhotonNetwork.NickName);
-            MySqlCommand cmd = new MySqlCommand(sqlCommand, LoginPanel.connection);
+            MySqlCommand cmd = new MySqlCommand(sqlCommand, connection);
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
@@ -64,19 +93,17 @@ namespace KDY
             }
         }
 
-        public void UpdatePlayerList()
+        public void UpdatePlayerList(ChatChannel chatChannel)
         {
             // Clear Player List
             for (int i = 0; i < playerContent.childCount; i++)
                 Destroy(playerContent.GetChild(i).gameObject);
 
-            Debug.Log(string.Format("{0}", PhotonNetwork.PlayerList.Length));
-
             // Update Player List
-            foreach (Player player in PhotonNetwork.PlayerList)
+            foreach (string users in chatChannel.Subscribers)
             {
                 LobbyPlayer entry = Instantiate(playerPrefab, playerContent);
-                entry.Initialized(player);
+                entry.Initialized(users);
             }
         }
 
@@ -143,7 +170,7 @@ namespace KDY
         {
             string roomName = createRoomPanel.roomNameInput.text;
             if (string.IsNullOrEmpty(roomName))
-                roomName = $"Room {Random.Range(0, 1000)}";
+                roomName = $"Room {UnityEngine.Random.Range(0, 1000)}";
 
             int maxPlayer = 8;
 

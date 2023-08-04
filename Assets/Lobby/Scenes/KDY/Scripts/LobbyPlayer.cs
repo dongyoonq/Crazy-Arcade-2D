@@ -9,12 +9,10 @@ namespace KDY
     public class LobbyPlayer : MonoBehaviour
     {
         [SerializeField] TMP_Text playerName;
-        private Player player;
 
-        public void Initialized(Player player)
+        public void Initialized(string name)
         {
-            this.player = player;
-            playerName.text = player.NickName;
+            playerName.text = name;
         }
     }
 }
