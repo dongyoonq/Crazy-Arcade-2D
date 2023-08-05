@@ -23,23 +23,20 @@ namespace RoomUI.ChooseMap
         [SerializeField] Image mapImg;
         [SerializeField] Image levelImg;
 
-        [SerializeField] Image popularityImg1;
-        [SerializeField] Image popularityImg2;
-        [SerializeField] Image popularityImg3;
-        [SerializeField] Image popularityImg4;
-        [SerializeField] Image popularityImg5;
+		[SerializeField]
+		private PopularityImg popularity;
 
-        [SerializeField]
+		[SerializeField]
         private Button btnOk;
 
 		[SerializeField]
 		private Button btnCancel;
 
-		public Map prevMap;
-        public Map curChoosedMap;
-        public Map curMap;
+		public MapData prevMap;
+        public MapData curChoosedMap;
+        public MapData curMap;
 
-		public UnityAction<Map> OnClosedMapView;
+		public UnityAction<MapData> OnClosedMapView;
 
 
 		private void Awake()
@@ -56,69 +53,30 @@ namespace RoomUI.ChooseMap
 
         public void SetMapInfo(MapList mapList)
         {
-			foreach (Map maps in mapList.maps)
+			foreach (var maps in mapList.Maps)
 			{
 				MapEntry entry = Instantiate(mapEntryPrefab, mapContent);
 				entry.SetMapInfo(maps);
 			}
 
-			curChoosedMap = mapList.maps[0];
+			curChoosedMap = mapList.Maps[0];
 			OnMapChoosed();
 		}
 
         public void OnMapChoosed()
         {
-            mapTitle.text = curChoosedMap.title;
-            maxPlayer.text = curChoosedMap.maxPlayer.ToString();
-            rank.text = curChoosedMap.rank.ToString();
+            mapTitle.text = curChoosedMap.Title;
+            maxPlayer.text = curChoosedMap.MaxPlayer.ToString();
+            rank.text = curChoosedMap.Rank.ToString();
             mapInfo.text = curChoosedMap.info;
-            mapImg.sprite = curChoosedMap.mapImg;
+            mapImg.sprite = curChoosedMap.MapImg;
 
-            if (curChoosedMap.popularity == 1)
-            {
-                popularityImg1.sprite = curChoosedMap.star1;
-                popularityImg2.sprite = curChoosedMap.star2;
-                popularityImg3.sprite = curChoosedMap.star2;
-                popularityImg4.sprite = curChoosedMap.star2;
-                popularityImg5.sprite = curChoosedMap.star2;
-            }
-            else if (curChoosedMap.popularity == 2)
-            {
-                popularityImg1.sprite = curChoosedMap.star1;
-                popularityImg2.sprite = curChoosedMap.star1;
-                popularityImg3.sprite = curChoosedMap.star2;
-                popularityImg4.sprite = curChoosedMap.star2;
-                popularityImg5.sprite = curChoosedMap.star2;
-            }
-            else if (curChoosedMap.popularity == 3)
-            {
-                popularityImg1.sprite = curChoosedMap.star1;
-                popularityImg2.sprite = curChoosedMap.star1;
-                popularityImg3.sprite = curChoosedMap.star1;
-                popularityImg4.sprite = curChoosedMap.star2;
-                popularityImg5.sprite = curChoosedMap.star2;
-            }
-            else if (curChoosedMap.popularity == 4)
-            {
-                popularityImg1.sprite = curChoosedMap.star1;
-                popularityImg2.sprite = curChoosedMap.star1;
-                popularityImg3.sprite = curChoosedMap.star1;
-                popularityImg4.sprite = curChoosedMap.star1;
-                popularityImg5.sprite = curChoosedMap.star2;
-            }
-            else if (curChoosedMap.popularity == 5)
-            {
-                popularityImg1.sprite = curChoosedMap.star1;
-                popularityImg2.sprite = curChoosedMap.star1;
-                popularityImg3.sprite = curChoosedMap.star1;
-                popularityImg4.sprite = curChoosedMap.star1;
-                popularityImg5.sprite = curChoosedMap.star1;
-            }
+            popularity.SetPopularity(curChoosedMap.Popularity);
         }
 
         public void OnOkButtonClicked()
         {
-            Debug.Log($"[OnOkButtonClicked] : {curChoosedMap.title}");
+            //Debug.Log($"[OnOkButtonClicked] : {curChoosedMap.Title}");
 
             curMap = curChoosedMap;
             OnClosedMapView.Invoke(curMap);

@@ -6,8 +6,9 @@ namespace RoomUI.ChooseMap
 {
     public class MapList : MonoBehaviour
     {
-        public List<Map> maps = new List<Map>();
+        public List<MapData> Maps;
 
+		/*
         public Map darkCastle01;
         public Map darkCastle02;
         public Map camp01;
@@ -22,7 +23,7 @@ namespace RoomUI.ChooseMap
             maps.Add(camp01);
             maps.Add(camp02);
             maps.Add(factory01);
-            maps.Add(factory02);
-        }
-    }
+          maps.Add(factory02);
+        }*/
+	}
 }

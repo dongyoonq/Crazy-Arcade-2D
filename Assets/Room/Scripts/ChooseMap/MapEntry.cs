@@ -17,25 +17,25 @@ namespace RoomUI.ChooseMap
         public TMP_Text level;
         public Toggle favoritesCheck;
 
-        private Map map;
+        private MapData map;
         protected virtual void Awake()
         {
             chooseMap = GetComponentInParent<ChooseMap>();
             maplist = GetComponentInParent<MapList>();
         }
 
-        public void SetMapInfo(Map mapInfo)
+        public void SetMapInfo(MapData mapInfo)
         {
             map = mapInfo;
-            title.text = mapInfo.title;
-            maxPlayer.text = mapInfo.maxPlayer.ToString();
-            level.text = mapInfo.level.ToString();
+            //title.text = mapInfo.title;
+            //maxPlayer.text = mapInfo.maxPlayer.ToString();
+            //level.text = mapInfo.level.ToString();
         }
 
         public void OnChooseMapClicked()
         {
-            chooseMap.curChoosedMap = this.map;
-            chooseMap.OnMapChoosed();
+            //chooseMap.curChoosedMap = this.map;
+            //chooseMap.OnMapChoosed();
         }
     }
 }

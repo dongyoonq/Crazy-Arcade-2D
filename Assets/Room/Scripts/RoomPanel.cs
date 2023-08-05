@@ -83,9 +83,7 @@ namespace RoomUI
 				CheckPlayerReadyState();
 		}
 
-		/// <summary>
-		/// �̹� ������ �ִ� ����� + ���� ����
-		/// </summary>
+		
 		private void SetInPlayer()
 		{
 			foreach (Player player in PhotonNetwork.PlayerList)
@@ -138,18 +136,16 @@ namespace RoomUI
 			//startButton.gameObject.SetActive()
 		}
 
-		/// <summary>
-		/// ��� �÷��̾ ready ���°� �Ǹ� start button Ȱ�� ó��
-		/// </summary>
+		
 		public void CheckPlayerReadyState()
 		{
 			isPassableStarting = false;
 
-			if (PhotonNetwork.IsMasterClient) //������ �ƴϸ� ���� Ȯ���� �ʿ�� ����. 
+			if (PhotonNetwork.IsMasterClient) 
 			{
 				int readyCount = PhotonNetwork.PlayerList.Count(x => x.GetReady());
 
-				if (readyCount > 1) //���� ȥ�� ���� ���� ���� ���� ���ϰ� ����
+				if (readyCount > 1) 
 				{
 					isPassableStarting = (readyCount == PhotonNetwork.PlayerList.Length);
 				}
@@ -164,9 +160,6 @@ namespace RoomUI
 			CheckPlayerReadyState();
 		}
 
-		/// <summary>
-		/// ���� ������ �̵�
-		/// </summary>
 		public void StartGame()
 		{
 			if (isPassableStarting)
@@ -175,16 +168,13 @@ namespace RoomUI
 				PhotonNetwork.CurrentRoom.IsVisible = false;
 
 				//PhotonNetwork.LoadLevel("GameScene");
-				Debug.Log("���ӽ���!!");
+				Debug.Log("게임 시작!!");
 			}
 		}
 
-		/// <summary>
-		/// �� ������
-		/// </summary>
 		public void LeaveRoom()
 		{
-			PhotonNetwork.LeaveRoom(); //���� ��Ʈ��ũ�� �� �����ٰ� ��û�ϱ�   
+			PhotonNetwork.LeaveRoom(); 
 		}
 	}
 }
