@@ -19,6 +19,8 @@ namespace KDY
         [SerializeField]
         private LobbyPanel lobbyPanel;
 
+        public List<RoomInfo> rooms;
+
         private void Start()
         {
             if (PhotonNetwork.IsConnected)
@@ -83,6 +85,7 @@ namespace KDY
 
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
+            rooms = roomList;
             lobbyPanel.UpdateRoomList(roomList);
         }
 

@@ -30,7 +30,7 @@ namespace KDY
 
         private string roomPassword;
         private bool isPasswordRoom;
-        private RoomInfo info;
+        public RoomInfo info;
 
         private void Start()
         {
@@ -43,7 +43,18 @@ namespace KDY
             roomName.text = info.CustomProperties["RoomName"].ToString();
             currentPlayer.text = string.Format("{0} / {1}", info.PlayerCount, info.MaxPlayers);
             joinRoomButton.interactable = info.PlayerCount < info.MaxPlayers;
-            roomState.sprite = (info.PlayerCount < info.MaxPlayers) ? Resources.Load<Sprite>("Waiting") : Resources.Load<Sprite>("Full");
+
+            if (info.PlayerCount < info.MaxPlayers)
+            {
+                roomState.sprite = Resources.Load<Sprite>("Waiting");
+                info.CustomProperties["RoomState"] = "Waiting";
+            }
+            else
+            {
+                roomState.sprite = Resources.Load<Sprite>("Full");
+                info.CustomProperties["RoomState"] = "Full";
+            }
+
             roomNumber.text = number.ToString();
             if (roomInfo.CustomProperties.ContainsKey("Password"))
             {
