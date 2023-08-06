@@ -8,13 +8,14 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using RoomUI.Utils;
+using RoomUI.ChangedRoomInfo;
 
 namespace RoomUI
 {
 	public class RoomPanel : MonoBehaviourPunCallbacks
 	{
 		[SerializeField]
-		private RoomInfo roomInfo;
+		private RoomChangedInfo roomInfo;
 
 		[SerializeField]
 		private RectTransform playerContent;

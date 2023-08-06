@@ -9,6 +9,7 @@ namespace RoomUI.ChooseMap
         {
             base.Awake();
 
+            /*
             data = Resources.Load<MapData>("ChooseMap/Data/Camp02Data");
 
             title = data.maps[0].title;
@@ -23,6 +24,7 @@ namespace RoomUI.ChooseMap
             mapImg = data.maps[0].mapImg;
             star1 = data.maps[0].star1;
             star2 = data.maps[0].star2;
+            */
         }
     }
 }

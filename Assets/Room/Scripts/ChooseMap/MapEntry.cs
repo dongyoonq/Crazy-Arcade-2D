@@ -6,36 +6,36 @@ using UnityEngine.UI;
 
 namespace RoomUI.ChooseMap
 {
-    public class MapEntry : MonoBehaviour
-    {
-        public ChooseMap chooseMap;
+	public class MapEntry : MonoBehaviour
+	{
+		public ChooseMap chooseMap;
 
-        public MapList maplist;
+		public MapList maplist;
 
-        public TMP_Text title;
-        public TMP_Text maxPlayer;
-        public TMP_Text level;
-        public Toggle favoritesCheck;
+		public TMP_Text title;
+		public TMP_Text maxPlayer;
+		public TMP_Text level;
+		public Toggle favoritesCheck;
 
-        private Map map;
-        protected virtual void Awake()
-        {
-            chooseMap = GetComponentInParent<ChooseMap>();
-            maplist = GetComponentInParent<MapList>();
-        }
+		private MapData map;
+		protected virtual void Awake()
+		{
+			chooseMap = GetComponentInParent<ChooseMap>();
+			maplist = GetComponentInParent<MapList>();
+		}
 
-        public void SetMapInfo(Map mapInfo)
-        {
-            map = mapInfo;
-            title.text = mapInfo.title;
-            maxPlayer.text = mapInfo.maxPlayer.ToString();
-            level.text = mapInfo.level.ToString();
-        }
+		public void SetMapInfo(MapData mapInfo)
+		{
+			map = mapInfo;
+			//title.text = mapInfo.title;
+			//maxPlayer.text = mapInfo.maxPlayer.ToString();
+			//level.text = mapInfo.level.ToString();
+		}
 
-        public void OnChooseMapClicked()
-        {
-            chooseMap.curChoosedMap = this.map;
-            chooseMap.OnMapChoosed();
-        }
-    }
+		public void OnChooseMapClicked()
+		{
+			//chooseMap.curChoosedMap = this.map;
+			//chooseMap.OnMapChoosed();
+		}
+	}
 }

@@ -11,6 +11,7 @@ namespace RoomUI.ChooseMap
         {
             base.Awake();
 
+            /*
             data = Resources.Load<MapData>("ChooseMap/Data/DarkCastle01Data");
 
             title = data.maps[0].title;
@@ -26,6 +27,7 @@ namespace RoomUI.ChooseMap
 
             star1 = data.maps[0].star1;
             star2 = data.maps[0].star2;
+            */
         }
     }
 }

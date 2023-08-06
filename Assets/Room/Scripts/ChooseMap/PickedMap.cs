@@ -27,7 +27,7 @@ namespace RoomUI.ChooseMap
 
 		private void Awake()
 		{
-			if(PhotonNetwork.IsMasterClient)
+			if (PhotonNetwork.IsMasterClient)
 				btnPickedMap.onClick.AddListener(() => OpenChooseMapUI());
 		}
 
@@ -35,7 +35,7 @@ namespace RoomUI.ChooseMap
 		{
 			Debug.Log("[OpenChooseMapUI] 클릭");
 
-			if(chooseMapUI == null)
+			if (chooseMapUI == null)
 			{
 				chooseMapUI = GameManager.UI.ShowPopUpUI<ChooseMap>(UI_PATH);
 				chooseMapUI.SetMapInfo(mapList);
@@ -43,9 +43,9 @@ namespace RoomUI.ChooseMap
 			}
 		}
 
-		private void ClosedMapView(Map map)
+		private void ClosedMapView(MapData map)
 		{
-			txtMapName.text = map.title;
+			txtMapName.text = map.Title;
 			//todo.선택된 이미지로 세팅
 
 			chooseMapUI = null;

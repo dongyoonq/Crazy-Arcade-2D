@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace RoomUI.ChooseMap
 {
+    /*
     public class Factory02 : Map
     {
         protected override void Awake()
@@ -26,4 +27,5 @@ namespace RoomUI.ChooseMap
             star2 = data.maps[0].star2;
         }
     }
+    */
 }

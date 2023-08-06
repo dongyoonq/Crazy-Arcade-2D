@@ -64,7 +64,7 @@ namespace KDY
         private void Update()
         {
             playerName.text = PhotonNetwork.NickName;
-            ReadSqlData();
+            //ReadSqlData();
         }
 
         private void OnDisable()

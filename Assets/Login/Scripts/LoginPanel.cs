@@ -126,6 +126,7 @@ public class LoginPanel : MonoBehaviour
                 return;
             }
 
+			/*
             string sqlCommand = string.Format("SELECT ID,Password FROM user_info WHERE ID ='{0}'", id);
             MySqlCommand cmd = new MySqlCommand(sqlCommand, connection);
             reader = cmd.ExecuteReader();
@@ -169,7 +170,13 @@ public class LoginPanel : MonoBehaviour
             }
             if (!reader.IsClosed)
                 reader.Close();
-        }
+            */
+
+			PhotonNetwork.LocalPlayer.NickName = id;
+			PhotonNetwork.ConnectUsingSettings();
+
+			ActiveChatManager();
+		}
         catch (Exception e)
         {
             Debug.Log(e.Message);

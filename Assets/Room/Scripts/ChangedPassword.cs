@@ -27,5 +27,21 @@ namespace RoomUI
 			inputPassword.gameObject.SetActive(isChecked);
 			passwordBackImg.gameObject.SetActive(!isChecked);
 		}
+
+		public void SetRoomPassword(bool isPrivate, string pwdValue = "")
+		{
+			ClickedCheckBox(isPrivate);
+			inputPassword.text = pwdValue;
+		}
+
+		public string GetRoomPassword()
+		{
+			return inputPassword.text;
+		}
+
+		public bool IsSetPrivate()
+		{
+			return isPrivateRoom.isOn;
+		}
 	}
 }

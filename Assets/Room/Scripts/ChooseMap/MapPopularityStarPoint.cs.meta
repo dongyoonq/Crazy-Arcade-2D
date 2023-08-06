@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: e235a9a59070d1146b13f15d14a10675
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - StarImg: {instanceID: 0}
+  - StarON: {fileID: 942568707, guid: 155b23651989d384d8dab99f2e7f712b, type: 3}
+  - StarOFF: {fileID: 365158072, guid: 155b23651989d384d8dab99f2e7f712b, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
