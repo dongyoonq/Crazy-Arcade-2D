@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace RoomUI
+namespace RoomUI.PlayerSetting
 {
 	public class SlotController : MonoBehaviourPunCallbacks
 	{

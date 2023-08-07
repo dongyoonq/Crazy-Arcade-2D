@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RoomUI
+namespace RoomUI.PlayerSetting
 {
 	public class ExplainPlayer : MonoBehaviour, IChangeableCharacter
 	{

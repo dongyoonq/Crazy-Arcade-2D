@@ -8,7 +8,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using RoomUI.Utils;
 
-namespace RoomUI
+namespace RoomUI.SetGameReady
 {
 	public class GameStartController : MonoBehaviourPun
 	{

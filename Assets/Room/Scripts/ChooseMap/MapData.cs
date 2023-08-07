@@ -9,6 +9,8 @@ namespace RoomUI.ChooseMap
 	[CreateAssetMenu(fileName = "MapData", menuName = "Data/Map")]
 	public class MapData : ScriptableObject
 	{
+		public int Id;
+
 		public string Title;
 		public int MaxPlayer;
 		public int Level;

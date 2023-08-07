@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RoomUI
+namespace RoomUI.ChangedRoomInfo
 {
 	public class ChangedPassword : MonoBehaviour
 	{

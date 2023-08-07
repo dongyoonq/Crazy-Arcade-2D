@@ -70,6 +70,7 @@ namespace RoomUI.ChangedRoomInfo
 		public void SetMasterRoomInfo()
 		{
 			SetActiveChanged(true);
+			btnChangedRoomInfo.onClick.AddListener(() => OpenChangedRoomInfoUI());
 		}
 
 		private void OpenChangedRoomInfoUI()

@@ -10,7 +10,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using RoomUI.Utils;
 
-namespace RoomUI
+namespace RoomUI.PlayerSetting
 {
 	public class WaitingPlayer : MonoBehaviourPun, IChangeableCharacter
 	{
@@ -63,7 +63,7 @@ namespace RoomUI
 		}
 
 		/// <summary>
-		/// °ÔÀÓ ÁØºñ È°¼º ¿©ºÎ ¾÷µ¥ÀÌÆ®
+		/// ï¿½ï¿½ï¿½ï¿½ ï¿½Øºï¿½ È°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 		/// </summary>
 		public void UpdateReadyInfo()
 		{
@@ -81,7 +81,7 @@ namespace RoomUI
 		}
 
 		/// <summary>
-		/// °ÔÀÓ ÁØºñ È°¼º ¿©ºÎ ¾÷µ¥ÀÌÆ®
+		/// ï¿½ï¿½ï¿½ï¿½ ï¿½Øºï¿½ È°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 		/// </summary>
 		public void UpdateReadyInfo(bool isReady)
 		{

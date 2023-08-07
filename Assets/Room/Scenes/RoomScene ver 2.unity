@@ -13173,8 +13173,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1227450775}
-  - component: {fileID: 1227450773}
   - component: {fileID: 1227450774}
+  - component: {fileID: 1227450776}
   m_Layer: 0
   m_Name: LobbyManager
   m_TagString: Untagged
@@ -13182,21 +13182,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1227450773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1227450772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee53ddf816d91a34781099ffe28a7810, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loginPanel: {fileID: 65401772}
-  roomPanel: {fileID: 812435735}
-  lobbyPanel: {fileID: 1954010566}
 --- !u!222 &1227450774
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13225,6 +13210,21 @@ RectTransform:
   m_AnchoredPosition: {x: 761.8596, y: 548.809}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1227450776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227450772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce21c56270fed15468ca6ed908e5869f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loginPanel: {fileID: 65401772}
+  roomPanel: {fileID: 812435735}
+  lobbyPanel: {fileID: 1954010566}
 --- !u!1 &1232479547
 GameObject:
   m_ObjectHideFlags: 0
@@ -13292,7 +13292,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
+    rgba: 4278255610
   m_fontColor: {r: 0.9804435, g: 1, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3

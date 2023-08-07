@@ -8,9 +8,9 @@ namespace RoomUI.ChooseMap
 {
 	public class MapEntry : MonoBehaviour
 	{
-		public ChooseMap chooseMap;
+		public ChooseMapView chooseMap;
 
-		public MapList maplist;
+		//public MapList maplist;
 
 		public TMP_Text title;
 		public TMP_Text maxPlayer;
@@ -18,24 +18,24 @@ namespace RoomUI.ChooseMap
 		public Toggle favoritesCheck;
 
 		private MapData map;
-		protected virtual void Awake()
+
+		private void Awake()
 		{
-			chooseMap = GetComponentInParent<ChooseMap>();
-			maplist = GetComponentInParent<MapList>();
+			chooseMap = GetComponentInParent<ChooseMapView>();
+			//maplist = GetComponentInParent<MapList>();
 		}
 
 		public void SetMapInfo(MapData mapInfo)
 		{
 			map = mapInfo;
-			//title.text = mapInfo.title;
-			//maxPlayer.text = mapInfo.maxPlayer.ToString();
-			//level.text = mapInfo.level.ToString();
+			title.text = mapInfo.Title;
+			maxPlayer.text = mapInfo.MaxPlayer.ToString();
+			level.text = mapInfo.Level.ToString();
 		}
 
 		public void OnChooseMapClicked()
 		{
-			//chooseMap.curChoosedMap = this.map;
-			//chooseMap.OnMapChoosed();
+			chooseMap.OnChoosedMap?.Invoke(this.map);
 		}
 	}
 }

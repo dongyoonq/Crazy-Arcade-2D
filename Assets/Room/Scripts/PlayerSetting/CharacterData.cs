@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RoomUI
+namespace RoomUI.PlayerSetting
 {
 	[CreateAssetMenu(fileName = "CharacterData", menuName = "Room/Character")]
 	public class CharacterData : ScriptableObject

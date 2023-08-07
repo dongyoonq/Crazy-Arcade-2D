@@ -12,17 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eb0235a30ed8e645bd88285ed9644aa, type: 3}
   m_Name: DarkCastle01Data
   m_EditorClassIdentifier: 
-  maps:
-  - map: {fileID: 0}
-    title: "\uB2E4\uD06C \uCE90\uC2AC 01"
-    maxPlayer: 8
-    level: 1
-    popularity: 1
-    rank: 0
-    info: "\uB2E4\uD06C \uBC40\uD30C\uC774\uC5B4\uAC00 \uC0B4\uACE0 \uC788\uB294
-      \uACF3\uC785\uB2C8\uB2E4. \uC774\uACF3\uC5D0\uC11C\uB294 \uBCA8\uB77C\uB97C
-      \uB354 \uC790\uC8FC \uB9CC\uB0A0 \uC218 \uC788\uC744\uB4EF\uD574\uC694!"
-    favorites: 0
-    mapImg: {fileID: 21300000, guid: 5e5da79b338d70441910badea25ea760, type: 3}
-    star1: {fileID: 942568707, guid: 155b23651989d384d8dab99f2e7f712b, type: 3}
-    star2: {fileID: 365158072, guid: 155b23651989d384d8dab99f2e7f712b, type: 3}
+  Title: "\uB2E4\uD06C \uCE90\uC2AC 01"
+  MaxPlayer: 8
+  Level: 1
+  Popularity: 1
+  Rank: 0
+  info: "\uB2E4\uD06C \uBC40\uD30C\uC774\uC5B4\uAC00 \uC0B4\uACE0 \uC788\uB294 \uACF3\uC785\uB2C8\uB2E4.
+    \uC774\uACF3\uC5D0\uC11C\uB294 \uBCA8\uB77C\uB97C \uB354 \uC790\uC8FC \uB9CC\uB0A0
+    \uC218 \uC788\uC744\uB4EF\uD574\uC694! "
+  Favorites: 0
+  MapImg: {fileID: 0}

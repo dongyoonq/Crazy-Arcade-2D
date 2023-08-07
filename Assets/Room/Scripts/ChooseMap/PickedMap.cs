@@ -10,10 +10,6 @@ namespace RoomUI.ChooseMap
 {
 	public class PickedMap : MonoBehaviourPun
 	{
-		private const string UI_PATH = "ChooseMap/ChooseMap";
-
-		private ChooseMap chooseMapUI;
-
 		private Map map;
 
 		[SerializeField]
@@ -23,32 +19,59 @@ namespace RoomUI.ChooseMap
 		private MapList mapList;
 
 		[SerializeField]
-		private TMP_Text txtMapName;
+		private PickedGameMap gameMap;
+
+		[SerializeField]
+		private ChooseMapView chooseMapUI;
+
+		private bool isActiveUI;
 
 		private void Awake()
 		{
 			if (PhotonNetwork.IsMasterClient)
 				btnPickedMap.onClick.AddListener(() => OpenChooseMapUI());
+
+			isActiveUI = false;
+
+			for(int i=0; i<mapList.Maps.Count; i++)
+				mapList.Maps[i].Id = i;
+		}
+
+		private void Start()
+		{
+			if (mapList != null && mapList.Maps.Count > 0)
+				gameMap.InitGameMap(mapList.Maps[0]);
 		}
 
 		private void OpenChooseMapUI()
 		{
-			Debug.Log("[OpenChooseMapUI] 클릭");
-
-			if (chooseMapUI == null)
+			if (isActiveUI == false)
 			{
-				chooseMapUI = GameManager.UI.ShowPopUpUI<ChooseMap>(UI_PATH);
+				chooseMapUI.gameObject.SetActive(true);
 				chooseMapUI.SetMapInfo(mapList);
 				chooseMapUI.OnClosedMapView += ClosedMapView;
+				chooseMapUI.OnCancelMapView += CancelMapView;
+				isActiveUI = true;
 			}
 		}
 
 		private void ClosedMapView(MapData map)
 		{
-			txtMapName.text = map.Title;
-			//todo.선택된 이미지로 세팅
+			gameMap.OnChoosedMap?.Invoke(map);
+			DisableMapView();
+		}
 
-			chooseMapUI = null;
+		private void CancelMapView()
+		{
+			DisableMapView();
+		}
+
+		private void DisableMapView()
+		{
+			chooseMapUI.OnClosedMapView -= ClosedMapView;
+			chooseMapUI.OnCancelMapView -= CancelMapView;
+
+			isActiveUI = false;
 		}
 	}
 
