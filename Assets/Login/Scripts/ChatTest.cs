@@ -19,10 +19,17 @@ public class ChatTest : MonoBehaviour, IChatClientListener
     [SerializeField] TMP_InputField inputField;
     [SerializeField] TMP_Text outputText;
 
+    [SerializeField] TMP_Dropdown dropdown;
+
+    [SerializeField] TMP_Text toInput;
+
+    private string privateReceiver = "";
+    private string currentChat;
+
     // Use this for initialization
     void Start()
     {
-        
+
         Application.runInBackground = true;
 
         userName = PhotonNetwork.LocalPlayer.NickName; // System.Environment.UserName;
@@ -84,6 +91,7 @@ public class ChatTest : MonoBehaviour, IChatClientListener
     public void OnSubscribed(string[] channels, bool[] results)
     {
         AddLine(string.Format("채널 입장 ({0})", string.Join(",", channels)));
+        Debug.Log(dropdown.value);
     }
 
     public void OnUnsubscribed(string[] channels)
@@ -102,6 +110,7 @@ public class ChatTest : MonoBehaviour, IChatClientListener
     public void OnPrivateMessage(string sender, object message, string channelName)
     {
         Debug.Log("OnPrivateMessage : " + message);
+        AddLine(string.Format("(귓속말) {0} : {1}", sender, message.ToString()));
     }
 
     public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
@@ -112,16 +121,31 @@ public class ChatTest : MonoBehaviour, IChatClientListener
     void Update()
     {
         chatClient.Service();
+
+        if (inputField.text != "" && Input.GetKey(KeyCode.Return))
+        {
+            SubmitPublicChatOnClick();
+            SubmitPrivateChatOnClick();
+        }
     }
 
     public void Input_OnEndEdit(string text)
     {
         if (chatClient.State == ChatState.ConnectedToFrontEnd)
         {
-            //chatClient.PublishMessage(currentChannelName, text);
-            chatClient.PublishMessage(currentChannelName, inputField.text);
+            if (privateReceiver != "")
+            {
+                SubmitPrivateChatOnClick();
+                SubmitPublicChatOnClick();
+                //dropdown.value = dropdown.options.Count;
+            }
+            else
+            {
+                //chatClient.PublishMessage(currentChannelName, text);
+                chatClient.PublishMessage(currentChannelName, inputField.text);
 
-            inputField.text = "";
+                inputField.text = "";
+            }
         }
     }
 
@@ -133,5 +157,90 @@ public class ChatTest : MonoBehaviour, IChatClientListener
     public void OnUserUnsubscribed(string channel, string user)
     {
         throw new System.NotImplementedException();
+    }
+
+    // PrivateChat
+    public void ReceiverOnValueChange(string valueIn)
+    {
+        string curReceiver = privateReceiver;
+        privateReceiver = valueIn;
+
+        if (dropdown.options.Count >= 2)
+        {
+            dropdown.options[1].text = valueIn;
+            dropdown.options[2].text = curReceiver;
+        }
+    }
+    public void SubmitPrivateChatOnClick()
+    {
+        if (privateReceiver != "")
+        {
+            chatClient.SendPrivateMessage(privateReceiver, inputField.text);
+            inputField.text = "";
+            currentChat = "";
+        }
+    }
+    public void SubmitPublicChatOnClick()
+    {
+        if (privateReceiver == "")
+        {
+            chatClient.PublishMessage("Channel 001", inputField.text);
+            inputField.text = "";
+            currentChat = "";
+        }
+    }
+    public void TypeChatOnValueChange(string valueIn)
+    {
+        currentChat = valueIn;
+    }
+
+    public void OnDropdownValueChanging()
+    {
+        Color textColor = toInput.color;
+        float opacity = 1.0f;
+        textColor.a = opacity;
+        toInput.color = textColor;
+    }
+
+    public void OnDropdownValueChanged()
+    {
+        Debug.Log(dropdown.value);
+
+        Color textColor = toInput.color;
+
+
+        if (dropdown.value == 0)
+        {
+            privateReceiver = "";
+           
+            float opacity = 0.0f;
+
+            textColor.a = opacity;
+            toInput.color = textColor;
+        }
+        else if (dropdown.value == 1)
+        {
+            privateReceiver = dropdown.options[1].text;
+
+            float opacity = 1.0f;
+
+            textColor.a = opacity;
+            toInput.color = textColor;
+        }
+        else if (dropdown.value == 2)
+        {
+            privateReceiver = dropdown.options[2].text;
+
+            float opacity = 0.0f;
+
+            textColor.a = opacity;
+            toInput.color = textColor;
+        }
+    }
+
+    public void OnToInputEndEdit()
+    {
+        dropdown.value = 1;
+        Debug.Log(dropdown.value);
     }
 }

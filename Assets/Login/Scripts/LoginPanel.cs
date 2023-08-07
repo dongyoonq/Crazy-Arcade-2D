@@ -22,8 +22,8 @@ public class LoginPanel : MonoBehaviour
 
     [SerializeField] GameObject speakerPopUp;
 
-    private MySqlConnection connection;
-    private MySqlDataReader reader;
+    // private MySqlConnection connection;
+    // private MySqlDataReader reader;
 
     private void OnEnable()
     {
@@ -32,28 +32,28 @@ public class LoginPanel : MonoBehaviour
 
     private void Start()
     {
-        ConnectDataBase();
+        GameManager.Data.ConnectDataBase();
     }
 
-    private void ConnectDataBase()
-    {
-        try
-        {
-            string serverInfo = "Server=127.0.0.1; Database=crazyarcade; Uid=root; Pwd=pkb7018; Port=3306; CharSet=utf8;";
-            connection = new MySqlConnection(serverInfo);
-            connection.Open();
-
-            Debug.Log("DataBase Connect Success");
-        }
-        catch (InvalidCastException e)
-        {
-            Debug.Log(e.Message);
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e.Message);
-        }
-    }
+    // private void ConnectDataBase()
+    // {
+    //     try
+    //     {
+    //         string serverInfo = "Server=127.0.0.1; Database=crazyarcade; Uid=root; Pwd=pkb7018; Port=3306; CharSet=utf8;";
+    //         connection = new MySqlConnection(serverInfo);
+    //         connection.Open();
+    // 
+    //         Debug.Log("DataBase Connect Success");
+    //     }
+    //     catch (InvalidCastException e)
+    //     {
+    //         Debug.Log(e.Message);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Debug.Log(e.Message);
+    //     }
+    // }
 
     public void OnSignUpButtonClicked()
     {
@@ -71,29 +71,29 @@ public class LoginPanel : MonoBehaviour
 
             string sqlCommand = string.Format("SELECT ID FROM user_info WHERE ID ='{0}'", id);
 
-            MySqlCommand cmd = new MySqlCommand(sqlCommand, connection);
-            reader = cmd.ExecuteReader();
+            MySqlCommand cmd = new MySqlCommand(sqlCommand, GameManager.Data.Connection);
+            GameManager.Data.reader = cmd.ExecuteReader();
 
-            if (reader.HasRows)
+            if (GameManager.Data.reader.HasRows)
             {
                 Debug.Log("ID is already exist");
 
                 noticePopUp.notice.text = "해당 아이디는 이미 사용중입니다.";
                 noticePopUp.gameObject.SetActive(true);
 
-                if (!reader.IsClosed)
-                    reader.Close();
+                if (!GameManager.Data.reader.IsClosed)
+                    GameManager.Data.reader.Close();
 
                 return;
             }
             else
             {
-                if (!reader.IsClosed)
-                    reader.Close();
+                if (!GameManager.Data.reader.IsClosed)
+                    GameManager.Data.reader.Close();
 
                 sqlCommand = string.Format("INSERT INTO user_info(Id, Password, Exp, Money) VALUES ('{0}', '{1}', '{2}', '{3}');", id, password, 0f, 0f);
 
-                cmd = new MySqlCommand(sqlCommand, connection);
+                cmd = new MySqlCommand(sqlCommand, GameManager.Data.Connection);
                 if (cmd.ExecuteNonQuery() == 1)
                 {
                     Debug.Log("Success");
@@ -127,15 +127,15 @@ public class LoginPanel : MonoBehaviour
             }
 
             string sqlCommand = string.Format("SELECT ID,Password FROM user_info WHERE ID ='{0}'", id);
-            MySqlCommand cmd = new MySqlCommand(sqlCommand, connection);
-            reader = cmd.ExecuteReader();
+            MySqlCommand cmd = new MySqlCommand(sqlCommand, GameManager.Data.Connection);
+            GameManager.Data.reader = cmd.ExecuteReader();
 
-            if (reader.HasRows)
+            if (GameManager.Data.reader.HasRows)
             {
-                while (reader.Read())
+                while (GameManager.Data.reader.Read())
                 {
-                    string readID = reader["ID"].ToString();
-                    string readPassword = reader["Password"].ToString();
+                    string readID = GameManager.Data.reader["ID"].ToString();
+                    string readPassword = GameManager.Data.reader["Password"].ToString();
 
                     Debug.Log($"Id : {readID}, Pass : {readPassword}");
 
@@ -146,8 +146,8 @@ public class LoginPanel : MonoBehaviour
 
                         ActiveChatManager();
 
-                        if (!reader.IsClosed)
-                            reader.Close();
+                        if (!GameManager.Data.reader.IsClosed)
+                            GameManager.Data.reader.Close();
                         return;
                     }
                     else
@@ -157,8 +157,8 @@ public class LoginPanel : MonoBehaviour
                         noticePopUp.gameObject.SetActive(true);
                         // GameManager.UI.ShowPopUpUI<PopUpUI>("UI/NoticePopUp");
 
-                        if (!reader.IsClosed)
-                            reader.Close();
+                        if (!GameManager.Data.reader.IsClosed)
+                            GameManager.Data.reader.Close();
                         return;
                     }
                 }
@@ -167,8 +167,8 @@ public class LoginPanel : MonoBehaviour
             {
                 Debug.Log("There is no player id");
             }
-            if (!reader.IsClosed)
-                reader.Close();
+            if (!GameManager.Data.reader.IsClosed)
+                GameManager.Data.reader.Close();
         }
         catch (Exception e)
         {
