@@ -177,18 +177,19 @@ namespace KDY
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = maxPlayer;
 
-            roomOptions.CustomRoomProperties = new PhotonHashtable() { { "RoomName", roomName }, { "RoomId", GetRoomNumber() } };
-            roomOptions.CustomRoomPropertiesForLobby = new string[] { "RoomName", "RoomId" };
+            roomOptions.CustomRoomProperties = new PhotonHashtable() { { "RoomName", roomName }, { "RoomId", GetRoomNumber() }, { "RoomState", "Waiting" } };
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { "RoomName", "RoomId", "RoomState", "Map", "Mode" };
 
             if (createRoomPanel.passwordToggle.isOn)
             {
                 roomOptions.CustomRoomProperties = new PhotonHashtable() {
                     { "RoomName", roomName },
                     { "Password", createRoomPanel.passwordInput.text },
-                    { "RoomId", GetRoomNumber() }
+                    { "RoomId", GetRoomNumber() },
+                    { "RoomState", "Waiting" },
                 };
 
-                roomOptions.CustomRoomPropertiesForLobby = new string[] { "RoomName", "Password", "RoomId" };
+                roomOptions.CustomRoomPropertiesForLobby = new string[] { "RoomName", "Password", "RoomId", "RoomState", "Map", "Mode" };
             }
 
             PhotonNetwork.CreateRoom(roomName, roomOptions, null);

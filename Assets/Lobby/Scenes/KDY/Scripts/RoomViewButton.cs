@@ -22,7 +22,7 @@ public class RoomViewButton : MonoBehaviour
         isAllRoomBtn = true;
         button = GetComponent<Button>();
         buttonImg = GetComponent<Image>();
-        waitingRoomImg = Resources.Load<Sprite>("WaitingRoom");
+        waitingRoomImg = Resources.Load<Sprite>("대기방보기&입장");
         allRoomImg = Resources.Load<Sprite>("AllRoomView");
 
         button.onClick.AddListener(ButtonChange);

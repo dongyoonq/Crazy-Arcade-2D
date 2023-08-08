@@ -15,7 +15,7 @@ namespace KDY
         [SerializeField]
         private LoginPanel loginPanel;
         [SerializeField]
-        private RoomUI.RoomPanel roomPanel;
+        private KDY.RoomPanel roomPanel;
         [SerializeField]
         private LobbyPanel lobbyPanel;
 
@@ -59,6 +59,9 @@ namespace KDY
             PhotonNetwork.LocalPlayer.SetLoad(false);
 
             PhotonNetwork.AutomaticallySyncScene = true;
+
+            //RoomEntry currRoom = (RoomEntry)PhotonNetwork.CurrentRoom.CustomProperties["RoomEntry"];
+            //currRoom.roomPlayers = PhotonNetwork.CurrentRoom.Players;
             //roomPanel.UpdatePlayerList();
         }
 
