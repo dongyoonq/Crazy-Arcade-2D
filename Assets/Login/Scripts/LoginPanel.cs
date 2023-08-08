@@ -22,8 +22,8 @@ public class LoginPanel : MonoBehaviour
 
     [SerializeField] GameObject speakerPopUp;
 
-    private MySqlConnection connection;
-    private MySqlDataReader reader;
+    // private MySqlConnection connection;
+    // private MySqlDataReader reader;
 
     private void OnEnable()
     {
@@ -32,28 +32,28 @@ public class LoginPanel : MonoBehaviour
 
     private void Start()
     {
-        ConnectDataBase();
+        GameManager.Data.ConnectDataBase();
     }
 
-    private void ConnectDataBase()
-    {
-        try
-        {
-            string serverInfo = "Server=127.0.0.1; Database=userdata; Uid=root; Pwd=1234; Port=3306; CharSet=utf8;";
-            connection = new MySqlConnection(serverInfo);
-            connection.Open();
-
-            Debug.Log("DataBase Connect Success");
-        }
-        catch (InvalidCastException e)
-        {
-            Debug.Log(e.Message);
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e.Message);
-        }
-    }
+    // private void ConnectDataBase()
+    // {
+    //     try
+    //     {
+    //         string serverInfo = "Server=127.0.0.1; Database=crazyarcade; Uid=root; Pwd=pkb7018; Port=3306; CharSet=utf8;";
+    //         connection = new MySqlConnection(serverInfo);
+    //         connection.Open();
+    // 
+    //         Debug.Log("DataBase Connect Success");
+    //     }
+    //     catch (InvalidCastException e)
+    //     {
+    //         Debug.Log(e.Message);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Debug.Log(e.Message);
+    //     }
+    // }
 
     public void OnSignUpButtonClicked()
     {
@@ -64,40 +64,40 @@ public class LoginPanel : MonoBehaviour
 
             if (string.IsNullOrEmpty(id))
             {
-                noticePopUp.notice.text = "¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.";
+                noticePopUp.notice.text = "ì•„ì´ë””ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.";
                 GameManager.UI.ShowPopUpUI<PopUpUI>("UI/NoticePopUp");
                 return;
             }
 
             string sqlCommand = string.Format("SELECT ID FROM user_info WHERE ID ='{0}'", id);
 
-            MySqlCommand cmd = new MySqlCommand(sqlCommand, connection);
-            reader = cmd.ExecuteReader();
+            MySqlCommand cmd = new MySqlCommand(sqlCommand, GameManager.Data.Connection);
+            GameManager.Data.reader = cmd.ExecuteReader();
 
-            if (reader.HasRows)
+            if (GameManager.Data.reader.HasRows)
             {
                 Debug.Log("ID is already exist");
 
-                noticePopUp.notice.text = "ÇØ´ç ¾ÆÀÌµğ´Â ÀÌ¹Ì »ç¿ëÁßÀÔ´Ï´Ù.";
+                noticePopUp.notice.text = "í•´ë‹¹ ì•„ì´ë””ëŠ” ì´ë¯¸ ì‚¬ìš©ì¤‘ì…ë‹ˆë‹¤.";
                 noticePopUp.gameObject.SetActive(true);
 
-                if (!reader.IsClosed)
-                    reader.Close();
+                if (!GameManager.Data.reader.IsClosed)
+                    GameManager.Data.reader.Close();
 
                 return;
             }
             else
             {
-                if (!reader.IsClosed)
-                    reader.Close();
+                if (!GameManager.Data.reader.IsClosed)
+                    GameManager.Data.reader.Close();
 
                 sqlCommand = string.Format("INSERT INTO user_info(Id, Password, Exp, Money) VALUES ('{0}', '{1}', '{2}', '{3}');", id, password, 0f, 0f);
 
-                cmd = new MySqlCommand(sqlCommand, connection);
+                cmd = new MySqlCommand(sqlCommand, GameManager.Data.Connection);
                 if (cmd.ExecuteNonQuery() == 1)
                 {
                     Debug.Log("Success");
-                    noticePopUp.notice.text = "È¸¿ø°¡ÀÔÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.\n·Î±×ÀÎ ÈÄ ÀÌ¿ëÇÏ¼¼¿ä.";
+                    noticePopUp.notice.text = "íšŒì›ê°€ì…ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\në¡œê·¸ì¸ í›„ ì´ìš©í•˜ì„¸ìš”.";
                     noticePopUp.gameObject.SetActive(true);
                 }
                 else
@@ -121,22 +121,22 @@ public class LoginPanel : MonoBehaviour
 
             if (string.IsNullOrEmpty(id))
             {
-                noticePopUp.notice.text = "¾ÆÀÌµğ¿Í ºñ¹Ğ¹øÈ£¸¦ È®ÀÎÇØÁÖ¼¼¿ä.";
+                noticePopUp.notice.text = "ì•„ì´ë””ì™€ ë¹„ë°€ë²ˆí˜¸ë¥¼ í™•ì¸í•´ì£¼ì„¸ìš”.";
                 noticePopUp.gameObject.SetActive(true);
                 return;
             }
 
 			/*
             string sqlCommand = string.Format("SELECT ID,Password FROM user_info WHERE ID ='{0}'", id);
-            MySqlCommand cmd = new MySqlCommand(sqlCommand, connection);
-            reader = cmd.ExecuteReader();
+            MySqlCommand cmd = new MySqlCommand(sqlCommand, GameManager.Data.Connection);
+            GameManager.Data.reader = cmd.ExecuteReader();
 
-            if (reader.HasRows)
+            if (GameManager.Data.reader.HasRows)
             {
-                while (reader.Read())
+                while (GameManager.Data.reader.Read())
                 {
-                    string readID = reader["ID"].ToString();
-                    string readPassword = reader["Password"].ToString();
+                    string readID = GameManager.Data.reader["ID"].ToString();
+                    string readPassword = GameManager.Data.reader["Password"].ToString();
 
                     Debug.Log($"Id : {readID}, Pass : {readPassword}");
 
@@ -147,19 +147,19 @@ public class LoginPanel : MonoBehaviour
 
                         ActiveChatManager();
 
-                        if (!reader.IsClosed)
-                            reader.Close();
+                        if (!GameManager.Data.reader.IsClosed)
+                            GameManager.Data.reader.Close();
                         return;
                     }
                     else
                     {
                         Debug.Log("Wrong Password");
-                        noticePopUp.notice.text = "¾ÆÀÌµğ¿Í ºñ¹Ğ¹øÈ£¸¦ È®ÀÎÇØÁÖ¼¼¿ä.";
+                        noticePopUp.notice.text = "ì•„ì´ë””ì™€ ë¹„ë°€ë²ˆí˜¸ë¥¼ í™•ì¸í•´ì£¼ì„¸ìš”.";
                         noticePopUp.gameObject.SetActive(true);
                         // GameManager.UI.ShowPopUpUI<PopUpUI>("UI/NoticePopUp");
 
-                        if (!reader.IsClosed)
-                            reader.Close();
+                        if (!GameManager.Data.reader.IsClosed)
+                            GameManager.Data.reader.Close();
                         return;
                     }
                 }
@@ -168,15 +168,11 @@ public class LoginPanel : MonoBehaviour
             {
                 Debug.Log("There is no player id");
             }
-            if (!reader.IsClosed)
-                reader.Close();
-            */
 
-			PhotonNetwork.LocalPlayer.NickName = id;
-			PhotonNetwork.ConnectUsingSettings();
-
-			ActiveChatManager();
-		}
+            if (!GameManager.Data.reader.IsClosed)
+                GameManager.Data.reader.Close();
+        }
+        
         catch (Exception e)
         {
             Debug.Log(e.Message);
