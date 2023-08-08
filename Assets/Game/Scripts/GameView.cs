@@ -38,12 +38,14 @@ public class GameView : MonoBehaviourPunCallbacks
 
 	private void SetPlayer()
 	{
-		float angularStart = (360.0f / 8f) * PhotonNetwork.LocalPlayer.GetPlayerNumber();
-		float x = 20.0f * Mathf.Sin(angularStart * Mathf.Deg2Rad);
-		float z = 20.0f * Mathf.Cos(angularStart * Mathf.Deg2Rad);
-		Vector3 position = new Vector3(x, 0.0f, z);
+		float startPosition = (360.0f / 8f) * PhotonNetwork.LocalPlayer.GetPlayerNumber();
+		float x = 20.0f * Mathf.Sin(startPosition * Mathf.Deg2Rad);
+		float z = 20.0f * Mathf.Cos(startPosition * Mathf.Deg2Rad);
+		Vector3 position = new Vector3(x, z, 0f);
 
-		var newPlayer = PhotonNetwork.Instantiate("GamePlayer", position, Quaternion.identity).transform.GetComponent<GamePlayer>();
+		Debug.Log($"[SetPlayer] {PhotonNetwork.LocalPlayer.NickName}");
+
+		GamePlayer newPlayer = PhotonNetwork.Instantiate("GamePlayer", position, Quaternion.identity).transform.GetComponent<GamePlayer>();
 		newPlayer.PlayerNickName.text = PhotonNetwork.LocalPlayer.NickName;
 	}
 
