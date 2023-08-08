@@ -2,6 +2,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System;
 using System.Collections;
+using RoomUI.ChangedRoomInfo;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
@@ -33,8 +34,8 @@ namespace KDY
 		[SerializeField]
 		private Button changedRoomInfo;
 
-		private RoomUI.RoomData roomData;
-		private RoomUI.ChangedRoomInfo roomInfo;
+		private RoomData roomData;
+		private RoomChangedInfo roomInfo;
 
 		private void Awake()
 		{
@@ -56,7 +57,7 @@ namespace KDY
 			bool isPrivate = pwd.Trim() != "";
 			SetRoomProperty("Map", "Random");
 
-            roomData = new RoomUI.RoomData(num, name, isPrivateRoom: isPrivate, password: pwd);
+            roomData = new RoomData(num, name, isPrivateRoom: isPrivate, password: pwd);
 
 			roomNumber.text = string.Format("{0:D3}", roomData.Number);
 			SetRoomInfo(roomData);
@@ -75,14 +76,14 @@ namespace KDY
 		{
 			if (roomInfo == null)
 			{
-                RoomUI.ChangedRoomInfo roomInfo = Resources.Load<RoomUI.ChangedRoomInfo>(UI_PATH);
-				roomInfo.RoomData = roomData;
-				roomInfo.OnClosedView += SetRoomInfo;
+                //RoomChangedInfo roomInfo = Resources.Load<RoomChangedInfo>(UI_PATH);
+				//roomInfo.RoomData = roomData;
+				//roomInfo.OnClosedView += SetRoomInfo;
 			}
 		}
 
 
-		private void SetRoomInfo(RoomUI.RoomData data)
+		private void SetRoomInfo(RoomData data)
 		{
 			roomData = data;
 

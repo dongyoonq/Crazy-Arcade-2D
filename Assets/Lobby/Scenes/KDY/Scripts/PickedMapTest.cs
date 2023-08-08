@@ -9,73 +9,70 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace RoomUI.ChooseMap
 {
-	public class PickedMapTest : MonoBehaviourPun
-	{
-		private const string UI_PATH = "ChooseMap/ChooseMap";
+    public class PickedMapTest : MonoBehaviourPun
+    {
+        private Map map;
 
-		private ChooseMap chooseMapUI;
+        [SerializeField]
+        private Button btnPickedMap;
 
-		private Map map;
+        [SerializeField]
+        private MapList mapList;
 
-		[SerializeField]
-		private Button btnPickedMap;
+        [SerializeField]
+        private PickedGameMap gameMap;
 
-		[SerializeField]
-		private MapList mapList;
+        [SerializeField]
+        private ChooseMapView chooseMapUI;
 
-		[SerializeField]
-		private TMP_Text txtMapName;
+        private bool isActiveUI;
 
-		private void Awake()
-		{
-			if(PhotonNetwork.IsMasterClient)
-				btnPickedMap.onClick.AddListener(() => OpenChooseMapUI());
-		}
-
-		private void OpenChooseMapUI()
-		{
-			Debug.Log("[OpenChooseMapUI] 클릭");
-
-			if(chooseMapUI == null)
-			{
-				chooseMapUI = GameManager.UI.ShowPopUpUI<ChooseMap>(UI_PATH);
-				chooseMapUI.SetMapInfo(mapList);
-				chooseMapUI.OnClosedMapView += ClosedMapView;
-			}
-		}
-
-		private void ClosedMapView(Map map)
-		{
-			txtMapName.text = map.title;
-			//todo.선택된 이미지로 세팅
-
-			if (map.title.Contains("캠프"))
-			{
-				SetRoomProperty("Map", "Camp");
-			}
-            else if (map.title.Contains("다크 캐슬"))
-			{
-                SetRoomProperty("Map", "DarkCastle");
-            }
-			else if (map.title.Contains("팩토리"))
-			{
-                SetRoomProperty("Map", "Factory");
-            }
-            else if (map.title.Contains("랜덤"))
-            {
-                SetRoomProperty("Map", "Random");
-            }
-
-            chooseMapUI = null;
-		}
-
-        private void SetRoomProperty(string propertyKey, string value)
+        private void Awake()
         {
-            PhotonHashtable property = PhotonNetwork.CurrentRoom.CustomProperties;
+            if (PhotonNetwork.IsMasterClient)
+                btnPickedMap.onClick.AddListener(() => OpenChooseMapUI());
 
-            property[propertyKey] = value;
-            PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+            isActiveUI = false;
+
+            for (int i = 0; i < mapList.Maps.Count; i++)
+                mapList.Maps[i].Id = i;
+        }
+
+        private void Start()
+        {
+            if (mapList != null && mapList.Maps.Count > 0)
+                gameMap.InitGameMap(mapList.Maps[0]);
+        }
+
+        private void OpenChooseMapUI()
+        {
+            if (isActiveUI == false)
+            {
+                chooseMapUI.gameObject.SetActive(true);
+                chooseMapUI.SetMapInfo(mapList);
+                chooseMapUI.OnClosedMapView += ClosedMapView;
+                chooseMapUI.OnCancelMapView += CancelMapView;
+                isActiveUI = true;
+            }
+        }
+
+        private void ClosedMapView(MapData map)
+        {
+            gameMap.OnChoosedMap?.Invoke(map);
+            DisableMapView();
+        }
+
+        private void CancelMapView()
+        {
+            DisableMapView();
+        }
+
+        private void DisableMapView()
+        {
+            chooseMapUI.OnClosedMapView -= ClosedMapView;
+            chooseMapUI.OnCancelMapView -= CancelMapView;
+
+            isActiveUI = false;
         }
     }
-
 }

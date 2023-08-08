@@ -15,7 +15,7 @@ namespace KDY
         [SerializeField]
         private LoginPanel loginPanel;
         [SerializeField]
-        private KDY.RoomPanel roomPanel;
+        private RoomUI.RoomPanel roomPanel;
         [SerializeField]
         private LobbyPanel lobbyPanel;
 

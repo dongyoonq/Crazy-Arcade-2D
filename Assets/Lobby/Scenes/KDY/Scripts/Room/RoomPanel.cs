@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
-using RoomUI;
+using RoomUI.PlayerSetting;
+using RoomUI.SetGameReady;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;

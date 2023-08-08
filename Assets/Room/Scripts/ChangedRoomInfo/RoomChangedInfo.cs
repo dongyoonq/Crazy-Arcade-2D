@@ -60,8 +60,9 @@ namespace RoomUI.ChangedRoomInfo
 			string name = GetRoomProperty("RoomName", $"Room{num}");
 			string pwd = GetRoomProperty("Password", "");
 			bool isPrivate = pwd.Trim() != "";
+            SetRoomProperty("Map", "Random"); // Add From Lobby
 
-			roomData = new RoomData(num, name, isPrivateRoom: isPrivate, password: pwd);
+            roomData = new RoomData(num, name, isPrivateRoom: isPrivate, password: pwd);
 
 			txtRoomNumber.text = string.Format("{0:D3}", roomData.Number);
 			SetRoomInfo(roomData);
