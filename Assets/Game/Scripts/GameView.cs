@@ -27,13 +27,13 @@ public class GameView : MonoBehaviourPunCallbacks
 		if (PhotonNetwork.InRoom)
 		{
 			PhotonNetwork.LocalPlayer.SetLoad(true); //씬에 잘 넘어왔다는 의미로 프로퍼티를 변경
+			SetPlayer();
 		}
 		countdownTimer = 5f;
 	}
 
-	public override void OnJoinedRoom()
+	public override void OnConnectedToMaster()
 	{
-		SetPlayer();
 	}
 
 	private void SetPlayer()

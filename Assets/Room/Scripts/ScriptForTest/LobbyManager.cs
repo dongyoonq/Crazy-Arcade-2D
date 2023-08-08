@@ -108,6 +108,11 @@ namespace RoomUI.ScriptForTest
 			roomPanel.UpdatePlayerState(targetPlayer);
 		}
 
+		public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
+		{
+			lobbyPanel.OnRoomPropertiesUpdate(propertiesThatChanged);
+		}
+
 		public override void OnJoinedLobby()
 		{
 			SetActivePanel(Panel.Lobby);

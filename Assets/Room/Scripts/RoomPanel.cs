@@ -13,6 +13,7 @@ using RoomUI.ChangedRoomInfo;
 using RoomUI.SetGameReady;
 using RoomUI.Chat;
 
+
 namespace RoomUI
 {
 	public class RoomPanel : MonoBehaviourPunCallbacks

@@ -15,7 +15,11 @@ namespace KDY
 {
     public class LobbyPanel : MonoBehaviour
     {
-        [SerializeField] private RoomEntry roomEntryPrefab;
+		private const string ROOM_NAME = "RoomName";
+		private const string PASSWORD = "Password";
+		private const string ROOM_ID = "RoomId";
+
+		[SerializeField] private RoomEntry roomEntryPrefab;
         [SerializeField] private RectTransform roomContent;
         [SerializeField] private Canvas popUpCanvas;
         [SerializeField] private TMP_Text playerName;
@@ -207,5 +211,23 @@ namespace KDY
 
             return cnt;
         }
-    }
+
+		public void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
+		{
+			if (propertiesThatChanged.ContainsKey(ROOM_ID))
+			{
+                string key = propertiesThatChanged[ROOM_ID].ToString();
+
+				if (propertiesThatChanged.ContainsKey(ROOM_NAME))
+                {
+                    //현재 방 이름과 다른 경우 변경
+                }
+
+				if (propertiesThatChanged.ContainsKey(PASSWORD) && propertiesThatChanged[PASSWORD].ToString().Trim() != "")
+                {
+                   //암호방 설정하기
+				}
+			}
+		}
+	}
 }
