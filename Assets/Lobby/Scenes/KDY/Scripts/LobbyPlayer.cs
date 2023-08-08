@@ -12,7 +12,7 @@ namespace KDY
     {
         [SerializeField] TMP_Text playerNameText;
         private Canvas popupCanvas;
-        private string playerName;
+        public string playerName;
 
         private void Start()
         {

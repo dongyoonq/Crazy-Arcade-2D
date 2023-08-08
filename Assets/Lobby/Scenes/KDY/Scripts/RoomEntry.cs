@@ -34,7 +34,7 @@ namespace KDY
 
         private void Start()
         {
-            passwordPanel = transform.parent.parent.parent.GetChild(1).GetComponent<PasswordRoomPanel>();
+            passwordPanel = transform.parent.parent.parent.GetChild(2).GetComponent<PasswordRoomPanel>();
         }
 
         public void Initialized(RoomInfo roomInfo, int number)

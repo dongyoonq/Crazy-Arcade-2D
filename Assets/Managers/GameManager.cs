@@ -12,14 +12,14 @@ public class GameManager : MonoBehaviour
     private static ResourceManager resource;
     private static UIManager ui;
     // private static SceneManager sceneManager;
-    // private static DataManager dataManager;
+    private static DataManager dataManager;
 
     public static GameManager Instance { get { return instance; } }
     public static PoolManager Pool { get { return poolManager; } }
     public static ResourceManager Resource { get { return resource; } }
     public static UIManager UI { get { return ui; } }
     // public static SceneManager Scene { get { return sceneManager; } }
-    // public static DataManager data { get { return dataManager; } }
+    public static DataManager Data { get { return dataManager; } }
 
 
     private void Awake()
@@ -64,9 +64,9 @@ public class GameManager : MonoBehaviour
         // sceneObj.transform.parent = transform;
         // sceneManager = sceneObj.AddComponent<SceneManager>();
 
-        // GameObject dataObj = new GameObject();
-        // dataObj.name = "DataManager";
-        // dataObj.transform.parent = transform;
-        // dataManager = dataObj.AddComponent<DataManager>();
+        GameObject dataObj = new GameObject();
+        dataObj.name = "DataManager";
+        dataObj.transform.parent = transform;
+        dataManager = dataObj.AddComponent<DataManager>();
     }
 }
