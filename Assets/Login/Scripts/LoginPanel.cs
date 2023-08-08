@@ -126,7 +126,6 @@ public class LoginPanel : MonoBehaviour
                 return;
             }
 
-			/*
             string sqlCommand = string.Format("SELECT ID,Password FROM user_info WHERE ID ='{0}'", id);
             MySqlCommand cmd = new MySqlCommand(sqlCommand, GameManager.Data.Connection);
             GameManager.Data.reader = cmd.ExecuteReader();
