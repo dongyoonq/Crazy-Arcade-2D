@@ -8,13 +8,18 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using RoomUI.Utils;
+using RoomUI.PlayerSetting;
+using RoomUI.ChangedRoomInfo;
+using RoomUI.SetGameReady;
+using RoomUI.Chat;
+
 
 namespace RoomUI
 {
 	public class RoomPanel : MonoBehaviourPunCallbacks
 	{
 		[SerializeField]
-		private RoomInfo roomInfo;
+		private RoomChangedInfo roomInfo;
 
 		[SerializeField]
 		private RectTransform playerContent;
@@ -37,6 +42,8 @@ namespace RoomUI
 		{
 			SetInPlayer();
 			CheckPlayerReadyState();
+
+			NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{PhotonNetwork.NickName}님이 참가하셨습니다.");
 		}
 
 		private void OnDisable()
@@ -58,7 +65,13 @@ namespace RoomUI
 		{
 			Destroy(playerDictionary[leavePlayer.ActorNumber].gameObject);
 			playerDictionary.Remove(leavePlayer.ActorNumber);
+
+			Instantiate<WaitingPlayer>(Resources.Load<WaitingPlayer>("WaitingPlayer"), playerContent);
+
 			CheckPlayerReadyState();
+
+			if(PhotonNetwork.IsMasterClient)
+				NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{leavePlayer.NickName}님이 퇴장하셨습니다,");
 		}
 
 		private void AddPlayer()
@@ -83,9 +96,6 @@ namespace RoomUI
 				CheckPlayerReadyState();
 		}
 
-		/// <summary>
-		/// �̹� ������ �ִ� ����� + ���� ����
-		/// </summary>
 		private void SetInPlayer()
 		{
 			foreach (Player player in PhotonNetwork.PlayerList)
@@ -138,53 +148,46 @@ namespace RoomUI
 			//startButton.gameObject.SetActive()
 		}
 
-		/// <summary>
-		/// ��� �÷��̾ ready ���°� �Ǹ� start button Ȱ�� ó��
-		/// </summary>
 		public void CheckPlayerReadyState()
 		{
 			isPassableStarting = false;
 
-			if (PhotonNetwork.IsMasterClient) //������ �ƴϸ� ���� Ȯ���� �ʿ�� ����. 
+			if (PhotonNetwork.IsMasterClient) 
 			{
 				int readyCount = PhotonNetwork.PlayerList.Count(x => x.GetReady());
 
-				if (readyCount > 1) //���� ȥ�� ���� ���� ���� ���� ���ϰ� ����
+				if (readyCount > 1)
 				{
 					isPassableStarting = (readyCount == PhotonNetwork.PlayerList.Length);
 				}
 			}
+
+			isPassableStarting = true;
 		}
 
 		public void SwitchedMasterPlayer(Player newMaster)
 		{
 			roomInfo.SetMasterRoomInfo();
+			playerDictionary[newMaster.ActorNumber].WaitState.UpdateMasterInfo();
 			playerDictionary[newMaster.ActorNumber].UpdateMasterInfo();
 			gameStartController.BtnGameReady.SetReadyBtnImg();
 			CheckPlayerReadyState();
 		}
 
-		/// <summary>
-		/// ���� ������ �̵�
-		/// </summary>
 		public void StartGame()
 		{
-			if (isPassableStarting)
+			if (PhotonNetwork.IsMasterClient && isPassableStarting)
 			{
 				PhotonNetwork.CurrentRoom.IsOpen = false;
 				PhotonNetwork.CurrentRoom.IsVisible = false;
 
-				//PhotonNetwork.LoadLevel("GameScene");
-				Debug.Log("���ӽ���!!");
+				PhotonNetwork.LoadLevel("GameScene");
 			}
 		}
 
-		/// <summary>
-		/// �� ������
-		/// </summary>
 		public void LeaveRoom()
 		{
-			PhotonNetwork.LeaveRoom(); //���� ��Ʈ��ũ�� �� �����ٰ� ��û�ϱ�   
+			PhotonNetwork.LeaveRoom(); 
 		}
 	}
 }

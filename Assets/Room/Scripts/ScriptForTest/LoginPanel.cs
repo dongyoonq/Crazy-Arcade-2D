@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace RoomUI.ScriptForTest
 {
+	/*
 	public class LoginPanel : MonoBehaviour
 	{
 		[SerializeField] TMP_InputField idInputField;
@@ -30,4 +31,5 @@ namespace RoomUI.ScriptForTest
 			return string.Format("Player {0}", Random.Range(1000, 10000));
 		}
 	}
+	//*/
 }

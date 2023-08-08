@@ -64,7 +64,7 @@ public class LoginPanel : MonoBehaviour
 
             if (string.IsNullOrEmpty(id))
             {
-                noticePopUp.notice.text = "¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.";
+                noticePopUp.notice.text = "ì•„ì´ë””ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.";
                 GameManager.UI.ShowPopUpUI<PopUpUI>("UI/NoticePopUp");
                 return;
             }
@@ -78,7 +78,7 @@ public class LoginPanel : MonoBehaviour
             {
                 Debug.Log("ID is already exist");
 
-                noticePopUp.notice.text = "ÇØ´ç ¾ÆÀÌµğ´Â ÀÌ¹Ì »ç¿ëÁßÀÔ´Ï´Ù.";
+                noticePopUp.notice.text = "í•´ë‹¹ ì•„ì´ë””ëŠ” ì´ë¯¸ ì‚¬ìš©ì¤‘ì…ë‹ˆë‹¤.";
                 noticePopUp.gameObject.SetActive(true);
 
                 if (!GameManager.Data.reader.IsClosed)
@@ -97,7 +97,7 @@ public class LoginPanel : MonoBehaviour
                 if (cmd.ExecuteNonQuery() == 1)
                 {
                     Debug.Log("Success");
-                    noticePopUp.notice.text = "È¸¿ø°¡ÀÔÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.\n·Î±×ÀÎ ÈÄ ÀÌ¿ëÇÏ¼¼¿ä.";
+                    noticePopUp.notice.text = "íšŒì›ê°€ì…ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\në¡œê·¸ì¸ í›„ ì´ìš©í•˜ì„¸ìš”.";
                     noticePopUp.gameObject.SetActive(true);
                 }
                 else
@@ -121,11 +121,12 @@ public class LoginPanel : MonoBehaviour
 
             if (string.IsNullOrEmpty(id))
             {
-                noticePopUp.notice.text = "¾ÆÀÌµğ¿Í ºñ¹Ğ¹øÈ£¸¦ È®ÀÎÇØÁÖ¼¼¿ä.";
+                noticePopUp.notice.text = "ì•„ì´ë””ì™€ ë¹„ë°€ë²ˆí˜¸ë¥¼ í™•ì¸í•´ì£¼ì„¸ìš”.";
                 noticePopUp.gameObject.SetActive(true);
                 return;
             }
 
+			/*
             string sqlCommand = string.Format("SELECT ID,Password FROM user_info WHERE ID ='{0}'", id);
             MySqlCommand cmd = new MySqlCommand(sqlCommand, GameManager.Data.Connection);
             GameManager.Data.reader = cmd.ExecuteReader();
@@ -153,7 +154,7 @@ public class LoginPanel : MonoBehaviour
                     else
                     {
                         Debug.Log("Wrong Password");
-                        noticePopUp.notice.text = "¾ÆÀÌµğ¿Í ºñ¹Ğ¹øÈ£¸¦ È®ÀÎÇØÁÖ¼¼¿ä.";
+                        noticePopUp.notice.text = "ì•„ì´ë””ì™€ ë¹„ë°€ë²ˆí˜¸ë¥¼ í™•ì¸í•´ì£¼ì„¸ìš”.";
                         noticePopUp.gameObject.SetActive(true);
                         // GameManager.UI.ShowPopUpUI<PopUpUI>("UI/NoticePopUp");
 
@@ -167,9 +168,11 @@ public class LoginPanel : MonoBehaviour
             {
                 Debug.Log("There is no player id");
             }
+
             if (!GameManager.Data.reader.IsClosed)
                 GameManager.Data.reader.Close();
         }
+        
         catch (Exception e)
         {
             Debug.Log(e.Message);
