@@ -9,7 +9,6 @@ using UnityEngine.SceneManagement;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 using RoomUI.Utils;
 using GameUI;
-using static Photon.Pun.UtilityScripts.PunTeams;
 
 public class TestManager : MonoBehaviourPunCallbacks
 {
