@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using RoomUI.Utils;
+using CustomProperty.Utils;
 
 namespace RoomUI.SetGameReady
 {
@@ -17,7 +17,7 @@ namespace RoomUI.SetGameReady
 		[SerializeField]
 		private Toggle autoReady;
 
-		public UnityAction<Player, bool> OnChangeReadyState;
+		//public UnityAction<Player, bool> OnChangeReadyState;
 
 		private void Awake()
 		{
@@ -30,7 +30,7 @@ namespace RoomUI.SetGameReady
 			if (isChecked)
 			{
 				if (PhotonNetwork.IsMasterClient == false)
-					UpdatePlayerState(true);
+					PhotonNetwork.LocalPlayer.SetReady(true);
 			}
 		}
 
@@ -39,16 +39,8 @@ namespace RoomUI.SetGameReady
 			if (PhotonNetwork.IsMasterClient == false)
 			{
 				bool isReady = !PhotonNetwork.LocalPlayer.GetReady();
-
 				PhotonNetwork.LocalPlayer.SetReady(isReady);
-				UpdatePlayerState(isReady);
 			}
-
-		}
-
-		private void UpdatePlayerState(bool isReady)
-		{
-			OnChangeReadyState?.Invoke(PhotonNetwork.LocalPlayer, isReady);
 		}
 	}
 }
