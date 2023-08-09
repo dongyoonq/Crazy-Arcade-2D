@@ -7,7 +7,7 @@ using Photon.Realtime;
 using TMPro;
 using UnityEngine.SceneManagement;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
-using RoomUI.Utils;
+using CustomProperty.Utils;
 using GameUI;
 
 public class TestManager : MonoBehaviourPunCallbacks
