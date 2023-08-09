@@ -130,5 +130,15 @@ namespace KDY
                 currTeam = (TEAM)stream.ReceiveNext();
             }
         }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("WaterBlock"))
+            {
+                Debug.Log("플레이어 물감옥");
+
+                //Todo : 플레이어 물감옥 상태 처리
+            }
+        }
     }
 }
