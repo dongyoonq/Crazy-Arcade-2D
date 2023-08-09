@@ -84,9 +84,6 @@ namespace KDY
                 CheckPlayerReadyState();
         }
 
-        /// <summary>
-        /// �̹� ������ �ִ� ����� + ���� ����
-        /// </summary>
         private void SetInPlayer()
         {
             foreach (Player player in PhotonNetwork.PlayerList)
@@ -104,21 +101,27 @@ namespace KDY
 
             WaitingPlayer waitingPlayer = playerContent.GetComponentsInChildren<WaitingPlayer>()[index];
             waitingPlayer.SetPlayer(player);
-            waitingPlayer.OnChangedOtherPlayerCharacter += UpdateOtherPlayerCharacter;
-            waitingPlayer.OnChangedOtherPlayerState += UpdateOtherPlayerState;
+			waitingPlayer.OnChangedOtherPlayerCharacter += UpdateOtherPlayerCharacter;
+			waitingPlayer.OnChangedOtherPlayerTeam += UpdateOtherPlayerTeam;
+			waitingPlayer.OnChangedOtherPlayerState += UpdateOtherPlayerState;
             waitingPlayer.OnChangedMasterPlayerState += UpdateMasterPlayerState;
             playerDictionary.Add(player.ActorNumber, waitingPlayer);
 
-            if (player.IsLocal)
-                gameStartController.OnChangeReadyState += UpdatePlayerState;
+            //if (player.IsLocal)
+            //    gameStartController.OnChangeReadyState += UpdatePlayerState;
         }
 
-        private void UpdateOtherPlayerCharacter(int actorNumber, CharacterData data)
-        {
-            playerDictionary[actorNumber].playerImg.sprite = data.Character;
-        }
+		private void UpdateOtherPlayerCharacter(int actorNumber, CharacterData data)
+		{
+			playerDictionary[actorNumber].PlayerSet.PlayerImg.sprite = data.Character;
+		}
 
-        private void UpdateOtherPlayerState(int actorNumber, bool isReady)
+		private void UpdateOtherPlayerTeam(int actorNumber, Color color)
+		{
+			playerDictionary[actorNumber].PlayerSet.TeamColor.color = color;
+		}
+
+		private void UpdateOtherPlayerState(int actorNumber, bool isReady)
         {
             playerDictionary[actorNumber].WaitState.UpdateReadyInfo(isReady);
         }
