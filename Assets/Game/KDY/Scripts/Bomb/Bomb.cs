@@ -8,13 +8,28 @@ namespace KDY
 {
     public class Bomb : MonoBehaviourPun
     {
+        [SerializeField] float tileYInterval;
+        [SerializeField] float tileXInterval;
         [SerializeField] float bombCoolTime;
         [SerializeField] int bombPower = 1;
 
+        [SerializeField] float castingXRange;
+        [SerializeField] float castingYRange;
+
         public InGamePlayer owner;
+        private Vector2 prevLeftWaterPos;
+        private Vector2 prevRightWaterPos;
+        private Vector2 prevUpWaterPos;
+        private Vector2 prevDownWaterPos;
 
         private void OnEnable()
         {
+            prevLeftWaterPos = transform.position;
+            prevRightWaterPos = transform.position;
+            prevUpWaterPos = transform.position;
+            prevDownWaterPos = transform.position;
+
+            SetBombTilePosition();
             // GetOwnerItem();
             StartCoroutine(BombCoolTimer());
         }
@@ -56,34 +71,112 @@ namespace KDY
 
         private void CreateBombWaterLeft(int count)
         {
+            if (CheckStaticBlockObject(prevLeftWaterPos, Vector2.left, 0f))
+                return;
+
+            if (CheckBlockObject(prevLeftWaterPos, Vector2.left))
+            {
+                PhotonNetwork.Instantiate("Prefabs/bombwater_leftend", (Vector3)prevLeftWaterPos + -transform.right * 1f * tileXInterval, Quaternion.identity);
+                return;
+            }
+
             if (count == 1)
-                PhotonNetwork.Instantiate("Prefabs/bombwater_leftend", transform.position + -transform.right * bombPower, Quaternion.identity);
+            {
+                PhotonNetwork.Instantiate("Prefabs/bombwater_leftend", transform.position + -transform.right * bombPower * tileXInterval, Quaternion.identity);
+            }
             else if (count > 1)
-                PhotonNetwork.Instantiate("Prefabs/bombwater_left", transform.position + -transform.right * (bombPower - count + 1), Quaternion.identity);
+            {
+                PhotonNetwork.Instantiate("Prefabs/bombwater_left", transform.position + -transform.right * ((bombPower - count + 1) * tileXInterval), Quaternion.identity);
+                prevLeftWaterPos = transform.position + -transform.right * ((bombPower - count + 1) * tileXInterval);
+            }
         }
 
         private void CreateBombWaterRight(int count)
         {
+            if (CheckStaticBlockObject(prevRightWaterPos, Vector2.right, 0f))
+                return;
+
+            if (CheckBlockObject(prevRightWaterPos, Vector2.right))
+            {
+                PhotonNetwork.Instantiate("Prefabs/bombwater_rightend", (Vector3)prevRightWaterPos + transform.right * 1f * tileXInterval, Quaternion.identity);
+                return;
+            }
+
             if (count == 1)
-                PhotonNetwork.Instantiate("Prefabs/bombwater_rightend", transform.position + transform.right * bombPower, Quaternion.identity);
+            {
+                PhotonNetwork.Instantiate("Prefabs/bombwater_rightend", transform.position + transform.right * bombPower * tileXInterval, Quaternion.identity);
+            }
             else if (count > 1)
-                PhotonNetwork.Instantiate("Prefabs/bombwater_right", transform.position + transform.right * (bombPower - count + 1), Quaternion.identity);
+            {
+                PhotonNetwork.Instantiate("Prefabs/bombwater_right", transform.position + transform.right * ((bombPower - count + 1) * tileXInterval), Quaternion.identity);
+                prevRightWaterPos = transform.position + transform.right * ((bombPower - count + 1) * tileXInterval);
+            }
         }
 
         private void CreateBombWaterUp(int count)
         {
+            if (CheckStaticBlockObject(prevUpWaterPos, Vector2.up, 90f))
+                return;
+
+            if (CheckBlockObject(prevUpWaterPos, Vector2.up))
+            {
+                PhotonNetwork.Instantiate("Prefabs/bombwater_upend", (Vector3)prevUpWaterPos + transform.up * 1f * tileYInterval, Quaternion.identity);
+                return;
+            }
+
             if (count == 1)
-                PhotonNetwork.Instantiate("Prefabs/bombwater_upend", transform.position + transform.up * bombPower, Quaternion.identity);
+            {
+                PhotonNetwork.Instantiate("Prefabs/bombwater_upend", transform.position + transform.up * bombPower * tileYInterval, Quaternion.identity);
+            }
+
             else if (count > 1)
-                PhotonNetwork.Instantiate("Prefabs/bombwater_up", transform.position + transform.up * (bombPower - count + 1), Quaternion.identity);
+            {
+                PhotonNetwork.Instantiate("Prefabs/bombwater_up", transform.position + transform.up * ((bombPower - count + 1) * tileYInterval), Quaternion.identity);
+                prevUpWaterPos = transform.position + transform.up * ((bombPower - count + 1) * tileYInterval);
+            }
         }
 
         private void CreateBombWaterDown(int count)
         {
+            if (CheckStaticBlockObject(prevDownWaterPos, Vector2.down, 90f))
+                return;
+
+            if (CheckBlockObject(prevDownWaterPos, Vector2.down))
+            {
+                PhotonNetwork.Instantiate("Prefabs/bombwater_downend", (Vector3)prevDownWaterPos + -transform.up * 1f * tileYInterval, Quaternion.identity);
+                return;
+            }
+
             if (count == 1)
-                PhotonNetwork.Instantiate("Prefabs/bombwater_downend", transform.position + -transform.up * bombPower, Quaternion.identity);
+            {
+                PhotonNetwork.Instantiate("Prefabs/bombwater_downend", transform.position + -transform.up * bombPower * tileYInterval, Quaternion.identity);
+            }
+
             else if (count > 1)
-                PhotonNetwork.Instantiate("Prefabs/bombwater_down", transform.position + -transform.up * (bombPower - count + 1), Quaternion.identity);
+            {
+                PhotonNetwork.Instantiate("Prefabs/bombwater_down", transform.position + -transform.up * ((bombPower - count + 1) * tileYInterval), Quaternion.identity);
+                prevDownWaterPos = transform.position + -transform.up * ((bombPower - count + 1) * tileYInterval);
+            }
+        }
+
+        private bool CheckStaticBlockObject(Vector2 position, Vector2 direction, float angle)
+        {
+            RaycastHit2D hit = Physics2D.BoxCast(position, new Vector2(castingXRange, castingYRange), angle, direction, 0.5f, LayerMask.GetMask("StaticBlock"));
+
+            if (hit)
+                return true;
+            else
+                return false;
+        }
+
+        private bool CheckBlockObject(Vector2 position, Vector2 direction)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(position, direction, 1f, LayerMask.GetMask("Block"));
+
+            if (hit)
+                return true;
+            else
+                return false;
         }
 
         private void OnTriggerExit2D(Collider2D collision)
@@ -92,6 +185,25 @@ namespace KDY
             {
                 GetComponent<Collider2D>().isTrigger = false;
             }
+        }
+
+        private void SetBombTilePosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.01f, LayerMask.GetMask("Tile"));
+
+            if (hit)
+            {
+                transform.position = hit.transform.position;
+            }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireCube((Vector2)transform.position + Vector2.left * 0.5f, new Vector2(castingXRange, castingYRange));
+            Gizmos.DrawWireCube((Vector2)transform.position + Vector2.right * 0.5f, new Vector2(castingXRange, castingYRange));
+            Gizmos.DrawWireCube((Vector2)transform.position + Vector2.up * 0.5f, new Vector2(castingXRange, castingYRange));
+            Gizmos.DrawWireCube((Vector2)transform.position + Vector2.down * 0.5f, new Vector2(castingXRange, castingYRange));
         }
     }
 

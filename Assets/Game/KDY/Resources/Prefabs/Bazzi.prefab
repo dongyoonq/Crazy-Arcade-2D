@@ -70,9 +70,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 418945519
+  m_SortingLayer: 2
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300008, guid: fd4504cc8b95974408cf339b3bc647eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -102,7 +102,6 @@ GameObject:
   - component: {fileID: 3347720599948304882}
   - component: {fileID: 3347720599948304883}
   - component: {fileID: 3347720599948304876}
-  - component: {fileID: 2755349305934771194}
   - component: {fileID: 7033126112414388746}
   m_Layer: 3
   m_Name: Bazzi
@@ -120,7 +119,7 @@ Transform:
   m_GameObject: {fileID: 3347720599948304877}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3347720599815357152}
@@ -162,8 +161,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0011248589, y: 0.02942577}
-  m_Size: {x: 0.6687226, y: 0.8981448}
+  m_Offset: {x: 0.0062203407, y: -0.042118825}
+  m_Size: {x: 0.6540323, y: 0.6540323}
   m_Direction: 0
 --- !u!114 &3347720599948304885
 MonoBehaviour:
@@ -316,17 +315,6 @@ MonoBehaviour:
     LayerIndex: 0
   - SynchronizeType: 0
     LayerIndex: 1
---- !u!210 &2755349305934771194
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3347720599948304877}
-  m_Enabled: 1
-  m_SortingLayerID: -1694212989
-  m_SortingLayer: 4
-  m_SortingOrder: 0
 --- !u!114 &7033126112414388746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -536,7 +524,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1694212989
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &8064926487713925848
