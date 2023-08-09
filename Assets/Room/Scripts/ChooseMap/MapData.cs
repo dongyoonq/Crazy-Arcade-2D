@@ -6,29 +6,20 @@ using UnityEngine.UI;
 
 namespace RoomUI.ChooseMap
 {
-    [CreateAssetMenu(fileName = "MapData", menuName = "Data/Map")]
-    public class MapData : ScriptableObject
-    {
-        public MapInfo[] maps;
+	[CreateAssetMenu(fileName = "MapData", menuName = "Data/Map")]
+	public class MapData : ScriptableObject
+	{
+		public int Id;
 
-        [Serializable]
-        public class MapInfo
-        {
-            public Map map;
+		public string Title;
+		public int MaxPlayer;
+		public int Level;
+		public int Popularity;
+		public int Rank;
+		public string info;
 
-            public string title;
-            public int maxPlayer;
-            public int level;
-            public int popularity;
-            public int rank;
-            public string info;
+		public bool Favorites;
 
-            public bool favorites;
-
-            public Sprite mapImg;
-
-            public Sprite star1;
-            public Sprite star2;
-        }
-    }
+		public Sprite MapImg;
+	}
 }
