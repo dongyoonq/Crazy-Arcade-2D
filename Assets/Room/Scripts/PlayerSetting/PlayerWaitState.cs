@@ -33,6 +33,7 @@ namespace RoomUI.PlayerSetting
 		{
 			StateEnable.gameObject.SetActive(isReady);
 			StateDisable.gameObject.SetActive(!isReady);
+			StateMaster.gameObject.SetActive(false);
 		}
 
 		public void UpdateMasterInfo()

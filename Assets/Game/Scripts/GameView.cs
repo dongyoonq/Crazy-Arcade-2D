@@ -9,9 +9,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
-using RoomUI.Utils;
+using CustomProperty.Utils;
 using GameUI;
-
+using System;
 
 public class GameView : MonoBehaviourPunCallbacks
 {
@@ -20,6 +20,13 @@ public class GameView : MonoBehaviourPunCallbacks
 	[SerializeField]
 	private TMP_Text infoText;
 
+	[SerializeField]
+	private RectTransform EnteredPlayerList;
+
+	[SerializeField]
+	private RectTransform Players;  // 부모 오브젝트의 Transform 컴포넌트
+
+
 	private float countdownTimer;
 
 	private void Start()
@@ -27,26 +34,43 @@ public class GameView : MonoBehaviourPunCallbacks
 		if (PhotonNetwork.InRoom)
 		{
 			PhotonNetwork.LocalPlayer.SetLoad(true); //씬에 잘 넘어왔다는 의미로 프로퍼티를 변경
-			SetPlayer();
+
+			InstantiatePlayer();
 		}
 		countdownTimer = 5f;
 	}
+
 
 	public override void OnConnectedToMaster()
 	{
 	}
 
-	private void SetPlayer()
+	private void InstantiatePlayer()
 	{
-		float startPosition = (360.0f / 8f) * PhotonNetwork.LocalPlayer.GetPlayerNumber();
-		float x = 20.0f * Mathf.Sin(startPosition * Mathf.Deg2Rad);
-		float z = 20.0f * Mathf.Cos(startPosition * Mathf.Deg2Rad);
-		Vector3 position = new Vector3(x, z, 0f);
+		float baseSizeX = Players.rect.width / 2;
+		float baseSizeY = Players.rect.height / 2;
 
-		Debug.Log($"[SetPlayer] {PhotonNetwork.LocalPlayer.NickName}");
+		float randomX = UnityEngine.Random.Range(baseSizeX * -1, baseSizeX);
+		float randomY = UnityEngine.Random.Range(baseSizeY * -1, baseSizeY);
 
-		GamePlayer newPlayer = PhotonNetwork.Instantiate("GamePlayer", position, Quaternion.identity).transform.GetComponent<GamePlayer>();
-		newPlayer.PlayerNickName.text = PhotonNetwork.LocalPlayer.NickName;
+		Vector3 postion = new Vector3(randomX, randomY, 0);
+		var newPlayer = PhotonNetwork.Instantiate("GamePlayer", postion, Quaternion.identity);
+		newPlayer.transform.SetParent(Players.transform, false);
+		newPlayer.GetComponent<GamePlayer>().PlayerNickName.text = PhotonNetwork.NickName;
+
+		SetEnteredPlayerList();
+	}
+
+	private void SetEnteredPlayerList()
+	{
+		var enteredList = EnteredPlayerList.GetComponentsInChildren<EnteredGamePlayer>();
+
+		int index = 0;
+		foreach (var player in PhotonNetwork.CurrentRoom.Players)
+		{
+			//player.Value.GetPlayerNumber()
+			enteredList[player.Value.GetPlayerNumber()].SetEnteredPlayer(player.Value);
+		}
 	}
 
 	public override void OnDisconnected(DisconnectCause cause)
@@ -63,7 +87,7 @@ public class GameView : MonoBehaviourPunCallbacks
 
 	public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
 	{
-		if (changedProps.ContainsKey(CustomProperty.PROPERTYKEY_LOAD))
+		if (changedProps.ContainsKey(CustProperty.PROPERTYKEY_LOAD))
 		{
 			int loadingCnt = PlayerLoadCount();
 			if (loadingCnt == PhotonNetwork.PlayerList.Length)
@@ -85,7 +109,7 @@ public class GameView : MonoBehaviourPunCallbacks
 
 	public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
 	{
-		if (propertiesThatChanged.ContainsKey(CustomProperty.PROPERTYKEY_LOADTIME))
+		if (propertiesThatChanged.ContainsKey(CustProperty.PROPERTYKEY_LOADTIME))
 		{
 			StartCoroutine(GameStartTimer());
 		}

@@ -7,12 +7,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
-using RoomUI.Utils;
+using CustomProperty.Utils;
 using RoomUI.PlayerSetting;
 using RoomUI.ChangedRoomInfo;
 using RoomUI.SetGameReady;
 using RoomUI.Chat;
-
+using RoomUI.ChooseTeam;
+using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
+using CustomProperty;
+using static Extension;
+using Unity.VisualScripting;
 
 namespace RoomUI
 {
@@ -25,7 +29,13 @@ namespace RoomUI
 		private RectTransform playerContent;
 
 		[SerializeField]
+		private PickedTeam pickedTeam;
+
+		[SerializeField]
 		private GameStartController gameStartController;
+
+		[SerializeField]
+		private List<CharacterData> characterDatas;
 
 		private Dictionary<int, WaitingPlayer> playerDictionary;
 
@@ -80,17 +90,39 @@ namespace RoomUI
 				Instantiate<WaitingPlayer>(Resources.Load<WaitingPlayer>("WaitingPlayer"), playerContent);
 		}
 
-		public void UpdatePlayerState(Player player)
+		public void PlayerPropertiesUpdate(Player player, PhotonHashtable changedProps)
 		{
-			GetPalyerEntry(player)?.UpdateReadyInfo();
+			if (changedProps.ContainsKey(PlayerProp.READY))
+			{
+				GetPalyerEntry(player)?.UpdateReadyInfo();
 
-			if (PhotonNetwork.IsMasterClient)
-				CheckPlayerReadyState();
+				if (PhotonNetwork.IsMasterClient)
+					CheckPlayerReadyState();
+			}
+
+			else if (changedProps.ContainsKey(PlayerProp.TEAM))
+			{
+				Color teamColor;
+				string hexColor = player.CustomProperties[PlayerProp.TEAM].ToString();
+				UnityEngine.ColorUtility.TryParseHtmlString(hexColor, out teamColor);
+
+				UpdateOtherPlayerTeam(player.ActorNumber, teamColor);
+			}
+
+			else if (changedProps.ContainsKey(PlayerProp.CHARACTER))
+			{
+				UpdateOtherPlayerCharacter(player.ActorNumber, player.CustomProperties[PlayerProp.CHARACTER].ToString());
+			}
+		}
+
+		private CharacterData GetCharacterData(CharacterEnum characterEnum)
+		{
+			return characterDatas.Where(x => x.Name == characterEnum.ToString()).FirstOrDefault();
 		}
 
 		public void UpdatePlayerState(Player player, bool isReady)
 		{
-			GetPalyerEntry(player)?.UpdateReadyInfo(isReady);
+			GetPalyerEntry(player)?.UpdateReadyInfo();
 
 			if (PhotonNetwork.IsMasterClient)
 				CheckPlayerReadyState();
@@ -113,18 +145,33 @@ namespace RoomUI
 
 			WaitingPlayer waitingPlayer = playerContent.GetComponentsInChildren<WaitingPlayer>()[index];
 			waitingPlayer.SetPlayer(player);
-			waitingPlayer.OnChangedOtherPlayerCharacter += UpdateOtherPlayerCharacter;
-			waitingPlayer.OnChangedOtherPlayerState += UpdateOtherPlayerState;
-			waitingPlayer.OnChangedMasterPlayerState += UpdateMasterPlayerState;
 			playerDictionary.Add(player.ActorNumber, waitingPlayer);
 
 			if (player.IsLocal)
-				gameStartController.OnChangeReadyState += UpdatePlayerState;
+			{
+				pickedTeam.InitTeam();
+			}
+			else
+			{
+				if(player.CustomProperties.ContainsKey(PlayerProp.CHARACTER))
+					UpdateOtherPlayerCharacter(player.ActorNumber, player.CustomProperties[PlayerProp.CHARACTER].ToString());
+			}
 		}
 
-		private void UpdateOtherPlayerCharacter(int actorNumber, CharacterData data)
+		private void UpdateOtherPlayerCharacter(int actorNumber, string characterKey)
 		{
-			playerDictionary[actorNumber].playerImg.sprite = data.Character;
+			CharacterEnum character = (CharacterEnum)Enum.Parse(typeof(CharacterEnum), characterKey);
+
+			CharacterData data = GetCharacterData((CharacterEnum)character);
+			if (data != null)
+			{
+				playerDictionary[actorNumber].PlayerSet.PlayerImg.sprite = data.Character;
+			}
+		}
+
+		private void UpdateOtherPlayerTeam(int actorNumber, Color color)
+		{
+			playerDictionary[actorNumber].PlayerSet.TeamColor.color = color;
 		}
 
 		private void UpdateOtherPlayerState(int actorNumber, bool isReady)
@@ -171,7 +218,8 @@ namespace RoomUI
 			playerDictionary[newMaster.ActorNumber].WaitState.UpdateMasterInfo();
 			playerDictionary[newMaster.ActorNumber].UpdateMasterInfo();
 			gameStartController.BtnGameReady.SetReadyBtnImg();
-			CheckPlayerReadyState();
+
+			UpdateMasterPlayerState(newMaster.ActorNumber);
 		}
 
 		public void StartGame()
@@ -189,5 +237,8 @@ namespace RoomUI
 		{
 			PhotonNetwork.LeaveRoom(); 
 		}
+
+
+
 	}
 }

@@ -5,22 +5,21 @@ using UnityEngine;
 
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable; 
 
-namespace RoomUI.Utils
+namespace CustomProperty.Utils
 {
-	public static class CustomProperty
+	public static class CustProperty
 	{
-		public const string PROPERTYKEY_READY = "Ready";
 		public const string PROPERTYKEY_LOAD = "Load";
 		public const string PROPERTYKEY_LOADTIME = "LoadTime";
 
 		public static bool GetReady(this Player player)
 		{
-			return GetReadyProperty(player, PROPERTYKEY_READY, false);
+			return GetReadyProperty(player, PlayerProp.READY, false);
 		}
 
 		public static void SetReady(this Player player, bool ready)
 		{
-			SetReadyProperty(player, PROPERTYKEY_READY, ready);
+			SetReadyProperty(player, PlayerProp.READY, ready);
 		}
 
 		public static bool GetLoad(this Player player)
@@ -65,7 +64,7 @@ namespace RoomUI.Utils
 
 		private static void SetReadyProperty<T>(Player player, string propertyKey, T value)
 		{
-			PhotonHashtable property = player.CustomProperties;
+			PhotonHashtable property = new PhotonHashtable();
 
 			property[propertyKey] = value;
 			player.SetCustomProperties(property);
@@ -73,7 +72,7 @@ namespace RoomUI.Utils
 
 		private static void SetReadyProperty<T>(Room room, string propertyKey, T value)
 		{
-			PhotonHashtable property = room.CustomProperties;
+			PhotonHashtable property = new PhotonHashtable();
 
 			property[propertyKey] = value;
 			room.SetCustomProperties(property);

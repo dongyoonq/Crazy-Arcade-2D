@@ -105,7 +105,7 @@ namespace RoomUI.ScriptForTest
 
 		public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
 		{
-			roomPanel.UpdatePlayerState(targetPlayer);
+			roomPanel.PlayerPropertiesUpdate(targetPlayer, changedProps);
 		}
 
 		public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
