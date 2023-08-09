@@ -9,12 +9,14 @@ namespace KDY
 {
     public class InGamePlayer : MonoBehaviourPun, IPunObservable
     {
-        enum TEAM { RED, YELLOW, ORANGE, GREEN, SKY, BLUE, PURPLE, MAGENTA, NONE }
+        public enum TEAM { RED, YELLOW, ORANGE, GREEN, SKY, BLUE, PURPLE, MAGENTA, NONE }
 
         [SerializeField] TMP_Text nameTxt;
 
+        public TEAM currTeam;
+        public List<Item> itemLists;
+
         private string playerName;
-        private TEAM currTeam;
         private Color teamColor;
 
         private void Awake()
@@ -64,7 +66,7 @@ namespace KDY
                     teamColor = Color.green;
                     return TEAM.GREEN;
                 case "SKY":
-                    teamColor = new Color(1, 1, 1, 1);
+                    teamColor = new Color(0.5f, 1, 1, 1);
                     return TEAM.SKY;
                 case "BLUE":
                     teamColor = Color.blue;

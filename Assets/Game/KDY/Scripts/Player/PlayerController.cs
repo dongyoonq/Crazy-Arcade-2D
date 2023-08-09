@@ -12,7 +12,7 @@ namespace KDY
     public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         [SerializeField] float moveSpeed;
-        [SerializeField] float bombCoolTime;
+        [SerializeField] float attackCoolTime;
 
         private PlayerInput playerInput;
         private Rigidbody2D rb;
@@ -82,7 +82,7 @@ namespace KDY
         private void RequestCreateBomb(Vector3 position, Quaternion rotation, PhotonMessageInfo info)
         {
             // 마스터 클라이언트 입장(서버)에서 판정을 진행
-            if (Time.time < lastBombTime + bombCoolTime)
+            if (Time.time < lastBombTime + attackCoolTime)
                 return;
 
             lastBombTime = Time.time;
@@ -97,6 +97,7 @@ namespace KDY
             float lag = (float)(PhotonNetwork.Time - sentTime);
 
             Bomb bomb = GameManager.Resource.Instantiate<Bomb>("Prefabs/Bomb", position, rotation);
+            bomb.owner = GetComponent<InGamePlayer>();
         }
 
         private void SetPlayerColor()
