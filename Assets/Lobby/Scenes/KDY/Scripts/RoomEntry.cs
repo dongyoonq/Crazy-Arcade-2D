@@ -1,3 +1,4 @@
+using CustomProperty;
 using Photon.Pun;
 using Photon.Realtime;
 using RoomUI.ChooseMap;
@@ -50,7 +51,7 @@ namespace KDY
         public void Initialized(RoomInfo roomInfo, int number)
         {
             info = roomInfo;
-            roomName.text = info.CustomProperties["RoomName"].ToString();
+            roomName.text = info.CustomProperties[RoomProp.ROOM_NAME].ToString();
             currentPlayer.text = string.Format("{0} / {1}", info.PlayerCount, info.MaxPlayers);
             joinRoomButton.interactable = info.PlayerCount < info.MaxPlayers;
             
@@ -62,36 +63,36 @@ namespace KDY
                     if (s.name == "´ë±â¹æ_5")
                         roomState.sprite = s;
 
-                info.CustomProperties["RoomState"] = "Waiting";
+                info.CustomProperties[RoomProp.ROOM_STATE] = "Waiting";
             }
             else
             {
                 roomState.sprite = Resources.Load<Sprite>("Full");
-                info.CustomProperties["RoomState"] = "Full";
+                info.CustomProperties[RoomProp.ROOM_STATE] = "Full";
             }
 
             roomNumber.text = string.Format("{0:D3}", number);
-            info.CustomProperties["RoomId"] = number;
+            info.CustomProperties[RoomProp.ROOM_ID] = number;
 
-            if (info.CustomProperties.ContainsKey("Password"))
+            if (info.CustomProperties.ContainsKey(RoomProp.ROOM_PASSWORD))
             {
                 isPasswordRoom = true;
-                roomPassword = (string)info.CustomProperties["Password"];
+                roomPassword = (string)info.CustomProperties[RoomProp.ROOM_PASSWORD];
             }
 
-            if ((string)info.CustomProperties["Map"] == "Camp")
+            if ((string)info.CustomProperties[RoomProp.ROOM_MAP_GROUP] == "Camp")
             {
                 roomImg.sprite = Resources.Load<Sprite>("Map/CampMap");
             }
-            else if ((string)info.CustomProperties["Map"] == "DarkCastle")
+            else if ((string)info.CustomProperties[RoomProp.ROOM_MAP_GROUP] == "DarkCastle")
             {
                 roomImg.sprite = Resources.Load<Sprite>("Map/DarkCastleMap");
             }
-            else if ((string)info.CustomProperties["Map"] == "Factory")
+            else if ((string)info.CustomProperties[RoomProp.ROOM_MAP_GROUP] == "Factory")
             {
                 roomImg.sprite = Resources.Load<Sprite>("Map/FactoryMap");
             }
-            else if ((string)info.CustomProperties["Map"] == "Random")
+            else if ((string)info.CustomProperties[RoomProp.ROOM_MAP_GROUP] == "Random")
             {
                 roomImg.sprite = Resources.Load<Sprite>("Map/AllRandomMap");
             }

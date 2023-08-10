@@ -1,3 +1,4 @@
+using CustomProperty;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace RoomUI.ChooseMap
 {
@@ -41,8 +43,18 @@ namespace RoomUI.ChooseMap
 			mapTitle.text = data.Title;
 			maxPlayer.text = data.MaxPlayer.ToString();
 			mapImg.sprite = data.MapImg;
-			//levelImg.sprite = data.Level
-			popularity.SetPopularity(data.Popularity);
+            SetRoomProperty(RoomProp.ROOM_MAP, data.Title);
+            SetRoomProperty(RoomProp.ROOM_MAP_GROUP, data.Group);
+            //levelImg.sprite = data.Level
+            popularity.SetPopularity(data.Popularity);
 		}
-	}
+
+        private void SetRoomProperty(string propertyKey, string value)
+        {
+            PhotonHashtable property = PhotonNetwork.CurrentRoom.CustomProperties;
+
+            property[propertyKey] = value;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+        }
+    }
 }

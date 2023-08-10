@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eb0235a30ed8e645bd88285ed9644aa, type: 3}
   m_Name: Factory02Data
   m_EditorClassIdentifier: 
+  Id: 5
+  Group: Factory
   Title: "\uD329\uD1A0\uB9AC 02"
   MaxPlayer: 8
   Level: 3

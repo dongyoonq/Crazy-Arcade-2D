@@ -41,8 +41,9 @@ namespace RoomUI.ChooseTeam
 		public void InitTeam()
 		{
 			PhotonHashtable property = new PhotonHashtable();
-			property[PlayerProp.TEAM] = $"#{TempDatas[0].TeamColor.ToHexString()}";
-			PhotonNetwork.LocalPlayer.SetCustomProperties(property);
+			property[PlayerProp.TEAMCOLOR] = $"#{TempDatas[0].TeamColor.ToHexString()}";
+			property[PlayerProp.TEAM] = TempDatas[0].TeamName;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(property);
 		}
 	}
 }

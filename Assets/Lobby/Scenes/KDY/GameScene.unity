@@ -903,7 +903,7 @@ GameObject:
   - component: {fileID: 1741910055}
   - component: {fileID: 1741910054}
   m_Layer: 0
-  m_Name: TestManager
+  m_Name: InGameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -922,7 +922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoText: {fileID: 151192356}
-  countdownTimer: 0
+  countdownTimer: 5
 --- !u!4 &1741910055
 Transform:
   m_ObjectHideFlags: 0

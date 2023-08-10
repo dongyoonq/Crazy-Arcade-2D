@@ -9,8 +9,10 @@ using UnityEngine.SceneManagement;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 using CustomProperty.Utils;
 using GameUI;
+using CustomProperty;
+using static Extension;
 
-public class TestManager : MonoBehaviourPunCallbacks
+public class InGameManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] TMP_Text infoText;
     [SerializeField] float countdownTimer;
@@ -50,7 +52,7 @@ public class TestManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
     {
-        if (changedProps.ContainsKey("Load"))
+        if (changedProps.ContainsKey(PlayerProp.LOAD))
         {
             // 모든 플레이어 로딩 완료
             if (PlayerLoadCount() == PhotonNetwork.PlayerList.Length)
@@ -70,7 +72,7 @@ public class TestManager : MonoBehaviourPunCallbacks
 
     public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
     {
-        if (propertiesThatChanged.ContainsKey("LoadTime"))
+        if (propertiesThatChanged.ContainsKey(RoomProp.LOAD_TIME))
         {
             StartCoroutine(GameStartTimer());
         }
@@ -101,7 +103,7 @@ public class TestManager : MonoBehaviourPunCallbacks
     private void GameStart()
     {
         // Todo : debug game start
-        Debug.Log("Game Mode");
+        CharacterPropertyInstantiate();
     }
 
     IEnumerator DebugGameSetupDelay()
@@ -114,7 +116,7 @@ public class TestManager : MonoBehaviourPunCallbacks
     private void DebugGameStart()
     {
         // Team Property Test : 실제로는 Room에서 프로퍼티 설정함
-        string[] randoms = { "RED", "YELLOW", "ORANGE", "GREEN", "SKY", "BLUE", "PURPLE", "MAGENTA" };
+        string[] randoms = { "Red", "Yellow", "Orange", "Green", "Skyblue", "Blue", "Purple", "Pink" };
 
         SetPlayerTeamProperty(randoms[Random.Range(0,8)]);
 
@@ -141,10 +143,10 @@ public class TestManager : MonoBehaviourPunCallbacks
         return loadCount;
     }
 
-    private void SetPlayerTeamProperty(string teamColor)
+    private void SetPlayerTeamProperty(string team)
     {
         PhotonHashtable property = PhotonNetwork.LocalPlayer.CustomProperties;
-        property["Team"] = teamColor;
+        property[PlayerProp.TEAM] = team;
         PhotonNetwork.LocalPlayer.SetCustomProperties(property);
     }
 
@@ -155,19 +157,31 @@ public class TestManager : MonoBehaviourPunCallbacks
     {
         PhotonHashtable property = PhotonNetwork.LocalPlayer.CustomProperties;
 
-        if (!property.ContainsKey("Character"))
+        if (!property.ContainsKey(PlayerProp.CHARACTER))
         {
             Debug.Log("프로퍼티가 없습니다");
         }
 
-        switch (property["Character"])
+        Vector3 position = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0f);
+
+        switch ((CharacterEnum)property[PlayerProp.CHARACTER])
         {
-            // ex
-            /*
-             * case Character.Bazzi:
-             *      PhotonNetwork.Instantiate("Prefabs/Bazzi", position, Quaternion.identity); 
-             *      break;
-             */
+            case CharacterEnum.Dao:
+                PhotonNetwork.Instantiate("Prefabs/Dao", position, Quaternion.identity);
+                Debug.Log("Dao Create");
+                break;
+            case CharacterEnum.Cappi:
+                PhotonNetwork.Instantiate("Prefabs/Cappi", position, Quaternion.identity);
+                Debug.Log("Cappi Create");
+                break;
+            case CharacterEnum.Marid:
+                PhotonNetwork.Instantiate("Prefabs/Marid", position, Quaternion.identity);
+                Debug.Log("Marid Create");
+                break;
+            case CharacterEnum.Bazzi:
+                PhotonNetwork.Instantiate("Prefabs/Bazzi", position, Quaternion.identity);
+                Debug.Log("Bazzi Create");
+                break;
         }
     }
 }

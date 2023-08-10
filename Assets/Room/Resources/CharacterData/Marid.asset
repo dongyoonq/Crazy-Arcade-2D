@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Marid
   m_EditorClassIdentifier: 
   Name: Marid
+  CharacterEnum: 2
   Character: {fileID: 21300000, guid: 9db4df2d0aa31d84d8b1771e17c5046e, type: 3}
   Description: {fileID: 21300000, guid: fe600cfd110201f4d8cebc148e49fed3, type: 3}

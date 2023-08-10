@@ -12,6 +12,7 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 using CustomProperty.Utils;
 using GameUI;
 using System;
+using CustomProperty;
 
 public class GameView : MonoBehaviourPunCallbacks
 {
@@ -87,7 +88,7 @@ public class GameView : MonoBehaviourPunCallbacks
 
 	public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
 	{
-		if (changedProps.ContainsKey(CustProperty.PROPERTYKEY_LOAD))
+		if (changedProps.ContainsKey(PlayerProp.LOAD))
 		{
 			int loadingCnt = PlayerLoadCount();
 			if (loadingCnt == PhotonNetwork.PlayerList.Length)
@@ -109,7 +110,7 @@ public class GameView : MonoBehaviourPunCallbacks
 
 	public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
 	{
-		if (propertiesThatChanged.ContainsKey(CustProperty.PROPERTYKEY_LOADTIME))
+		if (propertiesThatChanged.ContainsKey(RoomProp.LOAD_TIME))
 		{
 			StartCoroutine(GameStartTimer());
 		}
