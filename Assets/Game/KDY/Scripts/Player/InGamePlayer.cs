@@ -1,16 +1,17 @@
+using CustomProperty;
 using Photon.Pun;
+using RoomUI.ChooseTeam;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static Extension;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace KDY
 {
     public class InGamePlayer : MonoBehaviourPun, IPunObservable
     {
-        public enum TEAM { RED, YELLOW, ORANGE, GREEN, SKY, BLUE, PURPLE, MAGENTA, NONE }
-
         [SerializeField] TMP_Text nameTxt;
 
         public TEAM currTeam;
@@ -21,13 +22,13 @@ namespace KDY
 
         private void Awake()
         {
+            currTeam = GetTeamFromProperty();
+            nameTxt.color = GetColorFromProperty();
+
             if (photonView.IsMine)
             {
                 playerName = photonView.Owner.NickName;
                 nameTxt.text = playerName;
-                currTeam = GetTeamFromProperty();
-                Debug.Log(currTeam.ToString());
-                nameTxt.color = teamColor;
             }
         }
 
@@ -36,47 +37,57 @@ namespace KDY
             if (!photonView.IsMine)
             {
                 nameTxt.text = playerName;
-                SetTeamColor();
-                nameTxt.color = teamColor;
             }
         }
 
+        private Color GetColorFromProperty()
+        {
+            PhotonHashtable property = photonView.Owner.CustomProperties;
+
+            string hexColor = (string)property[PlayerProp.TEAMCOLOR];
+
+            if (ColorUtility.TryParseHtmlString(hexColor, out Color color))
+            {
+                teamColor = color;
+                return color;
+            }
+            else
+            {
+                Debug.LogWarning("Invalid hex color string: " + hexColor);
+                teamColor = Color.white;
+                return Color.white; // 또는 다른 기본값
+            }
+        }
+
+        
         private TEAM GetTeamFromProperty()
         {
             PhotonHashtable property = photonView.Owner.CustomProperties;
 
-            if (!property.ContainsKey("Team"))
+            if (!property.ContainsKey(PlayerProp.TEAM))
             {
                 Debug.Log("프로퍼티가 없습니다");
                 return TEAM.NONE;
             }
 
-            switch ((string)property["Team"])
+            switch ((string)property[PlayerProp.TEAM])
             {
-                case "RED":
-                    teamColor = Color.red;
+                case "Red":
                     return TEAM.RED;
-                case "YELLOW":
-                    teamColor = Color.yellow;
+                case "Yellow":
                     return TEAM.YELLOW;
-                case "ORANGE":
-                    teamColor = new Color(1, 0.5f, 0, 1);
+                case "Orange":
                     return TEAM.ORANGE;
-                case "GREEN":
-                    teamColor = Color.green;
+                case "Green":
                     return TEAM.GREEN;
-                case "SKY":
-                    teamColor = new Color(0.5f, 1, 1, 1);
+                case "Skyblue":
                     return TEAM.SKY;
-                case "BLUE":
-                    teamColor = Color.blue;
+                case "Blue":
                     return TEAM.BLUE;
-                case "PURPLE":
-                    teamColor = new Color(0.5f, 0, 1, 1);
+                case "Purple":
                     return TEAM.PURPLE;
-                case "MAGENTA":
-                    teamColor = Color.magenta;
-                    return TEAM.MAGENTA;
+                case "Pink":
+                    return TEAM.PINK;
                 default:
                     Debug.Log("선택된 팀이 없습니다.");
                     return TEAM.NONE;
@@ -108,7 +119,7 @@ namespace KDY
                 case TEAM.PURPLE:
                     teamColor = new Color(0.5f, 0, 1, 1);
                     break;
-                case TEAM.MAGENTA:
+                case TEAM.PINK:
                     teamColor = Color.magenta;
                     break;
                 default:

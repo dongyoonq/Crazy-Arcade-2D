@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eb0235a30ed8e645bd88285ed9644aa, type: 3}
   m_Name: Camp02Data
   m_EditorClassIdentifier: 
+  Id: 1
+  Group: Camp
   Title: "\uCEA0\uD504 02"
   MaxPlayer: 4
   Level: 1

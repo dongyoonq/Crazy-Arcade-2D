@@ -125,7 +125,7 @@ namespace KDY
 
         private void SetActivePanel(Panel panel)
         {
-            loginPanel.gameObject?.transform.GetChild(0).gameObject.SetActive(panel == Panel.Login);
+            loginPanel.gameObject?.SetActive(panel == Panel.Login);
             roomPanel.gameObject?.SetActive(panel == Panel.Room);
             lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby);
         }

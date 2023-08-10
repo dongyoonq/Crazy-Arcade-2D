@@ -150,6 +150,7 @@ namespace RoomUI
 			if (player.IsLocal)
 			{
 				pickedTeam.InitTeam();
+				InitCharacter();
 			}
 			else
 			{
@@ -229,8 +230,8 @@ namespace RoomUI
 				PhotonNetwork.CurrentRoom.IsOpen = false;
 				PhotonNetwork.CurrentRoom.IsVisible = false;
 
-				PhotonNetwork.LoadLevel("GameScene");
-			}
+				LoadMapScene();
+            }
 		}
 
 		public void LeaveRoom()
@@ -238,7 +239,23 @@ namespace RoomUI
 			PhotonNetwork.LeaveRoom(); 
 		}
 
+		private void InitCharacter()
+		{
+            PhotonHashtable property = new PhotonHashtable();
+			property[PlayerProp.CHARACTER] = CharacterEnum.Dao;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(property);
+        }
 
-
+		private void LoadMapScene()
+		{
+            // ROOM_MAP is MapData.Title
+            switch ((string)PhotonNetwork.CurrentRoom.CustomProperties[RoomProp.ROOM_MAP])
+			{
+				// Todo Scene Load
+				default:
+                    PhotonNetwork.LoadLevel("GameScene");
+					break;
+            }
+		}
 	}
 }

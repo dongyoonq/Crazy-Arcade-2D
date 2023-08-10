@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Cappi
   m_EditorClassIdentifier: 
   Name: Cappi
+  CharacterEnum: 1
   Character: {fileID: 21300000, guid: d1c4a859d3da15d4cae5e291faa0b510, type: 3}
   Description: {fileID: 21300000, guid: 850800630cfe38743a6258970bfcdab2, type: 3}

@@ -87,7 +87,7 @@ namespace RoomUI.PlayerSetting
 			PlayerSet.PlayerImg.sprite = data.Character;
 
 			PhotonHashtable property = new PhotonHashtable();
-			property[PlayerProp.CHARACTER] = data.Name;
+			property[PlayerProp.CHARACTER] = data.CharacterEnum;
 			player.SetCustomProperties(property);
 		}
 

@@ -9,9 +9,6 @@ namespace CustomProperty.Utils
 {
 	public static class CustProperty
 	{
-		public const string PROPERTYKEY_LOAD = "Load";
-		public const string PROPERTYKEY_LOADTIME = "LoadTime";
-
 		public static bool GetReady(this Player player)
 		{
 			return GetReadyProperty(player, PlayerProp.READY, false);
@@ -24,22 +21,22 @@ namespace CustomProperty.Utils
 
 		public static bool GetLoad(this Player player)
 		{
-			return GetReadyProperty(player, PROPERTYKEY_LOAD, false);
+			return GetReadyProperty(player, PlayerProp.LOAD, false);
 		}
 
 		public static void SetLoad(this Player player, bool load)
 		{
-			SetReadyProperty(player, PROPERTYKEY_LOAD, load);
+			SetReadyProperty(player, PlayerProp.LOAD, load);
 		}
 
 		public static int GetLoadTime(this Room room)
 		{
-			return GetReadyProperty(room, PROPERTYKEY_LOADTIME, -1);
+			return GetReadyProperty(room, RoomProp.LOAD_TIME, -1);
 		}
 
 		public static void SetLoadTime(this Room room, int loadTime)
 		{
-			SetReadyProperty(room, PROPERTYKEY_LOADTIME, loadTime);
+			SetReadyProperty(room, RoomProp.LOAD_TIME, loadTime);
 		}
 
 		private static T GetReadyProperty<T>(Player player, string propertyKey, T returnValue)

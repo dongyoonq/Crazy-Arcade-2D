@@ -9,6 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
+using CustomProperty;
 
 namespace KDY
 {
@@ -55,7 +56,7 @@ namespace KDY
 			string name = GetRoomProperty("RoomName", $"Room{num}");
 			string pwd = GetRoomProperty("Password", "");
 			bool isPrivate = pwd.Trim() != "";
-			SetRoomProperty("Map", "Random");
+			SetRoomProperty(RoomProp.ROOM_MAP_GROUP, "Random");
 
             roomData = new RoomData(num, name, isPrivateRoom: isPrivate, password: pwd);
 

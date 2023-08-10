@@ -11,6 +11,7 @@ namespace RoomUI.ChooseMap
 	{
 		public int Id;
 
+		public string Group;
 		public string Title;
 		public int MaxPlayer;
 		public int Level;

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eb0235a30ed8e645bd88285ed9644aa, type: 3}
   m_Name: DarkCastle02Data
   m_EditorClassIdentifier: 
+  Id: 3
+  Group: DarkCastle
   Title: "\uB2E4\uD06C \uCE90\uC2AC 02"
   MaxPlayer: 8
   Level: 1

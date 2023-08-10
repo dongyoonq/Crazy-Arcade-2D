@@ -11,4 +11,6 @@ public class Extension : MonoBehaviour
 		Marid,
 		Bazzi
 	}
+
+    public enum TEAM { RED, YELLOW, ORANGE, GREEN, SKY, BLUE, PURPLE, PINK, NONE }
 }

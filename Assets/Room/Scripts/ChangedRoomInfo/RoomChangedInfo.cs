@@ -1,3 +1,4 @@
+using CustomProperty;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -56,11 +57,11 @@ namespace RoomUI.ChangedRoomInfo
 
 		private void OnEnable()
 		{
-			int num = (int)PhotonNetwork.CurrentRoom.CustomProperties["RoomId"];
-			string name = GetRoomProperty("RoomName", $"Room{num}");
-			string pwd = GetRoomProperty("Password", "");
+			int num = (int)PhotonNetwork.CurrentRoom.CustomProperties[RoomProp.ROOM_ID];
+			string name = GetRoomProperty(RoomProp.ROOM_NAME, $"Room{num}");
+			string pwd = GetRoomProperty(RoomProp.ROOM_PASSWORD, "");
 			bool isPrivate = pwd.Trim() != "";
-            SetRoomProperty("Map", "Random"); // Add From Lobby
+            SetRoomProperty(RoomProp.ROOM_MAP_GROUP, "Random"); // Add From Lobby
 
             roomData = new RoomData(num, name, isPrivateRoom: isPrivate, password: pwd);
 
@@ -97,8 +98,8 @@ namespace RoomUI.ChangedRoomInfo
 			imgRoomMode.sprite = roomModeIcons[(int)roomData.Mode];
 			imgRoomPassword.gameObject.SetActive(roomData.IsPrivateRoom);
 
-			SetRoomProperty("RoomName", roomData.Name);
-			SetRoomProperty("Password", roomData.Password);
+			SetRoomProperty(RoomProp.ROOM_NAME, roomData.Name);
+			SetRoomProperty(RoomProp.ROOM_PASSWORD, roomData.Password);
 
 			viewChangedRoomInfo.OnClosedView -= SetRoomInfo;
 			isActiveChangedView = false;

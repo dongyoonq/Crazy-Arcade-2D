@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static Extension;
 
 namespace RoomUI.PlayerSetting
 {
@@ -9,6 +10,8 @@ namespace RoomUI.PlayerSetting
 	public class CharacterData : ScriptableObject
 	{
 		public string Name;
+
+		public CharacterEnum CharacterEnum; 
 
 		public Sprite Character;
 

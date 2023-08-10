@@ -36,8 +36,9 @@ namespace RoomUI.ChooseTeam
 			togChecked.isOn = true;
 
 			PhotonHashtable property = new PhotonHashtable();
-			property[PlayerProp.TEAM] = $"#{teamData.TeamColor.ToHexString()}";
-			PhotonNetwork.LocalPlayer.SetCustomProperties(property);
+			property[PlayerProp.TEAMCOLOR] = $"#{teamData.TeamColor.ToHexString()}";
+            property[PlayerProp.TEAM] = teamData.TeamName;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(property);
 		}
 	}
 

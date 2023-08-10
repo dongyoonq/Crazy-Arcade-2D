@@ -8,12 +8,19 @@ namespace CustomProperty
 	[Serializable]
 	public class PlayerProp
 	{
-		public const string READY = "Ready";
+        // READY is Player Check Ready, READY is used RoomPanel, PlayerWaitState, WaitingPlayer, GameStartController
+        public const string READY = "Ready";
 
-		public const string LOAD = "Load";
+        // In GameScene All Player Load check count
+        public const string LOAD = "Load";
 
-		public const string TEAM = "TeamColor";
+        // TEAMCOLOR is dividing team player (distinguish team by color), used Room : set, Game : load
+		public const string TEAMCOLOR = "TeamColor";
 
-		public const string CHARACTER = "Character";
-	}
+        // TEAM is dividing team player (distinguish team), used Room : set, Game : load
+        public const string TEAM = "Team";
+
+        // CHARACTER is selected room character, used Room : set, Game : instantiate
+        public const string CHARACTER = "Character";
+    }
 }
