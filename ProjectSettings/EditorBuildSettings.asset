@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Lobby/Scenes/KDY/GameScene.unity
     guid: f1c9790f64869214cb9260e136c29a95
+  - enabled: 0
+    path: Assets/Room/Scenes/RoomScene ver 2.unity
+    guid: b37b3f8667dea3849a68d8aaecda455e
+  - enabled: 0
+    path: Assets/Game/Scenes/GameScene.unity
+    guid: bde3b99d90d5b404ba5a537489fd0394
   m_configObjects: {}

@@ -316,6 +316,7 @@ MonoBehaviour:
   OpenSlot: {fileID: 8413115591953840634}
   CloseSlot: {fileID: 1821639495982469247}
   BtnChangeSlot: {fileID: 6731175979436135926}
+  SlotNumber: 0
 --- !u!1 &5557168134698813541
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,6 +735,7 @@ MonoBehaviour:
   PlayerImg: {fileID: 5668446438599100580}
   LevelImg: {fileID: 48063894}
   TeamColor: {fileID: 1550552102}
+  Team: 
 --- !u!1 &8413115591530249097
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,7 +828,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d5a19607f79746498180821dcc23205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotController: {fileID: 1607575458435414644}
+  Slot: {fileID: 1607575458435414644}
   playerWaitState: {fileID: 2054390156757287295}
   playerId: {fileID: 7928805443150724381}
   PlayerSet: {fileID: 346573901}

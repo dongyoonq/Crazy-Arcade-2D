@@ -3,19 +3,21 @@ using Photon.Pun;
 using Photon.Realtime;
 using RoomUI.ChooseMap;
 using SYJ;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using static Extension;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 namespace KDY
 {
-    public class RoomEntry : MonoBehaviour
-    {
-        
+    public class RoomEntry : MonoBehaviourPunCallbacks
+    {   
         [SerializeField]
         private RectTransform roomType;
         [SerializeField]
@@ -34,24 +36,27 @@ namespace KDY
         private Image roomImg;
 
         private Canvas popUpCanvas;
-        PasswordRoomPanel passwordPanel;
+        private PasswordRoomPanel passwordPanel;
 
-        public Dictionary<int, Player> roomPlayers;
         private string roomPassword;
         private bool isPasswordRoom;
-        public RoomInfo info;
 
-        private void Start()
+		public RoomInfo RoomInfo { get; private set; }
+        public int RoomNumber { get; private set; }
+
+		private void Start()
         {
-            passwordPanel = transform.parent.parent.parent.GetChild(2).GetComponent<PasswordRoomPanel>();
             infoButton.onClick.AddListener(ShowRoomPlayers);
             popUpCanvas = GameObject.Find("PopUp").GetComponent<Canvas>();
         }
 
-        public void Initialized(RoomInfo roomInfo, int number)
+        public void Initialized(RoomInfo info, int number, PasswordRoomPanel passwordRoomPanel)
         {
-            info = roomInfo;
-            roomName.text = info.CustomProperties[RoomProp.ROOM_NAME].ToString();
+            RoomNumber = number;
+            passwordPanel = passwordRoomPanel;
+            RoomInfo = info;
+
+			roomName.text = info.CustomProperties[RoomProp.ROOM_NAME].ToString();
             currentPlayer.text = string.Format("{0} / {1}", info.PlayerCount, info.MaxPlayers);
             joinRoomButton.interactable = info.PlayerCount < info.MaxPlayers;
             
@@ -76,10 +81,11 @@ namespace KDY
 
             if (info.CustomProperties.ContainsKey(RoomProp.ROOM_PASSWORD))
             {
-                isPasswordRoom = true;
-                roomPassword = (string)info.CustomProperties[RoomProp.ROOM_PASSWORD];
+                roomPassword = info.CustomProperties[RoomProp.ROOM_PASSWORD].ToString().Trim();
+                isPasswordRoom = !(roomPassword == "");
             }
 
+            
             if ((string)info.CustomProperties[RoomProp.ROOM_MAP_GROUP] == "Camp")
             {
                 roomImg.sprite = Resources.Load<Sprite>("Map/CampMap");
@@ -96,11 +102,14 @@ namespace KDY
             {
                 roomImg.sprite = Resources.Load<Sprite>("Map/AllRandomMap");
             }
+            
         }
 
         public void OnJoinButtonClicked()
         {
-            //PhotonNetwork.LeaveLobby();
+            if (passwordPanel == null)
+                return;
+
             if (isPasswordRoom)
             {
                 passwordPanel.gameObject.SetActive(true);
@@ -109,15 +118,15 @@ namespace KDY
                 return;
             }
 
-            PhotonNetwork.JoinRoom(roomName.text);
+            PhotonNetwork.JoinRoom(RoomNumber.ToString());
         }
 
         private void PasswordRoomJoin()
         {
             if (passwordPanel.passwordInput.text == roomPassword)
             {
-                PhotonNetwork.JoinRoom(roomName.text);
-                passwordPanel.gameObject.SetActive(false);
+				PhotonNetwork.JoinRoom(RoomNumber.ToString());
+				passwordPanel.gameObject.SetActive(false);
             }
             else
             {
@@ -128,9 +137,33 @@ namespace KDY
 
         private void ShowRoomPlayers()
         {
-            PlayerListPanel playerListPanel = Instantiate(Resources.Load<PlayerListPanel>("Prefabs/PlayerListPanel"));
+			PlayerListPanel playerListPanel = Instantiate(Resources.Load<PlayerListPanel>("Prefabs/PlayerListPanel"));
             playerListPanel.transform.SetParent(popUpCanvas.transform, false);
-            //playerListPanel.ShowPlayers(roomPlayers);
+
+            if(RoomInfo.CustomProperties.ContainsKey(RoomProp.PLAYER_LIST))
+            {
+                string players = RoomInfo.CustomProperties[RoomProp.PLAYER_LIST].ToString();
+				playerListPanel.ShowPlayers(players.Split(";"));
+			} 
         }
+
+        public void SetChangedRoomInfo(string changedType, string value)
+        {
+            switch(changedType)
+            {
+                case RoomProp.ROOM_NAME:
+					roomName.text = value; 
+                    break;
+				case RoomProp.ROOM_PASSWORD:
+					isPasswordRoom = !(value == "");
+					roomPassword = value;
+				break;
+			}
+        }
+
+        public void SetChangedRoomInfo(RoomMode roomMode)
+		{
+            // todo. 방 모드 변경
+		}
     }
 }

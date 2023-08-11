@@ -14,12 +14,12 @@ public class PlayerListPanel : MonoBehaviour
         confirmButton.onClick.AddListener(() => Destroy(gameObject));
     }
 
-    public void ShowPlayers(Dictionary<int, Player> players)
+    public void ShowPlayers(string[] players)
     {
-        foreach (Player player in players.Values)
+        foreach (string player in players)
         {
             PlayerList l_player = GameManager.Resource.Instantiate<PlayerList>("Prefabs/PlayerList", playerContent);
-            l_player.playerName.text = player.NickName;
+            l_player.SetEnteredPlayer(player, false);
         }
     }
 }

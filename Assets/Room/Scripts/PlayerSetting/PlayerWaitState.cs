@@ -1,3 +1,5 @@
+using CustomProperty.Utils;
+using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
@@ -41,6 +43,8 @@ namespace RoomUI.PlayerSetting
 			StateMaster.gameObject.SetActive(true);
 			StateDisable.gameObject.SetActive(false);
 			StateEnable.gameObject.SetActive(false);
+
+			
 		}
 	}
 }

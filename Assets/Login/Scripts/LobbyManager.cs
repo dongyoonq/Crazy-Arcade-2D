@@ -59,7 +59,7 @@ namespace Gangbie
         {
             SetActivePanel(Panel.Room);
 
-            PhotonNetwork.LocalPlayer.SetReady(false);
+            PhotonNetwork.LocalPlayer.SetReady(PhotonNetwork.IsMasterClient);
             PhotonNetwork.LocalPlayer.SetLoad(false);
 
             PhotonNetwork.AutomaticallySyncScene = true;
@@ -119,7 +119,8 @@ namespace Gangbie
 
         public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
         {
-            lobbyPanel.OnRoomPropertiesUpdate(propertiesThatChanged);
+            lobbyPanel.RoomPropertiesUpdate(propertiesThatChanged);
+            roomPanel.RoomPropertiesUpdate(propertiesThatChanged);
         }
 
         public override void OnJoinedLobby()
