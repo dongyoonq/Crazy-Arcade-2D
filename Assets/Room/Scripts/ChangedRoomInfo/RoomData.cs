@@ -2,9 +2,11 @@ using RoomUI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Extension;
 
 namespace RoomUI.ChangedRoomInfo
 {
+	/*
 	public class RoomData
 	{
 		public RoomData(int number, string name, RoomMode mode = RoomMode.Manner, bool isPrivateRoom = false, string password = "")
@@ -42,4 +44,6 @@ namespace RoomUI.ChangedRoomInfo
 		/// </summary>
 		public string Password { get; set; }
 	}
+
+	//*/
 }

@@ -1,12 +1,21 @@
+using CustomProperty;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace RoomUI.PlayerSetting
 {
+	public enum SlotState
+	{
+		Open,
+		Use,
+		Close
+	}
+
 	public class SlotController : MonoBehaviourPunCallbacks
 	{
 		[SerializeField]
@@ -18,8 +27,11 @@ namespace RoomUI.PlayerSetting
 		[SerializeField]
 		private Button BtnChangeSlot;
 
-		private bool isSlotOpen;
-		public bool IsSlotOpen { get { return IsSlotOpen; } }
+		public bool IsUsedSlot = false;
+
+		public SlotState SlotCurState { get; set; } = SlotState.Open;
+
+		public int SlotNumber;
 
 		private void Awake()
 		{
@@ -46,11 +58,27 @@ namespace RoomUI.PlayerSetting
 		{
 			if (PhotonNetwork.IsMasterClient)
 			{
-				isSlotOpen = !isSlotOpen;
+				if (SlotCurState == SlotState.Use)
+					return;
 
-				OpenSlot.gameObject.SetActive(isSlotOpen);
-				CloseSlot.gameObject.SetActive(!isSlotOpen);
+				SlotCurState = SlotCurState == SlotState.Open ? SlotState.Close : SlotState.Open;
+
+				//OpenSlot.gameObject.SetActive(isSlotOpen);
+				//CloseSlot.gameObject.SetActive(!isSlotOpen);
+
+				PhotonHashtable property = new PhotonHashtable();
+				property[RoomProp.SLOT_NUMBER] = SlotNumber;
+				property[RoomProp.SLOT_STATE] = (int)SlotCurState;
+
+				PhotonNetwork.CurrentRoom.SetCustomProperties(property);
 			}
+		}
+
+		public void SetSlot(SlotState state)
+		{
+			bool isOpen = state == SlotState.Open;
+			OpenSlot.gameObject.SetActive(isOpen);
+			CloseSlot.gameObject.SetActive(!isOpen);
 		}
 	}
 }

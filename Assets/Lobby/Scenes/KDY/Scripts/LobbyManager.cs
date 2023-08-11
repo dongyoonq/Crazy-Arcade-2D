@@ -1,7 +1,9 @@
+using CustomProperty;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
@@ -19,9 +21,9 @@ namespace KDY
         [SerializeField]
         private LobbyPanel lobbyPanel;
 
-        public List<RoomInfo> rooms;
+        public List<RoomInfo> Rooms { get; private set; }
 
-        private void Start()
+		private void Start()
         {
             if (PhotonNetwork.IsConnected)
                 OnConnectedToMaster();
@@ -45,7 +47,7 @@ namespace KDY
             SetActivePanel(Panel.Login);
         }
 
-        public override void OnCreateRoomFailed(short returnCode, string message)
+		public override void OnCreateRoomFailed(short returnCode, string message)
         {
             SetActivePanel(Panel.Lobby);
             Debug.Log(string.Format("Create room failed with error({0}) : {1}", returnCode, message));
@@ -55,15 +57,15 @@ namespace KDY
         {
             SetActivePanel(Panel.Room);
 
-            PhotonNetwork.LocalPlayer.SetReady(false);
+            PhotonNetwork.LocalPlayer.SetReady(PhotonNetwork.IsMasterClient);
             PhotonNetwork.LocalPlayer.SetLoad(false);
 
             PhotonNetwork.AutomaticallySyncScene = true;
 
-            //RoomEntry currRoom = (RoomEntry)PhotonNetwork.CurrentRoom.CustomProperties["RoomEntry"];
-            //currRoom.roomPlayers = PhotonNetwork.CurrentRoom.Players;
-            //roomPanel.UpdatePlayerList();
-        }
+			//RoomEntry currRoom = (RoomEntry)PhotonNetwork.CurrentRoom.CustomProperties["RoomEntry"];
+			//currRoom.roomPlayers = PhotonNetwork.CurrentRoom.Players;
+			//roomPanel.UpdatePlayerList();
+		}
 
         public override void OnJoinRoomFailed(short returnCode, string message)
         {
@@ -88,19 +90,19 @@ namespace KDY
 
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
-            rooms = roomList;
             lobbyPanel.UpdateRoomList(roomList);
-        }
+            Rooms = roomList;
+		}
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             roomPanel.EntryPlayer(newPlayer);
-        }
+		}
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             roomPanel.LeavePlayer(otherPlayer);
-        }
+		}
 
         public override void OnMasterClientSwitched(Player newMasterClient)
         {
@@ -110,10 +112,16 @@ namespace KDY
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
         {
-            //roomPanel.UpdatePlayerState(targetPlayer);
-        }
+			roomPanel.PlayerPropertiesUpdate(targetPlayer, changedProps);
+		}
 
-        public override void OnJoinedLobby()
+		public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
+		{
+			lobbyPanel.RoomPropertiesUpdate(propertiesThatChanged);
+			roomPanel.RoomPropertiesUpdate(propertiesThatChanged);
+		}
+
+		public override void OnJoinedLobby()
         {
             SetActivePanel(Panel.Lobby);
         }
@@ -129,5 +137,5 @@ namespace KDY
             roomPanel.gameObject?.SetActive(panel == Panel.Room);
             lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby);
         }
-    }
+	}
 }

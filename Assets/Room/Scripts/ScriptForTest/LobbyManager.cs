@@ -110,7 +110,8 @@ namespace RoomUI.ScriptForTest
 
 		public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
 		{
-			lobbyPanel.OnRoomPropertiesUpdate(propertiesThatChanged);
+			lobbyPanel.RoomPropertiesUpdate(propertiesThatChanged);
+			roomPanel.RoomPropertiesUpdate(propertiesThatChanged);
 		}
 
 		public override void OnJoinedLobby()

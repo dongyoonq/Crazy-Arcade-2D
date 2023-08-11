@@ -74,6 +74,43 @@ namespace CustomProperty.Utils
 			property[propertyKey] = value;
 			room.SetCustomProperties(property);
 		}
+
+
+		public static T GetPlayerProperty<T>(this Player player, string propertyKey, T returnValue)
+		{
+			PhotonHashtable property = player.CustomProperties;
+
+			if (property.ContainsKey(propertyKey)) //일단 해당 키 값이 있는지를 먼저 확인하기
+				return (T)property[propertyKey];
+			else
+				return returnValue;
+		}
+
+		public static void SetPlayerProperty<T>(this Player player, string propertyKey, T value)
+		{
+			PhotonHashtable property = new PhotonHashtable();
+
+			property[propertyKey] = value;
+			player.SetCustomProperties(property);
+		}
+
+		public static T GetRoomProperty<T>(this Room room, string propertyKey, T returnValue)
+		{
+			PhotonHashtable property = room.CustomProperties;
+
+			if (property.ContainsKey(propertyKey))
+				return (T)property[propertyKey];
+			else
+				return returnValue;
+		}
+
+		public static void SetRoomProperty<T>(this Room room, string propertyKey, T value)
+		{
+			PhotonHashtable property = new PhotonHashtable();
+
+			property[propertyKey] = value;
+			room.SetCustomProperties(property);
+		}
 	}
 
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using CustomProperty.Utils;
+using CustomProperty;
 
 namespace RoomUI.SetGameReady
 {
@@ -30,7 +31,7 @@ namespace RoomUI.SetGameReady
 			if (isChecked)
 			{
 				if (PhotonNetwork.IsMasterClient == false)
-					PhotonNetwork.LocalPlayer.SetReady(true);
+					PhotonNetwork.LocalPlayer.SetPlayerProperty(PlayerProp.READY, true);
 			}
 		}
 
@@ -38,8 +39,8 @@ namespace RoomUI.SetGameReady
 		{
 			if (PhotonNetwork.IsMasterClient == false)
 			{
-				bool isReady = !PhotonNetwork.LocalPlayer.GetReady();
-				PhotonNetwork.LocalPlayer.SetReady(isReady);
+				bool isReady = !PhotonNetwork.LocalPlayer.GetPlayerProperty(PlayerProp.READY, true);
+				PhotonNetwork.LocalPlayer.SetPlayerProperty(PlayerProp.READY, isReady);
 			}
 		}
 	}

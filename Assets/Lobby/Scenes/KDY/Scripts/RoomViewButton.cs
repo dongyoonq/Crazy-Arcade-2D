@@ -41,7 +41,7 @@ public class RoomViewButton : MonoBehaviour
 
             foreach (RoomEntry roomEntry in roomEntries)
             {
-                if ((string)roomEntry.info.CustomProperties["RoomState"] != "Waiting")
+                if ((string)roomEntry.RoomInfo.CustomProperties["RoomState"] != "Waiting")
                     Destroy(roomEntry.gameObject);
             }
         }
@@ -51,7 +51,7 @@ public class RoomViewButton : MonoBehaviour
 
             // Todo : AllRoomView
             isAllRoomBtn = true;
-            lobbyPanel.UpdateRoomList(lobbyManager.rooms);
+            lobbyPanel.UpdateRoomList(lobbyManager.Rooms);
         }
     }
 }
