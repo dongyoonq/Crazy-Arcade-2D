@@ -11,7 +11,6 @@ namespace KDY
         [SerializeField] float tileYInterval;
         [SerializeField] float tileXInterval;
         [SerializeField] float bombCoolTime;
-        [SerializeField] int bombPower = 1;
 
         [SerializeField] float castingXRange;
         [SerializeField] float castingYRange;
@@ -34,18 +33,10 @@ namespace KDY
             StartCoroutine(BombCoolTimer());
         }
 
-        private void GetOwnerItem()
-        {
-            foreach (Item item in owner.itemLists)
-            {
-                // 물줄기 아이템 읽고 bombPower를 정함
-            }
-        }
-
         IEnumerator BombCoolTimer()
         {
             yield return new WaitForSeconds(bombCoolTime);
-            Explosion(bombPower);
+            Explosion(owner.bombPower);
             Destroy(gameObject);
         }
 
@@ -71,7 +62,10 @@ namespace KDY
 
         private void CreateBombWaterLeft(int count)
         {
-            if (CheckStaticBlockObject(prevLeftWaterPos, Vector2.left, 0f))
+            if (CheckUI(prevLeftWaterPos, Vector2.left))
+                return;
+
+            if (CheckStaticBlockObject(prevLeftWaterPos, Vector2.left))
                 return;
 
             if (CheckBlockObject(prevLeftWaterPos, Vector2.left))
@@ -82,18 +76,21 @@ namespace KDY
 
             if (count == 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_leftend", transform.position + -transform.right * bombPower * tileXInterval, Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/bombwater_leftend", transform.position + -transform.right * owner.bombPower * tileXInterval, Quaternion.identity);
             }
             else if (count > 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_left", transform.position + -transform.right * ((bombPower - count + 1) * tileXInterval), Quaternion.identity);
-                prevLeftWaterPos = transform.position + -transform.right * ((bombPower - count + 1) * tileXInterval);
+                PhotonNetwork.Instantiate("Prefabs/bombwater_left", transform.position + -transform.right * ((owner.bombPower - count + 1) * tileXInterval), Quaternion.identity);
+                prevLeftWaterPos = transform.position + -transform.right * ((owner.bombPower - count + 1) * tileXInterval);
             }
         }
 
         private void CreateBombWaterRight(int count)
         {
-            if (CheckStaticBlockObject(prevRightWaterPos, Vector2.right, 0f))
+            if (CheckUI(prevRightWaterPos, Vector2.right))
+                return;
+
+            if (CheckStaticBlockObject(prevRightWaterPos, Vector2.right))
                 return;
 
             if (CheckBlockObject(prevRightWaterPos, Vector2.right))
@@ -104,21 +101,24 @@ namespace KDY
 
             if (count == 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_rightend", transform.position + transform.right * bombPower * tileXInterval, Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/bombwater_rightend", transform.position + transform.right * owner.bombPower * tileXInterval, Quaternion.identity);
             }
             else if (count > 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_right", transform.position + transform.right * ((bombPower - count + 1) * tileXInterval), Quaternion.identity);
-                prevRightWaterPos = transform.position + transform.right * ((bombPower - count + 1) * tileXInterval);
+                PhotonNetwork.Instantiate("Prefabs/bombwater_right", transform.position + transform.right * ((owner.bombPower - count + 1) * tileXInterval), Quaternion.identity);
+                prevRightWaterPos = transform.position + transform.right * ((owner.bombPower - count + 1) * tileXInterval);
             }
         }
 
         private void CreateBombWaterUp(int count)
         {
+            if (CheckUI(prevUpWaterPos, Vector2.up, 90f))
+                return;
+
             if (CheckStaticBlockObject(prevUpWaterPos, Vector2.up, 90f))
                 return;
 
-            if (CheckBlockObject(prevUpWaterPos, Vector2.up))
+            if (CheckBlockObject(prevUpWaterPos, Vector2.up, 90f))
             {
                 PhotonNetwork.Instantiate("Prefabs/bombwater_upend", (Vector3)prevUpWaterPos + transform.up * 1f * tileYInterval, Quaternion.identity);
                 return;
@@ -126,22 +126,25 @@ namespace KDY
 
             if (count == 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_upend", transform.position + transform.up * bombPower * tileYInterval, Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/bombwater_upend", transform.position + transform.up * owner.bombPower * tileYInterval, Quaternion.identity);
             }
 
             else if (count > 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_up", transform.position + transform.up * ((bombPower - count + 1) * tileYInterval), Quaternion.identity);
-                prevUpWaterPos = transform.position + transform.up * ((bombPower - count + 1) * tileYInterval);
+                PhotonNetwork.Instantiate("Prefabs/bombwater_up", transform.position + transform.up * ((owner.bombPower - count + 1) * tileYInterval), Quaternion.identity);
+                prevUpWaterPos = transform.position + transform.up * ((owner.bombPower - count + 1) * tileYInterval);
             }
         }
 
         private void CreateBombWaterDown(int count)
         {
+            if (CheckUI(prevDownWaterPos, Vector2.down, 90f))
+                return;
+
             if (CheckStaticBlockObject(prevDownWaterPos, Vector2.down, 90f))
                 return;
 
-            if (CheckBlockObject(prevDownWaterPos, Vector2.down))
+            if (CheckBlockObject(prevDownWaterPos, Vector2.down, 90f))
             {
                 PhotonNetwork.Instantiate("Prefabs/bombwater_downend", (Vector3)prevDownWaterPos + -transform.up * 1f * tileYInterval, Quaternion.identity);
                 return;
@@ -149,17 +152,17 @@ namespace KDY
 
             if (count == 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_downend", transform.position + -transform.up * bombPower * tileYInterval, Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/bombwater_downend", transform.position + -transform.up * owner.bombPower * tileYInterval, Quaternion.identity);
             }
 
             else if (count > 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_down", transform.position + -transform.up * ((bombPower - count + 1) * tileYInterval), Quaternion.identity);
-                prevDownWaterPos = transform.position + -transform.up * ((bombPower - count + 1) * tileYInterval);
+                PhotonNetwork.Instantiate("Prefabs/bombwater_down", transform.position + -transform.up * ((owner.bombPower - count + 1) * tileYInterval), Quaternion.identity);
+                prevDownWaterPos = transform.position + -transform.up * ((owner.bombPower - count + 1) * tileYInterval);
             }
         }
 
-        private bool CheckStaticBlockObject(Vector2 position, Vector2 direction, float angle)
+        private bool CheckStaticBlockObject(Vector2 position, Vector2 direction, float angle = 0f)
         {
             RaycastHit2D hit = Physics2D.BoxCast(position, new Vector2(castingXRange, castingYRange), angle, direction, 0.5f, LayerMask.GetMask("StaticBlock"));
 
@@ -169,9 +172,19 @@ namespace KDY
                 return false;
         }
 
-        private bool CheckBlockObject(Vector2 position, Vector2 direction)
+        private bool CheckBlockObject(Vector2 position, Vector2 direction, float angle = 0f)
         {
-            RaycastHit2D hit = Physics2D.Raycast(position, direction, 1f, LayerMask.GetMask("Block"));
+            RaycastHit2D hit = Physics2D.BoxCast(position, new Vector2(castingXRange, castingYRange), angle, direction, 0.5f, LayerMask.GetMask("Block"));
+
+            if (hit)
+                return true;
+            else
+                return false;
+        }
+
+        private bool CheckUI(Vector2 position, Vector2 direction, float angle = 0f)
+        {
+            RaycastHit2D hit = Physics2D.BoxCast(position, new Vector2(castingXRange, castingYRange), angle, direction, 0.5f, LayerMask.GetMask("UI"));
 
             if (hit)
                 return true;
