@@ -29,7 +29,6 @@ public class UIManager : MonoBehaviour
 
     public T ShowPopUpUI<T>(T popUpui) where T : PopUpUI
     {
-        UnityEngine.Cursor.lockState = CursorLockMode.None;
         if (popUpStack.Count > 0)
         {
             PopUpUI prevUI = popUpStack.Peek();
@@ -48,7 +47,6 @@ public class UIManager : MonoBehaviour
 
     public T ShowPopUpUI<T>(string path) where T : PopUpUI
     {
-        UnityEngine.Cursor.lockState = CursorLockMode.None;
         T ui = GameManager.Resource.Load<T>(path);
         return ShowPopUpUI(ui);
     }
@@ -65,7 +63,6 @@ public class UIManager : MonoBehaviour
         }
         if (popUpStack.Count == 0)
         {
-            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
         }
     }

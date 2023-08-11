@@ -134,7 +134,9 @@ namespace KDY
         {
             animator.SetBool("Die", false);
             animator.SetBool("Died", true);
-            GetComponent<PlayerInput>().enabled = false;
+
+            if (photonView.IsMine)
+                GetComponent<PlayerInput>().enabled = false;
         }
     }
 }
