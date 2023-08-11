@@ -206,7 +206,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26f91053fa85e8844b993fa390177d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 0
+  bombPower: 1
   nameTxt: {fileID: 8064926487683872918}
+  dieTimer: 0
   currTeam: 0
 --- !u!114 &3347720599948304887
 MonoBehaviour:
@@ -220,7 +223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5170cf8d349298459ef74d2afa0c1db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
   attackCoolTime: 0
 --- !u!95 &3347720599948304879
 Animator:
@@ -310,6 +312,15 @@ MonoBehaviour:
   - Type: 1
     SynchronizeType: 1
     Name: moveSpeed
+  - Type: 4
+    SynchronizeType: 0
+    Name: BeforeDie
+  - Type: 4
+    SynchronizeType: 0
+    Name: Die
+  - Type: 4
+    SynchronizeType: 0
+    Name: Died
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0

@@ -122,6 +122,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
         SetPlayerTeamProperty(randoms[Random.Range(0,8)]);
 
+        Debug.Log(PhotonNetwork.LocalPlayer.GetPlayerNumber());
         Vector3 position = playerSpawn.spawnPoints[PhotonNetwork.LocalPlayer.GetPlayerNumber()].transform.position;
 
         Debug.Log($"[SetPlayer] {PhotonNetwork.LocalPlayer.NickName}");
