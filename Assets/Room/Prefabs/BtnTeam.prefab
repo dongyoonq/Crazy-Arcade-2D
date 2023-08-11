@@ -152,7 +152,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -463971191, guid: b07b0758e25027249b740df489abd904, type: 3}
+  m_Sprite: {fileID: 1950082121, guid: b07b0758e25027249b740df489abd904, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -266,7 +266,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5760677988892897293}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -376,7 +376,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btnPickedTeam: {fileID: 3941322103753992885}
   togChecked: {fileID: 2655629248362641993}
-  IsChecked: 0
   teamData:
     TeamName: 
     TeamColor: {r: 0, g: 0, b: 0, a: 0}

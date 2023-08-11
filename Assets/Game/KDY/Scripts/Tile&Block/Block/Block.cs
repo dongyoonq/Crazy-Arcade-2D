@@ -26,7 +26,7 @@ public abstract class Block : MonoBehaviour
             {
                 if (percent[i] == dropRandom)
                 {
-                    Instantiate(dropTable[dropItemRandom].itemPrefab, transform.GetChild(0).position, Quaternion.identity);
+                    Instantiate(dropTable[dropItemRandom].itemPrefab, transform.GetChild(0).position + (transform.up * 0.3f), Quaternion.identity);
                     break;
                 }
             }
