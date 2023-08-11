@@ -9,7 +9,7 @@ namespace SYJ
 
     public class LobbyManager : MonoBehaviourPunCallbacks
     {
-        public enum Panel { Login, Lobby, Room }
+        public enum Panel { Login, Lobby, Room, Shop }
 
         [SerializeField]
         private LoginPanel loginPanel;
@@ -17,6 +17,11 @@ namespace SYJ
         private RoomPanel roomPanel;
         [SerializeField]
         private LobbyPanel lobbyPanel;
+        [SerializeField]
+        private ShopPanel shopPanel;
+
+        public Panel curPanel;
+        public Panel prevPanel;
 
         private void Start()
         {
@@ -115,11 +120,15 @@ namespace SYJ
             SetActivePanel(Panel.Login);
         }
 
-        private void SetActivePanel(Panel panel)
+        public void SetActivePanel(Panel panel)
         {
+            prevPanel = curPanel;
+            curPanel = panel;
+
             loginPanel.gameObject?.SetActive(panel == Panel.Login);
-            roomPanel.gameObject?.SetActive(panel == Panel.Room);
             lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby);
+            roomPanel.gameObject?.SetActive(panel == Panel.Room);
+            shopPanel.gameObject?.SetActive(panel == Panel.Shop);
         }
     }
 }

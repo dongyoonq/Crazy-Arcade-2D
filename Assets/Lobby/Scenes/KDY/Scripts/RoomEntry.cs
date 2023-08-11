@@ -85,7 +85,7 @@ namespace KDY
                 isPasswordRoom = !(roomPassword == "");
             }
 
-            /*
+            
             if ((string)info.CustomProperties[RoomProp.ROOM_MAP_GROUP] == "Camp")
             {
                 roomImg.sprite = Resources.Load<Sprite>("Map/CampMap");
@@ -102,7 +102,7 @@ namespace KDY
             {
                 roomImg.sprite = Resources.Load<Sprite>("Map/AllRandomMap");
             }
-            */
+            
         }
 
         public void OnJoinButtonClicked()

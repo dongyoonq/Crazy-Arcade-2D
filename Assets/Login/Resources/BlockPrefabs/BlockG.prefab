@@ -157,6 +157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cdce020f0573ce4db3dbea1d1f8aa8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropTable:
+  - {fileID: 11400000, guid: 24604ac840f46254caf5da0c708d7a5f, type: 2}
 --- !u!50 &-1967444821360878461
 Rigidbody2D:
   serializedVersion: 4

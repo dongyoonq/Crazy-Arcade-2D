@@ -12,10 +12,12 @@ using GameUI;
 using CustomProperty;
 using static Extension;
 
+
 public class InGameManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] TMP_Text infoText;
     [SerializeField] float countdownTimer;
+    [SerializeField] PlayerSpawn playerSpawn;
 
     private void Start()
     {
@@ -120,7 +122,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
         SetPlayerTeamProperty(randoms[Random.Range(0,8)]);
 
-        Vector3 position = new Vector3(Random.Range(-5f,5f), Random.Range(-5f, 5f), 0f);
+        Debug.Log(PhotonNetwork.LocalPlayer.GetPlayerNumber());
+        Vector3 position = playerSpawn.spawnPoints[PhotonNetwork.LocalPlayer.GetPlayerNumber()].transform.position;
 
         Debug.Log($"[SetPlayer] {PhotonNetwork.LocalPlayer.NickName}");
 
@@ -162,7 +165,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
             Debug.Log("프로퍼티가 없습니다");
         }
 
-        Vector3 position = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0f);
+        Vector3 position = playerSpawn.spawnPoints[PhotonNetwork.LocalPlayer.GetPlayerNumber()].transform.position;
 
         switch ((CharacterEnum)property[PlayerProp.CHARACTER])
         {

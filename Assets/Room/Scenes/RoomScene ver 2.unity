@@ -989,6 +989,8 @@ MonoBehaviour:
   chatingView: {fileID: 4201505517535550678}
   chatingHide: {fileID: 4201505516021769881}
   speakerPopUp: {fileID: 4201505516224120618}
+  lobbyPanel: {fileID: 0}
+  lobbyManager: {fileID: 0}
 --- !u!114 &65401773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9632,9 +9634,9 @@ MonoBehaviour:
   roomInfo: {fileID: 251298438}
   playerContent: {fileID: 1074253154}
   pickedTeam: {fileID: 1210824914}
-  pickedMap: {fileID: 2108587321}
+  pickedMap: {fileID: 0}
   gameStartController: {fileID: 948718491}
-  roomNotifyPopup: {fileID: 520649435}
+  roomNotifyPopup: {fileID: 0}
   characterDatas:
   - {fileID: 11400000, guid: 2d539505872c9a041acba57b28241416, type: 2}
   - {fileID: 11400000, guid: 2845e362f2cfc7e41b8bc931b745a676, type: 2}
@@ -14222,12 +14224,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1227450772}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee53ddf816d91a34781099ffe28a7810, type: 3}
+  m_Script: {fileID: 11500000, guid: b7ff866a06ac04e41b2be3a867a1aab0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   loginPanel: {fileID: 65401772}
   roomPanel: {fileID: 812435735}
   lobbyPanel: {fileID: 1954010566}
+  shopPanel: {fileID: 0}
+  curPanel: 0
+  prevPanel: 0
 --- !u!1 &1232479547
 GameObject:
   m_ObjectHideFlags: 0

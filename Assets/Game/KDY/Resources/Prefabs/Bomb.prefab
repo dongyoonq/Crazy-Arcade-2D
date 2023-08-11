@@ -124,7 +124,6 @@ MonoBehaviour:
   tileYInterval: 0.7
   tileXInterval: 0.9
   bombCoolTime: 3
-  bombPower: 1
   castingXRange: 0.3
   castingYRange: 0.2
   owner: {fileID: 0}

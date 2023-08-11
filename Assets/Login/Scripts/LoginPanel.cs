@@ -1,3 +1,4 @@
+using Gangbie;
 using MySql.Data.MySqlClient;
 using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
@@ -21,6 +22,10 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] GameObject chatingHide;
 
     [SerializeField] GameObject speakerPopUp;
+
+    [SerializeField] KDY.LobbyPanel lobbyPanel;
+
+    [SerializeField] LobbyManager lobbyManager;
 
     // private MySqlConnection connection;
     // private MySqlDataReader reader;
@@ -141,10 +146,15 @@ public class LoginPanel : MonoBehaviour
 
                     if (password == readPassword)
                     {
+                        idInputField.text = "";
+                        passwordInputField.text = "";
+
                         PhotonNetwork.LocalPlayer.NickName = id;
                         PhotonNetwork.ConnectUsingSettings();
 
                         ActiveChatManager();
+
+                        lobbyManager.SetActivePanel(LobbyManager.Panel.Lobby);
 
                         if (!GameManager.Data.reader.IsClosed)
                             GameManager.Data.reader.Close();
@@ -182,7 +192,6 @@ public class LoginPanel : MonoBehaviour
     {
         chatManager.SetActive(true);
         chatingArea.SetActive(true);
-        loginPanel.SetActive(false);
     }
 
     public void Quit()

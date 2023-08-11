@@ -260,13 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e94701a4efa07b4dbfabcd19cfb2ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maps: []
-  darkCastle01: {fileID: 807528495}
-  darkCastle02: {fileID: 732726579}
-  camp01: {fileID: 1264734382}
-  camp02: {fileID: 1025171889}
-  factory01: {fileID: 37425274}
-  factory02: {fileID: 442312665}
+  Maps: []
 --- !u!4 &491413940
 Transform:
   m_ObjectHideFlags: 0
@@ -5429,6 +5423,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7697450635553547382, guid: 592aeaae3c945bf43a58c4c24c49a813, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697450635553547382, guid: 592aeaae3c945bf43a58c4c24c49a813, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697450635553547382, guid: 592aeaae3c945bf43a58c4c24c49a813, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 418945519
+      objectReference: {fileID: 0}
     - target: {fileID: 7727939876634187389, guid: 592aeaae3c945bf43a58c4c24c49a813, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -5740,6 +5746,8 @@ MonoBehaviour:
   chatingView: {fileID: 0}
   chatingHide: {fileID: 0}
   speakerPopUp: {fileID: 0}
+  lobbyPanel: {fileID: 0}
+  lobbyManager: {fileID: 0}
 --- !u!1 &5918094262161165228
 GameObject:
   m_ObjectHideFlags: 0
