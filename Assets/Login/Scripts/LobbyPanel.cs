@@ -144,7 +144,7 @@ namespace Gangbie
             foreach (RoomInfo room in roomDictionary.Values)
             {
                 RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
-                entry.Initialized(room, cnt++);
+                //entry.Initialized(data.Value, data.Key, PasswordPanel);
             }
         }
 

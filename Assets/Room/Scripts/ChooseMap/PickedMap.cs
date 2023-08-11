@@ -15,11 +15,9 @@ namespace RoomUI.ChooseMap
 		[SerializeField]
 		private Button btnPickedMap;
 
-		[SerializeField]
-		private MapList mapList;
+		public MapList mapList;
 
-		[SerializeField]
-		private PickedGameMap gameMap;
+		public PickedGameMap gameMap;
 
 		[SerializeField]
 		private ChooseMapView chooseMapUI;
@@ -50,27 +48,13 @@ namespace RoomUI.ChooseMap
 				chooseMapUI.gameObject.SetActive(true);
 				chooseMapUI.SetMapInfo(mapList);
 				chooseMapUI.OnClosedMapView += ClosedMapView;
-				chooseMapUI.OnCancelMapView += CancelMapView;
 				isActiveUI = true;
 			}
 		}
 
-		private void ClosedMapView(MapData map)
-		{
-			gameMap.OnChoosedMap?.Invoke(map);
-			DisableMapView();
-		}
-
-		private void CancelMapView()
-		{
-			DisableMapView();
-		}
-
-		private void DisableMapView()
+		private void ClosedMapView()
 		{
 			chooseMapUI.OnClosedMapView -= ClosedMapView;
-			chooseMapUI.OnCancelMapView -= CancelMapView;
-
 			isActiveUI = false;
 		}
 	}

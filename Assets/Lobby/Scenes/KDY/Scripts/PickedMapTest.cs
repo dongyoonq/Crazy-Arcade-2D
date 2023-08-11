@@ -44,35 +44,21 @@ namespace RoomUI.ChooseMap
                 gameMap.InitGameMap(mapList.Maps[0]);
         }
 
-        private void OpenChooseMapUI()
-        {
-            if (isActiveUI == false)
-            {
-                chooseMapUI.gameObject.SetActive(true);
-                chooseMapUI.SetMapInfo(mapList);
-                chooseMapUI.OnClosedMapView += ClosedMapView;
-                chooseMapUI.OnCancelMapView += CancelMapView;
-                isActiveUI = true;
-            }
-        }
+		private void OpenChooseMapUI()
+		{
+			if (isActiveUI == false)
+			{
+				chooseMapUI.gameObject.SetActive(true);
+				chooseMapUI.SetMapInfo(mapList);
+				chooseMapUI.OnClosedMapView += ClosedMapView;
+				isActiveUI = true;
+			}
+		}
 
-        private void ClosedMapView(MapData map)
-        {
-            gameMap.OnChoosedMap?.Invoke(map);
-            DisableMapView();
-        }
-
-        private void CancelMapView()
-        {
-            DisableMapView();
-        }
-
-        private void DisableMapView()
-        {
-            chooseMapUI.OnClosedMapView -= ClosedMapView;
-            chooseMapUI.OnCancelMapView -= CancelMapView;
-
-            isActiveUI = false;
-        }
-    }
+		private void ClosedMapView()
+		{
+			chooseMapUI.OnClosedMapView -= ClosedMapView;
+			isActiveUI = false;
+		}
+	}
 }

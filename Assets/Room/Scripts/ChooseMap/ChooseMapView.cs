@@ -1,3 +1,5 @@
+using CustomProperty;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace RoomUI.ChooseMap
 {
@@ -26,8 +29,7 @@ namespace RoomUI.ChooseMap
 		[SerializeField]
 		private Button btnCancel;
 
-		public UnityAction<MapData> OnClosedMapView;
-		public UnityAction OnCancelMapView;
+		public UnityAction OnClosedMapView;
 
 
 		protected override void Awake()
@@ -59,14 +61,16 @@ namespace RoomUI.ChooseMap
 
 		public void OnOkButtonClicked()
 		{
-			ClosedView();
-			OnClosedMapView.Invoke(curChoosedMap);
+			PhotonHashtable property = new PhotonHashtable();
+			property[RoomProp.ROOM_MAP_ID] = curChoosedMap.Id;
+			PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+
+			ClosedView();	
 		}
 
 		public void OnCancelButtonClicked()
 		{
 			ClosedView();
-			OnCancelMapView?.Invoke();
 		}
 
 		private void ClosedView()
@@ -78,6 +82,8 @@ namespace RoomUI.ChooseMap
 				Destroy(mapContents[i].gameObject);
 			}
 			gameObject.SetActive(false);
+
+			OnClosedMapView?.Invoke();
 		}
 	}
 }

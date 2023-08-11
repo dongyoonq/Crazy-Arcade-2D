@@ -9,8 +9,11 @@ namespace CustomProperty
 	{
         public const string PROPERTY_KEY = "RoomProp";
 
-        // ROOM_MAP_GROUP is MapData.Group
-        public const string ROOM_MAP_GROUP = "MapGroup";
+		// ROOM_MAP_ID is  MapData.Id
+		public const string ROOM_MAP_ID = "MapId";
+
+		// ROOM_MAP_GROUP is MapData.Group
+		public const string ROOM_MAP_GROUP = "MapGroup";
 
         // ROOM_MAP_GROUP is MapData.Title
         public const string ROOM_MAP = "Map";
@@ -32,5 +35,12 @@ namespace CustomProperty
 
         // In GameScene All Player Load than LoadTime used
         public const string LOAD_TIME = "LoadTime";
+
+		// NickName of All Player in the room
+		public const string PLAYER_LIST = "PlayerList";
+
+        public const string SLOT_NUMBER = "SlotNumber";
+
+        public const string SLOT_STATE = "SlotState";
     }
 }

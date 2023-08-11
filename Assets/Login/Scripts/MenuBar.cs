@@ -17,6 +17,7 @@ namespace Gangbie
 
         [SerializeField] GameObject myPage;
         [SerializeField] Button myPageItemButton;
+        [SerializeField] Button myPageInfoButton;
 
         [SerializeField] GameObject menuPopUp;
 
@@ -75,6 +76,7 @@ namespace Gangbie
             Debug.Log("Info Button Clicked");
             menuPopUpClose();
             myPage.SetActive(true);
+            myPageInfoButton.onClick.Invoke();
         }
 
         public void OnBackButtonClicked()

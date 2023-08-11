@@ -19,8 +19,7 @@ namespace RoomUI.PlayerSetting
 {
 	public class WaitingPlayer : MonoBehaviourPun, IChangeableCharacter
 	{
-		[SerializeField]
-		private SlotController slotController;
+		public SlotController Slot;
 
 		[SerializeField]
 		private PlayerWaitState playerWaitState;
@@ -39,16 +38,13 @@ namespace RoomUI.PlayerSetting
 		public UnityAction<int, bool> OnChangedOtherPlayerState;
 		public UnityAction<int> OnChangedMasterPlayerState;
 
-		private bool IsEmptySlot;
-
 		public void SetPlayer(Player player)
 		{
 			this.player = player;
 			playerId.text = player.NickName;
+			Slot.SlotCurState = SlotState.Use;
 
 			PlayerSet.gameObject.SetActive(true);
-
-			Debug.Log($"{player.NickName} : {player.IsMasterClient} / {player.IsLocal}");
 
 			if (player.IsLocal)
 			{
@@ -60,23 +56,23 @@ namespace RoomUI.PlayerSetting
 				if (player.IsMasterClient)
 					playerWaitState.UpdateMasterInfo();
 				else
-					playerWaitState.UpdateReadyInfo(player.GetReady());
+					playerWaitState.UpdateReadyInfo(player.GetPlayerProperty(PlayerProp.READY, false));
 
-				if(player.CustomProperties.ContainsKey(PlayerProp.TEAM))
+				if(player.CustomProperties.ContainsKey(PlayerProp.TEAMCOLOR))
 				{
-					string hexColor = player.CustomProperties[PlayerProp.TEAM].ToString();
+					string hexColor = player.CustomProperties[PlayerProp.TEAMCOLOR].ToString();
 
 					Color teamColor;
 					UnityEngine.ColorUtility.TryParseHtmlString(hexColor, out teamColor);
 					PlayerSet.TeamColor.color = teamColor;
 				}
 			}
-			slotController.RemoveCloseSlot();
+			Slot.RemoveCloseSlot();
 		}
 
 		public void UpdateReadyInfo()
 		{
-			bool isReady = player.GetReady();
+			bool isReady = player.GetPlayerProperty(PlayerProp.READY, false); 
 
 			if (player.IsMasterClient == false)
 				playerWaitState.UpdateReadyInfo(isReady);
@@ -85,10 +81,11 @@ namespace RoomUI.PlayerSetting
 		public void OnChangeCharacter(CharacterData data)
 		{
 			PlayerSet.PlayerImg.sprite = data.Character;
+			player.SetPlayerProperty(PlayerProp.CHARACTER, data.CharacterEnum);
 
-			PhotonHashtable property = new PhotonHashtable();
-			property[PlayerProp.CHARACTER] = data.CharacterEnum;
-			player.SetCustomProperties(property);
+			//PhotonHashtable property = new PhotonHashtable();
+			//property[PlayerProp.CHARACTER] = data.CharacterEnum;
+			//player.SetCustomProperties(property);
 		}
 
 		/*
@@ -102,7 +99,7 @@ namespace RoomUI.PlayerSetting
 		{
 			if (player.IsMasterClient)
 			{
-				player.SetReady(true);
+				player.SetPlayerProperty(PlayerProp.READY, true);
 			}
 		}
 

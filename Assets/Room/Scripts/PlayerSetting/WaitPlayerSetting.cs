@@ -16,6 +16,8 @@ namespace RoomUI.PlayerSetting
 
 		public Image TeamColor;
 
+		public string Team;
+
 		private void Awake()
 		{
 			//TODO. develing Level 
