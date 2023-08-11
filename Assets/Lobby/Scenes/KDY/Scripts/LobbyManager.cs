@@ -110,7 +110,12 @@ namespace KDY
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
         {
-            //roomPanel.UpdatePlayerState(targetPlayer);
+            roomPanel.PlayerPropertiesUpdate(targetPlayer, changedProps);
+        }
+
+        public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
+        {
+            lobbyPanel.OnRoomPropertiesUpdate(propertiesThatChanged);
         }
 
         public override void OnJoinedLobby()

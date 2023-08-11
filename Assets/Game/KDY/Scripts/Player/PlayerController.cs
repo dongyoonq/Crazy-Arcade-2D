@@ -12,9 +12,9 @@ namespace KDY
 {
     public class PlayerController : MonoBehaviourPun, IPunObservable
     {
-        [SerializeField] float moveSpeed;
         [SerializeField] float attackCoolTime;
 
+        private InGamePlayer player;
         private PlayerInput playerInput;
         private Rigidbody2D rb;
         private Animator animator;
@@ -23,11 +23,10 @@ namespace KDY
 
         private void Awake()
         {
+            player = GetComponent<InGamePlayer>();
             playerInput = GetComponent<PlayerInput>();
             rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
-
-            SetPlayerColor();
 
             if (!photonView.IsMine)
                 Destroy(playerInput);
@@ -67,7 +66,7 @@ namespace KDY
                     inputDir.x = 0;
                 }
 
-                rb.velocity = inputDir * moveSpeed;
+                rb.velocity = inputDir * player.moveSpeed;
                 animator.SetFloat("moveX", rb.velocity.x);
                 animator.SetFloat("moveY", rb.velocity.y);
                 animator.SetFloat("moveSpeed", rb.velocity.magnitude);
@@ -99,11 +98,6 @@ namespace KDY
 
             Bomb bomb = GameManager.Resource.Instantiate<Bomb>("Prefabs/Bomb", position, rotation);
             bomb.owner = GetComponent<InGamePlayer>();
-        }
-
-        private void SetPlayerColor()
-        {
-            //
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

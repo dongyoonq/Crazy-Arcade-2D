@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace KDY
 {
-    public abstract class Item
+    public abstract class Item : MonoBehaviour
     {
-
+        public ItemData data;
     }
 }

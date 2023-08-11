@@ -13,4 +13,6 @@ public class Extension : MonoBehaviour
 	}
 
     public enum TEAM { RED, YELLOW, ORANGE, GREEN, SKY, BLUE, PURPLE, PINK, NONE }
+
+	public enum SpanwState { EMPTY, USE }
 }
