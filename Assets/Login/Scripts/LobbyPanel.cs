@@ -1,3 +1,4 @@
+using KDY;
 using MySql.Data.MySqlClient;
 using Photon.Chat;
 using Photon.Pun;
@@ -11,15 +12,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
-namespace KDY
+namespace Gangbie
 {
     public class LobbyPanel : MonoBehaviour
     {
-		private const string ROOM_NAME = "RoomName";
-		private const string PASSWORD = "Password";
-		private const string ROOM_ID = "RoomId";
+        private const string ROOM_NAME = "RoomName";
+        private const string PASSWORD = "Password";
+        private const string ROOM_ID = "RoomId";
 
-		[SerializeField] private RoomEntry roomEntryPrefab;
+        [SerializeField] private RoomEntry roomEntryPrefab;
         [SerializeField] private RectTransform roomContent;
         [SerializeField] private Canvas popUpCanvas;
         [SerializeField] private TMP_Text playerName;
@@ -213,22 +214,22 @@ namespace KDY
             return cnt;
         }
 
-		public void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
-		{
-			if (propertiesThatChanged.ContainsKey(ROOM_ID))
-			{
+        public void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
+        {
+            if (propertiesThatChanged.ContainsKey(ROOM_ID))
+            {
                 string key = propertiesThatChanged[ROOM_ID].ToString();
 
-				if (propertiesThatChanged.ContainsKey(ROOM_NAME))
+                if (propertiesThatChanged.ContainsKey(ROOM_NAME))
                 {
                     //현재 방 이름과 다른 경우 변경
                 }
 
-				if (propertiesThatChanged.ContainsKey(PASSWORD) && propertiesThatChanged[PASSWORD].ToString().Trim() != "")
+                if (propertiesThatChanged.ContainsKey(PASSWORD) && propertiesThatChanged[PASSWORD].ToString().Trim() != "")
                 {
-                   //암호방 설정하기
-				}
-			}
-		}
-	}
+                    //암호방 설정하기
+                }
+            }
+        }
+    }
 }
