@@ -1,4 +1,5 @@
 using KDY;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Gangbie
 
         [SerializeField] LoginPanel loginPanel;
         [SerializeField] KDY.LobbyPanel lobbyPanel;
-        [SerializeField] RoomPanel roomPanel;
+        [SerializeField] RoomUI.RoomPanel roomPanel;
 
         [SerializeField] GameObject myPage;
         [SerializeField] Button myPageItemButton;
@@ -88,6 +89,7 @@ namespace Gangbie
             else if (lobbyManager.curPanel == LobbyManager.Panel.Room)
             {
                 lobbyManager.SetActivePanel(LobbyManager.Panel.Lobby);
+                PhotonNetwork.LeaveRoom();
             }
             else if (lobbyManager.curPanel == LobbyManager.Panel.Lobby)
             {
@@ -105,6 +107,10 @@ namespace Gangbie
         public void ReLogin()
         {
             lobbyManager.SetActivePanel(LobbyManager.Panel.Login);
+            PhotonNetwork.LeaveLobby();
+            PhotonNetwork.Disconnect();
+            if (!GameManager.Data.reader.IsClosed)
+                GameManager.Data.reader.Close();
         }
     }
 }

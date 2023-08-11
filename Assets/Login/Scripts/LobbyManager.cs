@@ -14,7 +14,7 @@ namespace Gangbie
         [SerializeField]
         private LoginPanel loginPanel;
         [SerializeField]
-        private RoomPanel roomPanel;
+        private RoomUI.RoomPanel roomPanel;
         [SerializeField]
         private KDY.LobbyPanel lobbyPanel;
         [SerializeField]
@@ -22,6 +22,8 @@ namespace Gangbie
 
         public Panel curPanel;
         public Panel prevPanel;
+
+        public List<RoomInfo> rooms;
 
         private void Start()
         {
@@ -33,6 +35,8 @@ namespace Gangbie
                 OnJoinedLobby();
             else
                 OnDisconnected(DisconnectCause.None);
+
+            SetActivePanel(Panel.Login);
         }
 
         public override void OnConnectedToMaster()
@@ -59,7 +63,10 @@ namespace Gangbie
             PhotonNetwork.LocalPlayer.SetLoad(false);
 
             PhotonNetwork.AutomaticallySyncScene = true;
-            roomPanel.UpdatePlayerList();
+
+            //RoomEntry currRoom = (RoomEntry)PhotonNetwork.CurrentRoom.CustomProperties["RoomEntry"];
+            //currRoom.roomPlayers = PhotonNetwork.CurrentRoom.Players;
+            //roomPanel.UpdatePlayerList();
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)
@@ -85,27 +92,34 @@ namespace Gangbie
 
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
+            rooms = roomList;
             lobbyPanel.UpdateRoomList(roomList);
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
-            roomPanel.UpdatePlayerList();
+            roomPanel.EntryPlayer(newPlayer);
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            roomPanel.UpdatePlayerList();
+            roomPanel.LeavePlayer(otherPlayer);
         }
 
         public override void OnMasterClientSwitched(Player newMasterClient)
         {
-            roomPanel.UpdatePlayerList();
+            if (newMasterClient.IsMasterClient)
+                roomPanel.SwitchedMasterPlayer(newMasterClient);
         }
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
         {
-            roomPanel.UpdatePlayerList();
+            roomPanel.PlayerPropertiesUpdate(targetPlayer, changedProps);
+        }
+
+        public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
+        {
+            lobbyPanel.OnRoomPropertiesUpdate(propertiesThatChanged);
         }
 
         public override void OnJoinedLobby()

@@ -146,6 +146,9 @@ public class LoginPanel : MonoBehaviour
 
                     if (password == readPassword)
                     {
+                        idInputField.text = "";
+                        passwordInputField.text = "";
+
                         PhotonNetwork.LocalPlayer.NickName = id;
                         PhotonNetwork.ConnectUsingSettings();
 
@@ -189,7 +192,6 @@ public class LoginPanel : MonoBehaviour
     {
         chatManager.SetActive(true);
         chatingArea.SetActive(true);
-        loginPanel.SetActive(false);
     }
 
     public void Quit()
