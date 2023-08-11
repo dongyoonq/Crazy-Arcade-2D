@@ -1,4 +1,4 @@
-using CustomProperty;
+using KDY;
 using MySql.Data.MySqlClient;
 using Photon.Chat;
 using Photon.Pun;
@@ -12,11 +12,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
-namespace KDY
+namespace Gangbie
 {
     public class LobbyPanel : MonoBehaviour
     {
-		[SerializeField] private RoomEntry roomEntryPrefab;
+        private const string ROOM_NAME = "RoomName";
+        private const string PASSWORD = "Password";
+        private const string ROOM_ID = "RoomId";
+
+        [SerializeField] private RoomEntry roomEntryPrefab;
         [SerializeField] private RectTransform roomContent;
         [SerializeField] private Canvas popUpCanvas;
         [SerializeField] private TMP_Text playerName;
@@ -178,27 +182,19 @@ namespace KDY
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = (byte)maxPlayer;
 
-            roomOptions.CustomRoomProperties = new PhotonHashtable() 
-            { 
-                { RoomProp.ROOM_NAME, roomName }, 
-                { RoomProp.ROOM_ID, GetRoomNumber() }, 
-                { RoomProp.ROOM_STATE, "Waiting" } 
-            };
-
-            roomOptions.CustomRoomPropertiesForLobby = new string[] 
-            { RoomProp.ROOM_NAME, RoomProp.ROOM_ID, RoomProp.ROOM_STATE, RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MODE };
+            roomOptions.CustomRoomProperties = new PhotonHashtable() { { "RoomName", roomName }, { "RoomId", GetRoomNumber() }, { "RoomState", "Waiting" } };
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { "RoomName", "RoomId", "RoomState", "Map", "Mode" };
 
             if (createRoomPanel.passwordToggle.isOn)
             {
                 roomOptions.CustomRoomProperties = new PhotonHashtable() {
-                    { RoomProp.ROOM_NAME, roomName },
-                    { RoomProp.ROOM_PASSWORD, createRoomPanel.passwordInput.text },
-                    { RoomProp.ROOM_ID, GetRoomNumber() },
-                    { RoomProp.ROOM_STATE, "Waiting" },
+                    { "RoomName", roomName },
+                    { "Password", createRoomPanel.passwordInput.text },
+                    { "RoomId", GetRoomNumber() },
+                    { "RoomState", "Waiting" },
                 };
 
-                roomOptions.CustomRoomPropertiesForLobby = new string[] 
-                { RoomProp.ROOM_NAME, RoomProp.ROOM_PASSWORD, RoomProp.ROOM_ID, RoomProp.ROOM_STATE, RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MODE };
+                roomOptions.CustomRoomPropertiesForLobby = new string[] { "RoomName", "Password", "RoomId", "RoomState", "Map", "Mode" };
             }
 
             PhotonNetwork.CreateRoom(roomName, roomOptions, null);
@@ -218,22 +214,22 @@ namespace KDY
             return cnt;
         }
 
-		public void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
-		{
-			if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_ID))
-			{
-                string key = propertiesThatChanged[RoomProp.ROOM_ID].ToString();
+        public void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
+        {
+            if (propertiesThatChanged.ContainsKey(ROOM_ID))
+            {
+                string key = propertiesThatChanged[ROOM_ID].ToString();
 
-				if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_NAME))
+                if (propertiesThatChanged.ContainsKey(ROOM_NAME))
                 {
                     //현재 방 이름과 다른 경우 변경
                 }
 
-				if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_PASSWORD) && propertiesThatChanged[RoomProp.ROOM_PASSWORD].ToString().Trim() != "")
+                if (propertiesThatChanged.ContainsKey(PASSWORD) && propertiesThatChanged[PASSWORD].ToString().Trim() != "")
                 {
-                   //암호방 설정하기
-				}
-			}
-		}
-	}
+                    //암호방 설정하기
+                }
+            }
+        }
+    }
 }

@@ -1,12 +1,12 @@
+using KDY;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
-namespace SYJ
+namespace Gangbie
 {
-
     public class LobbyManager : MonoBehaviourPunCallbacks
     {
         public enum Panel { Login, Lobby, Room, Shop }
@@ -16,7 +16,7 @@ namespace SYJ
         [SerializeField]
         private RoomPanel roomPanel;
         [SerializeField]
-        private LobbyPanel lobbyPanel;
+        private KDY.LobbyPanel lobbyPanel;
         [SerializeField]
         private ShopPanel shopPanel;
 
@@ -33,8 +33,6 @@ namespace SYJ
                 OnJoinedLobby();
             else
                 OnDisconnected(DisconnectCause.None);
-
-            //SetActivePanel(Panel.Login);
         }
 
         public override void OnConnectedToMaster()
@@ -129,6 +127,8 @@ namespace SYJ
             lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby);
             roomPanel.gameObject?.SetActive(panel == Panel.Room);
             shopPanel.gameObject?.SetActive(panel == Panel.Shop);
+
+            Debug.Log(curPanel);
         }
     }
 }
