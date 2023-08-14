@@ -29,7 +29,7 @@ namespace RoomUI.ChooseMap
 		[SerializeField]
 		private Button btnCancel;
 
-		public UnityAction OnClosedMapView;
+		public UnityAction<int> OnClosedMapView;
 
 
 		protected override void Awake()
@@ -40,7 +40,7 @@ namespace RoomUI.ChooseMap
 			btnCancel.onClick.AddListener(() => OnCancelButtonClicked());
 		}
 
-		public void SetMapInfo(MapList mapList)
+		public void SetMapInfo(MapList mapList, int choosedMapId)
 		{
 			foreach (var maps in mapList.Maps)
 			{
@@ -48,7 +48,7 @@ namespace RoomUI.ChooseMap
 				entry.SetMapInfo(maps);
 			}
 
-			OnMapChoosed(mapList.Maps[0]);
+			OnMapChoosed(mapList.Maps.Where(x => x.Id == choosedMapId).FirstOrDefault()) ;
 		}
 
 		protected override void OnMapChoosed(MapData data)
@@ -83,7 +83,7 @@ namespace RoomUI.ChooseMap
 			}
 			gameObject.SetActive(false);
 
-			OnClosedMapView?.Invoke();
+			OnClosedMapView?.Invoke(curChoosedMap.Id);
 		}
 	}
 }

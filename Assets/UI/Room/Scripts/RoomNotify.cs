@@ -20,13 +20,22 @@ namespace RoomUI
 		private void Awake()
 		{
 			btnOK.onClick.AddListener(() => { transform.gameObject.SetActive(false); });
+		}
+
+		private void OnEnable()
+		{
 			OnNotifyPopup += ShowPopupView;
+		}
+
+		private void OnDisable()
+		{
+			OnNotifyPopup -= ShowPopupView;
 		}
 
 		private void ShowPopupView(string message)
 		{
 			txtMessage.text = message;
-			transform.gameObject.SetActive(true);
+			
 		}
 	}
 

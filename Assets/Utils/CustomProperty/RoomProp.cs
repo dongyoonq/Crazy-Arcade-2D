@@ -18,6 +18,9 @@ namespace CustomProperty
         // ROOM_MAP_GROUP is MapData.Title
         public const string ROOM_MAP = "Map";
 
+		// ROOM_MAP_GROUP is MapData.FileName
+		public const string ROOM_MAP_FILE = "MapFile";
+
         // ROOM_ID is RoomEntry, RoomChangedInfo used
         public const string ROOM_ID = "RoomId";
 
