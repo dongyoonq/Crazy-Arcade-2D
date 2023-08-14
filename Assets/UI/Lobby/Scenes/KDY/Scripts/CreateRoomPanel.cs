@@ -9,7 +9,8 @@ namespace KDY
     public class CreateRoomPanel : MonoBehaviour
     {
         [SerializeField] public TMP_InputField roomNameInput;
-        [SerializeField] public TMP_InputField passwordInput;
+        [SerializeField] public CreateRoomMode roomMode;
+		[SerializeField] public TMP_InputField passwordInput;
         [SerializeField] public Toggle passwordToggle;
         [SerializeField] public Button okBtn;
         [SerializeField] public Button cancelBtn;
@@ -29,5 +30,10 @@ namespace KDY
             else
                 passwordInput.GetComponent<Image>().color = orgColor;
         }
-    }
+
+		public void GetSeletedRoomMode()
+		{
+
+		}
+	}
 }

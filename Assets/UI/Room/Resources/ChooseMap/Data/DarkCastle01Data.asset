@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 2
   Group: DarkCastle
-  Title: "\uB2E4\uD06C \uCE90\uC2AC 01"
+  Title: "\uB2E4\uD06C \uCE90\uC2AC"
   MaxPlayer: 8
   Level: 1
   Popularity: 1
@@ -23,4 +23,6 @@ MonoBehaviour:
     \uC774\uACF3\uC5D0\uC11C\uB294 \uBCA8\uB77C\uB97C \uB354 \uC790\uC8FC \uB9CC\uB0A0
     \uC218 \uC788\uC744\uB4EF\uD574\uC694! "
   Favorites: 0
-  MapImg: {fileID: 0}
+  MapImg: {fileID: -286429958, guid: 07644a5a649fa58478cc0f79133edfd9, type: 3}
+  MapIcon: {fileID: -37185848, guid: 07644a5a649fa58478cc0f79133edfd9, type: 3}
+  MapFileName: DarkCastle01Data

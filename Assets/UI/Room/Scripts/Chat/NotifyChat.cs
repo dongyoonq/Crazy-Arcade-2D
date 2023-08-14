@@ -13,9 +13,14 @@ namespace RoomUI.Chat
 
 		public static UnityAction<NotifyChatType, string> OnNotifyChat;
 
-		private void Awake()
+		private void OnEnable()
 		{
 			OnNotifyChat += PrintNotifyChatMessage;
+		}
+
+		private void OnDisable()
+		{
+			OnNotifyChat -= PrintNotifyChatMessage;
 		}
 
 		private void PrintNotifyChatMessage(NotifyChatType type, string message)
