@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2eb0235a30ed8e645bd88285ed9644aa, type: 3}
-  m_Name: DarkCastle02Data
+  m_Name: RandomData
   m_EditorClassIdentifier: 
-  Id: 3
-  Group: DarkCastle
-  Title: "\uB2E4\uD06C \uCE90\uC2AC 02"
-  MaxPlayer: 8
+  Id: 1
+  Group: Random
+  Title: "\uC804\uCCB4 \uB79C\uB364"
+  MaxPlayer: 99
   Level: 1
-  Popularity: 2
+  Popularity: 1
   Rank: 0
-  info: "\uB2E4\uD06C \uBC40\uD30C\uC774\uC5B4\uAC00 \uC0B4\uACE0 \uC788\uB294 \uACF3\uC785\uB2C8\uB2E4.
-    \uC774\uACF3\uC5D0\uC11C\uB294 \uBCA8\uB77C\uB97C \uB354 \uC790\uC8FC \uB9CC\uB0A0
-    \uC218 \uC788\uC744\uB4EF\uD574\uC694! "
+  info: "\uBAA8\uB4E0 \uB9F5\uC774 \uB79C\uB364\uD558\uAC8C \uC120\uD0DD\uB429\uB2C8\uB2E4."
   Favorites: 0
-  MapImg: {fileID: 0}
+  MapImg: {fileID: -1305618392, guid: 07644a5a649fa58478cc0f79133edfd9, type: 3}
+  MapIcon: {fileID: -231427999, guid: 07644a5a649fa58478cc0f79133edfd9, type: 3}
+  MapFileName: RandomData

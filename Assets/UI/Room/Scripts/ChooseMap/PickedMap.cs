@@ -23,6 +23,7 @@ namespace RoomUI.ChooseMap
 		private ChooseMapView chooseMapUI;
 
 		private bool isActiveUI;
+		private int chooseMapID;
 
 		private void Awake()
 		{
@@ -33,6 +34,8 @@ namespace RoomUI.ChooseMap
 
 			for(int i=0; i<mapList.Maps.Count; i++)
 				mapList.Maps[i].Id = i;
+
+			chooseMapID = 0;
 		}
 
 		private void Start()
@@ -46,16 +49,27 @@ namespace RoomUI.ChooseMap
 			if (isActiveUI == false)
 			{
 				chooseMapUI.gameObject.SetActive(true);
-				chooseMapUI.SetMapInfo(mapList);
+				chooseMapUI.SetMapInfo(mapList, chooseMapID);
 				chooseMapUI.OnClosedMapView += ClosedMapView;
 				isActiveUI = true;
 			}
 		}
 
-		private void ClosedMapView()
+		private void ClosedMapView(int choosedId)
 		{
+			chooseMapID = choosedId;
 			chooseMapUI.OnClosedMapView -= ClosedMapView;
 			isActiveUI = false;
+		}
+
+		public void ResetChooseID()
+		{
+			chooseMapID = 0;
+		}
+
+		public void AddOpenChooseMap()
+		{
+			btnPickedMap.onClick.AddListener(() => OpenChooseMapUI());
 		}
 	}
 

@@ -19,7 +19,14 @@ namespace RoomUI.PlayerSetting
 {
 	public class WaitingPlayer : MonoBehaviourPun, IChangeableCharacter
 	{
-		public SlotController Slot;
+		[SerializeField]
+		private SlotController slot;
+		public int SlotNumber
+		{ 
+			get { return slot == null ? -1 : slot.SlotNumber; } 
+			set { if (slot != null) slot.SlotNumber = value; } 
+		}
+		public SlotState CurrentSlotState { get { return slot == null ? SlotState.Open : slot.SlotCurState; } }
 
 		[SerializeField]
 		private PlayerWaitState playerWaitState;
@@ -32,17 +39,11 @@ namespace RoomUI.PlayerSetting
 
 		public WaitPlayerSetting PlayerSet;
 
-		public UnityAction<int, CharacterData> OnChangedOtherPlayerCharacter;
-		public UnityAction<int, Color> OnChangedOtherPlayerTeam;
-
-		public UnityAction<int, bool> OnChangedOtherPlayerState;
-		public UnityAction<int> OnChangedMasterPlayerState;
-
 		public void SetPlayer(Player player)
 		{
 			this.player = player;
 			playerId.text = player.NickName;
-			Slot.SlotCurState = SlotState.Use;
+			slot.SlotCurState = SlotState.Use;
 
 			PlayerSet.gameObject.SetActive(true);
 
@@ -56,9 +57,12 @@ namespace RoomUI.PlayerSetting
 				if (player.IsMasterClient)
 					playerWaitState.UpdateMasterInfo();
 				else
+				{
 					playerWaitState.UpdateReadyInfo(player.GetPlayerProperty(PlayerProp.READY, false));
+					slot.RemoveCloseSlot();
+				}
 
-				if(player.CustomProperties.ContainsKey(PlayerProp.TEAMCOLOR))
+				if (player.CustomProperties.ContainsKey(PlayerProp.TEAMCOLOR))
 				{
 					string hexColor = player.CustomProperties[PlayerProp.TEAMCOLOR].ToString();
 
@@ -67,7 +71,7 @@ namespace RoomUI.PlayerSetting
 					PlayerSet.TeamColor.color = teamColor;
 				}
 			}
-			Slot.RemoveCloseSlot();
+			
 		}
 
 		public void UpdateReadyInfo()
@@ -99,7 +103,9 @@ namespace RoomUI.PlayerSetting
 		{
 			if (player.IsMasterClient)
 			{
+				playerWaitState.UpdateMasterInfo();
 				player.SetPlayerProperty(PlayerProp.READY, true);
+				slot.AddCloseSlot();
 			}
 		}
 
@@ -109,6 +115,22 @@ namespace RoomUI.PlayerSetting
 			{
 				playerWaitState.UpdateReadyInfo(isReady);
 			}
+		}
+
+		public void UpdateSlotState(SlotState state)
+		{
+			slot.SetSlot(state);
+		}
+
+		public void InitWaitState()
+		{
+			PlayerSet.TeamColor.color = new Color(1f, 1f, 1f, 0f);
+			PlayerSet.Team = "";
+			PlayerSet.gameObject.SetActive(false);
+			playerId.text = "";
+			slot.SlotCurState = SlotState.Open;
+
+			playerWaitState.UpdateReadyInfo(false);
 		}
 	}
 }

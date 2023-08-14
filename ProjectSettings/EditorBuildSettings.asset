@@ -5,10 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/UI/Lobby/Scenes/KDY/Lobby_Test2.unity
     guid: 3a3e12ef3fd298a4e98cb54094e86d30
-  - enabled: 1
+  - enabled: 0
     path: Assets/UI/Lobby/Scenes/KDY/GameScene.unity
     guid: f1c9790f64869214cb9260e136c29a95
+  - enabled: 1
+    path: Assets/UI/Room/Scenes/RoomScene ver 3/DevRoomScene.unity
+    guid: f9707b23f2c715849a4f2c7e6f152c75
+  - enabled: 1
+    path: Assets/UI/Room/Scenes/RoomScene ver 3/GameScene.unity
+    guid: cbe9f5c8428dd0340b967328781b764b
   m_configObjects: {}

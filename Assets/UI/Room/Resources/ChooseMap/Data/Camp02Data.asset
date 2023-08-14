@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 1
   Group: Camp
-  Title: "\uCEA0\uD504 02"
+  Title: "\uCEA0\uD504"
   MaxPlayer: 4
   Level: 1
   Popularity: 5
@@ -24,4 +24,6 @@ MonoBehaviour:
     \uD558\uBA74 \uBB3C\uD48D\uC120\uC774 \uD130\uC9C0\uB294 \uBFB0\uC871\uD55C \uD540\uC744
     \uC870\uC2EC\uD558\uC138\uC694. "
   Favorites: 0
-  MapImg: {fileID: 0}
+  MapImg: {fileID: 1598356938, guid: 07644a5a649fa58478cc0f79133edfd9, type: 3}
+  MapIcon: {fileID: -640227075, guid: 07644a5a649fa58478cc0f79133edfd9, type: 3}
+  MapFileName: Camp02Data

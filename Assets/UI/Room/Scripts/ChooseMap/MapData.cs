@@ -22,5 +22,7 @@ namespace RoomUI.ChooseMap
 		public bool Favorites;
 
 		public Sprite MapImg;
+		public Sprite MapIcon;
+		public string MapFileName;
 	}
 }
