@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ChatManager : MonoBehaviour, IChatClientListener
@@ -30,6 +31,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
 
     private string privateReceiver = "";
     private string currentChat;
+    private bool isInputFieldFocused = false;
 
     // Use this for initialization
     private void OnEnable()
@@ -145,14 +147,32 @@ public class ChatManager : MonoBehaviour, IChatClientListener
         Debug.Log("status : " + string.Format("{0} is {1}, Msg : {2} ", user, status, message));
     }
 
-    void Update()
+
+    private void Update()
     {
         chatClient.Service();
 
-        if (inputField.text != "" && Input.GetKey(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
-            SubmitPublicChatOnClick();
-            SubmitPrivateChatOnClick();
+            if (!isInputFieldFocused)
+            {
+                // 인풋필드에 진입합니다.
+                inputField.Select();
+                isInputFieldFocused = true;
+            }
+            else
+            {
+                // 인풋필드에서 채팅을 전송합니다.
+                SubmitPublicChatOnClick();
+                SubmitPrivateChatOnClick();
+                isInputFieldFocused = false; // 포커스를 해제합니다.
+            }
+        }
+
+        // 인풋필드 이외의 영역을 클릭했을 때 포커스를 해제합니다.
+        if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0))
+        {
+            isInputFieldFocused = false;
         }
     }
 
@@ -175,6 +195,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
             }
         }
     }
+
 
     public void OnUserSubscribed(string channel, string user)
     {
