@@ -63,7 +63,7 @@ namespace KDY
 
         private void CreateBombWaterCenter()
         {
-            PhotonNetwork.Instantiate("Prefabs/bombwater_center", transform.position, Quaternion.identity);
+            PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_center", transform.position, Quaternion.identity);
         }
 
         private void CreateBombWaterLeft(int count)
@@ -76,17 +76,17 @@ namespace KDY
 
             if (CheckBlockObject(prevLeftWaterPos, Vector2.left))
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_leftend", (Vector3)prevLeftWaterPos + -transform.right * 1f * tileXInterval, Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_leftend", (Vector3)prevLeftWaterPos + -transform.right * 1f * tileXInterval, Quaternion.identity);
                 return;
             }
 
             if (count == 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_leftend", transform.position + -transform.right * owner.bombPower * tileXInterval, Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_leftend", transform.position + -transform.right * owner.bombPower * tileXInterval, Quaternion.identity);
             }
             else if (count > 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_left", transform.position + -transform.right * ((owner.bombPower - count + 1) * tileXInterval), Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_left", transform.position + -transform.right * ((owner.bombPower - count + 1) * tileXInterval), Quaternion.identity);
                 prevLeftWaterPos = transform.position + -transform.right * ((owner.bombPower - count + 1) * tileXInterval);
             }
         }
@@ -101,17 +101,17 @@ namespace KDY
 
             if (CheckBlockObject(prevRightWaterPos, Vector2.right))
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_rightend", (Vector3)prevRightWaterPos + transform.right * 1f * tileXInterval, Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_rightend", (Vector3)prevRightWaterPos + transform.right * 1f * tileXInterval, Quaternion.identity);
                 return;
             }
 
             if (count == 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_rightend", transform.position + transform.right * owner.bombPower * tileXInterval, Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_rightend", transform.position + transform.right * owner.bombPower * tileXInterval, Quaternion.identity);
             }
             else if (count > 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_right", transform.position + transform.right * ((owner.bombPower - count + 1) * tileXInterval), Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_right", transform.position + transform.right * ((owner.bombPower - count + 1) * tileXInterval), Quaternion.identity);
                 prevRightWaterPos = transform.position + transform.right * ((owner.bombPower - count + 1) * tileXInterval);
             }
         }
@@ -126,18 +126,18 @@ namespace KDY
 
             if (CheckBlockObject(prevUpWaterPos, Vector2.up, 90f))
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_upend", (Vector3)prevUpWaterPos + transform.up * 1f * tileYInterval, Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_upend", (Vector3)prevUpWaterPos + transform.up * 1f * tileYInterval, Quaternion.identity);
                 return;
             }
 
             if (count == 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_upend", transform.position + transform.up * owner.bombPower * tileYInterval, Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_upend", transform.position + transform.up * owner.bombPower * tileYInterval, Quaternion.identity);
             }
 
             else if (count > 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_up", transform.position + transform.up * ((owner.bombPower - count + 1) * tileYInterval), Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_up", transform.position + transform.up * ((owner.bombPower - count + 1) * tileYInterval), Quaternion.identity);
                 prevUpWaterPos = transform.position + transform.up * ((owner.bombPower - count + 1) * tileYInterval);
             }
         }
@@ -152,18 +152,18 @@ namespace KDY
 
             if (CheckBlockObject(prevDownWaterPos, Vector2.down, 90f))
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_downend", (Vector3)prevDownWaterPos + -transform.up * 1f * tileYInterval, Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_downend", (Vector3)prevDownWaterPos + -transform.up * 1f * tileYInterval, Quaternion.identity);
                 return;
             }
 
             if (count == 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_downend", transform.position + -transform.up * owner.bombPower * tileYInterval, Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_downend", transform.position + -transform.up * owner.bombPower * tileYInterval, Quaternion.identity);
             }
 
             else if (count > 1)
             {
-                PhotonNetwork.Instantiate("Prefabs/bombwater_down", transform.position + -transform.up * ((owner.bombPower - count + 1) * tileYInterval), Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("Prefabs/bombwater_down", transform.position + -transform.up * ((owner.bombPower - count + 1) * tileYInterval), Quaternion.identity);
                 prevDownWaterPos = transform.position + -transform.up * ((owner.bombPower - count + 1) * tileYInterval);
             }
         }
@@ -196,14 +196,6 @@ namespace KDY
                 return true;
             else
                 return false;
-        }
-
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                GetComponent<Collider2D>().isTrigger = false;
-            }
         }
 
         private void SetBombTilePosition()

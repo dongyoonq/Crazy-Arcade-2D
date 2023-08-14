@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public abstract class Block : MonoBehaviourPun
+public abstract class Block : MonoBehaviourPun, IPunObservable
 {
-    [SerializeField] List<ItemData> dropTableResource;
+    [SerializeField] List<string> dropTableResource;
     int[] percent = Enumerable.Range(1, 100).ToArray();
     bool isDropped = false;
 
@@ -22,27 +22,32 @@ public abstract class Block : MonoBehaviourPun
     [PunRPC]
     protected void RequestCreateItem(Vector3 position, Quaternion rotation)
     {
-        int dropRandom = Random.Range(1, 101);
-        int dropItemRandom = Random.Range(0, dropTableResource.Count);
-        photonView.RPC("ResultCreateItem", RpcTarget.AllViaServer, dropRandom, dropItemRandom, position, rotation);
-    }
-
-    [PunRPC]
-    protected void ResultCreateItem(int randValue, int randValue2, Vector3 position, Quaternion rotation)
-    {
         isDropped = true;
         int dropPercent = (int)(percent.Length * 0.35f);
+        int dropRandom = Random.Range(1, 101);
+        int dropItemRandom = Random.Range(0, dropTableResource.Count);
 
         for (int i = 0; i < dropPercent; i++)
         {
-            if (percent[i] == randValue)
+            if (percent[i] == dropRandom)
             {
-                Instantiate(dropTableResource[randValue2].itemPrefab, position, rotation);
+                PhotonNetwork.InstantiateRoomObject(dropTableResource[dropItemRandom], position, rotation);
                 break;
             }
         }
 
-        if (PhotonNetwork.IsMasterClient)
-            PhotonNetwork.Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(isDropped);
+        }
+        else
+        {
+            isDropped = (bool)stream.ReceiveNext();
+        }
     }
 }

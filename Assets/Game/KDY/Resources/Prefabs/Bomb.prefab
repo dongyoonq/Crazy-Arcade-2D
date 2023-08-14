@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -27324999884587478}
   - component: {fileID: 295985143176188046}
   - component: {fileID: -485576231771664167}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,8 +124,8 @@ MonoBehaviour:
   tileYInterval: 0.7
   tileXInterval: 0.9
   bombCoolTime: 3
-  castingXRange: 0.35
-  castingYRange: 0.25
+  castingXRange: 0.38
+  castingYRange: 0.28
   owner: {fileID: 0}
 --- !u!61 &295985143176188046
 BoxCollider2D:
@@ -140,7 +140,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0010118932, y: 0.1035516}
+  m_Offset: {x: 0.0024160668, y: 0.1035516}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -151,7 +151,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.49902388, y: 0.17043072}
+  m_Size: {x: 0.37733066, y: 0.17043072}
   m_EdgeRadius: 0
 --- !u!114 &-485576231771664167
 MonoBehaviour:

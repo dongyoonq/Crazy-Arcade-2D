@@ -3,6 +3,7 @@ using Photon.Pun;
 using RoomUI.ChooseTeam;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -24,15 +25,18 @@ namespace KDY
         [SerializeField] public float moveSpeed;
         [SerializeField] TMP_Text nameTxt;
         [SerializeField] float dieTimer;
+        [SerializeField] PlayerHitBox hitBox;
 
         public TEAM currTeam;
         public bool isPrision;
+        public float prevMoveSpeed;
+        public Animator animator;
 
         private string playerName;
-        private Animator animator;
 
         private void Awake()
         {
+            hitBox.owner = this;
             animator = GetComponent<Animator>();
             currTeam = GetTeamFromProperty();
             nameTxt.color = GetColorFromProperty();
@@ -120,14 +124,13 @@ namespace KDY
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("WaterBlock"))
+            if (collision.gameObject.layer == LayerMask.NameToLayer("WaterBlock") && !isPrision)
             {
-                //Todo : 플레이어 물감옥 상태 처리
                 isPrision = true;
                 animator.SetBool("BeforeDie", true);
+                prevMoveSpeed = moveSpeed;
                 moveSpeed = 0.5f;
-
-                // BeforeDie 애니메이션 중 플레이어가 터치시 처리
+                hitBox.gameObject.SetActive(true);
             }
         }
 
@@ -147,7 +150,12 @@ namespace KDY
             StartCoroutine(DissapearRoutime());
         }
 
-        IEnumerator DissapearRoutime()
+        public void OnRescueAnimationFinish()
+        {
+            animator.SetBool("Rescue", false);
+        }
+
+        public IEnumerator DissapearRoutime()
         {
             yield return new WaitForSeconds(1f);
 
@@ -156,8 +164,7 @@ namespace KDY
 
             yield return new WaitForSeconds(3f);
 
-            if (PhotonNetwork.IsMasterClient)
-                PhotonNetwork.Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 }

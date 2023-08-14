@@ -10,7 +10,7 @@ public abstract class InGameItem : Item
 
     private void OnEnable()
     {
-        StartCoroutine(collisionActive(0.4f));
+        StartCoroutine(collisionActive(0.5f));
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

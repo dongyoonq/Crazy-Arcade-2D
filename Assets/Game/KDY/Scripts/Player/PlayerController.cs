@@ -5,6 +5,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -69,11 +70,71 @@ namespace KDY
                     inputDir.x = 0;
                 }
 
+                if ((inputDir.y > 0.1 && CheckUpBomb()) || 
+                    (inputDir.y < -0.1 && CheckDownBomb()) || 
+                    (inputDir.x < -0.1 && CheckLeftBomb()) || 
+                    (inputDir.x > 0.1 && CheckRightBomb()))
+                {
+                    rb.velocity = Vector2.zero;
+                    return;
+                }
+
                 rb.velocity = inputDir * player.moveSpeed;
                 animator.SetFloat("moveX", rb.velocity.x);
                 animator.SetFloat("moveY", rb.velocity.y);
                 animator.SetFloat("moveSpeed", rb.velocity.magnitude);
             }
+        }
+
+        private bool CheckUpBomb()
+        {
+            Vector3 start = transform.position + (transform.up * 0.5f) + (transform.right * -0.2f);
+            RaycastHit2D hit = Physics2D.Raycast(start, Vector2.right, 0.4f, LayerMask.GetMask("Bomb"));
+
+            if (hit)
+                return true;
+            else
+                return false;
+        }
+
+        private bool CheckDownBomb()
+        {
+            Vector3 start = transform.position + (transform.up * -0.5f) + (transform.right * -0.2f);
+            RaycastHit2D hit = Physics2D.Raycast(start, Vector2.right, 0.4f, LayerMask.GetMask("Bomb"));
+
+            if (hit)
+                return true;
+            else
+                return false;
+        }
+
+        private bool CheckLeftBomb()
+        {
+            Vector3 start = transform.position + (transform.right * -0.5f) + (transform.up * -0.2f);
+            RaycastHit2D hit = Physics2D.Raycast(start, Vector2.up, 0.4f, LayerMask.GetMask("Bomb"));
+
+            if (hit)
+                return true;
+            else
+                return false;
+        }
+
+        private bool CheckRightBomb()
+        {
+            Vector3 start = transform.position + (transform.right * 0.5f) + (transform.up * -0.2f);
+            RaycastHit2D hit = Physics2D.Raycast(start, Vector2.up, 0.4f, LayerMask.GetMask("Bomb"));
+
+            if (hit)
+                return true;
+            else
+                return false;
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.cyan;
+            Vector3 start = transform.position + (transform.up * 1f) + (transform.right * -0.2f);
+            Gizmos.DrawLine(transform.position + (transform.up * 1f) + (transform.right * -0.2f), start + (transform.right * 0.4f));
         }
 
         private bool CheckBomb()
@@ -114,7 +175,7 @@ namespace KDY
             float lag = (float)(PhotonNetwork.Time - sentTime);
 
             Bomb bomb = GameManager.Resource.Instantiate<Bomb>("Prefabs/Bomb", position, rotation);
-            bomb.owner = GetComponent<InGamePlayer>();
+            bomb.owner = this.player;
 
             this.player.currbombCount++;
         }
