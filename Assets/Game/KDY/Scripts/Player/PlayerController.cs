@@ -44,6 +44,9 @@ namespace KDY
 
         private void OnAttack(InputValue value)
         {
+            if (player.isPrision || player.currbombCount >= player.maxbombCount || CheckBomb())
+                return;
+
             CreateBomb();
         }
 
@@ -73,6 +76,20 @@ namespace KDY
             }
         }
 
+        private bool CheckBomb()
+        {
+            Vector2 instPos = transform.position + transform.up * -0.25f;
+
+            RaycastHit2D hit = Physics2D.Raycast(instPos, Vector2.down, 0.01f, LayerMask.GetMask("Tile"));
+
+            Tile tile = hit.collider.GetComponent<Tile>();
+
+            if (tile.isInstallBombTile)
+                return true;
+            else
+                return false;
+        }
+
         private void CreateBomb()
         {
             photonView.RPC("RequestCreateBomb", RpcTarget.MasterClient, transform.position + transform.up * -0.25f, transform.rotation);
@@ -98,6 +115,8 @@ namespace KDY
 
             Bomb bomb = GameManager.Resource.Instantiate<Bomb>("Prefabs/Bomb", position, rotation);
             bomb.owner = GetComponent<InGamePlayer>();
+
+            this.player.currbombCount++;
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

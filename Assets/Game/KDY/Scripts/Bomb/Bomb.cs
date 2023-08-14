@@ -20,6 +20,7 @@ namespace KDY
         private Vector2 prevRightWaterPos;
         private Vector2 prevUpWaterPos;
         private Vector2 prevDownWaterPos;
+        private Tile currTile;
 
         private void OnEnable()
         {
@@ -29,8 +30,13 @@ namespace KDY
             prevDownWaterPos = transform.position;
 
             SetBombTilePosition();
-            // GetOwnerItem();
             StartCoroutine(BombCoolTimer());
+        }
+
+        private void OnDisable()
+        {
+            owner.currbombCount--;
+            currTile.InstallBomb(false);
         }
 
         IEnumerator BombCoolTimer()
@@ -203,6 +209,10 @@ namespace KDY
         private void SetBombTilePosition()
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.01f, LayerMask.GetMask("Tile"));
+
+            currTile = hit.collider.GetComponent<Tile>();
+
+            currTile.InstallBomb(true);
 
             if (hit)
             {

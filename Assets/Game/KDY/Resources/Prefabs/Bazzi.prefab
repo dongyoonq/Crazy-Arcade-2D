@@ -122,11 +122,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26f91053fa85e8844b993fa390177d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
   bombPower: 1
+  maxbombCount: 1
+  currbombCount: 0
+  moveSpeed: 3
   nameTxt: {fileID: 5843863827438227553}
   dieTimer: 5
   currTeam: 0
+  isPrision: 0
 --- !u!114 &5843863825986997073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5170cf8d349298459ef74d2afa0c1db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackCoolTime: 0
+  attackCoolTime: 0.2
 --- !u!95 &5843863825986997074
 Animator:
   serializedVersion: 5
@@ -229,14 +232,17 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: moveSpeed
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: BeforeDie
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: Die
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: Died
+  - Type: 4
+    SynchronizeType: 1
+    Name: Dissapear
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0

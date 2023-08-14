@@ -13,13 +13,20 @@ namespace KDY
 {
     public class InGamePlayer : MonoBehaviourPun, IPunObservable
     {
-        [SerializeField] public float moveSpeed;
-        public int bombPower = 1;
+        public const int limitbombPower = 8;
+        public const int limitbombCount = 8;
+        public const float limitmoveSpeed = 4.2f;
 
+        public int bombPower = 1;   // 물풍선 세기
+        public int maxbombCount;    // 최대 물풍선 설치 개수
+        public int currbombCount;   // 현재 물풍선 설치 수
+
+        [SerializeField] public float moveSpeed;
         [SerializeField] TMP_Text nameTxt;
         [SerializeField] float dieTimer;
 
         public TEAM currTeam;
+        public bool isPrision;
 
         private string playerName;
         private Animator animator;
@@ -27,7 +34,6 @@ namespace KDY
         private void Awake()
         {
             animator = GetComponent<Animator>();
-
             currTeam = GetTeamFromProperty();
             nameTxt.color = GetColorFromProperty();
 
@@ -117,6 +123,7 @@ namespace KDY
             if (collision.gameObject.layer == LayerMask.NameToLayer("WaterBlock"))
             {
                 //Todo : 플레이어 물감옥 상태 처리
+                isPrision = true;
                 animator.SetBool("BeforeDie", true);
                 moveSpeed = 0.5f;
 
@@ -128,15 +135,29 @@ namespace KDY
         {
             animator.SetBool("BeforeDie", false);
             animator.SetBool("Die", true);
+
+            if (photonView.IsMine)
+                GetComponent<PlayerInput>().enabled = false;
         }
 
         public void OnDieAnimationFinish()
         {
             animator.SetBool("Die", false);
             animator.SetBool("Died", true);
+            StartCoroutine(DissapearRoutime());
+        }
 
-            if (photonView.IsMine)
-                GetComponent<PlayerInput>().enabled = false;
+        IEnumerator DissapearRoutime()
+        {
+            yield return new WaitForSeconds(1f);
+
+            animator.SetBool("Died", false);
+            animator.SetBool("Dissapear", true);
+
+            yield return new WaitForSeconds(3f);
+
+            if (PhotonNetwork.IsMasterClient)
+                PhotonNetwork.Destroy(gameObject);
         }
     }
 }

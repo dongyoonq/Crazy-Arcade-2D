@@ -94,8 +94,9 @@ GameObject:
   m_Component:
   - component: {fileID: 481247452109997772}
   - component: {fileID: 4758046610246315534}
-  - component: {fileID: 7157683550058693690}
   - component: {fileID: -1743886163470890418}
+  - component: {fileID: 7157683550058693690}
+  - component: {fileID: -1381142112370021613}
   m_Layer: 7
   m_Name: Block7
   m_TagString: Untagged
@@ -145,20 +146,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9042736, y: 0.44742024}
   m_EdgeRadius: 0
---- !u!114 &7157683550058693690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4167396513786310279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cdce020f0573ce4db3dbea1d1f8aa8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropTable:
-  - {fileID: 11400000, guid: 24604ac840f46254caf5da0c708d7a5f, type: 2}
 --- !u!50 &-1743886163470890418
 Rigidbody2D:
   serializedVersion: 4
@@ -180,3 +167,41 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &7157683550058693690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4167396513786310279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cdce020f0573ce4db3dbea1d1f8aa8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropTableResource:
+  - {fileID: 11400000, guid: b0dbcfa6103527f4ba83255810f56cf0, type: 2}
+  - {fileID: 11400000, guid: 24604ac840f46254caf5da0c708d7a5f, type: 2}
+  - {fileID: 11400000, guid: 0b2c2154d84e7f14998b53a1101581ed, type: 2}
+--- !u!114 &-1381142112370021613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4167396513786310279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

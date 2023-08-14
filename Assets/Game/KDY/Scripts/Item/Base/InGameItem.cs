@@ -18,6 +18,10 @@ public abstract class InGameItem : Item
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             InGamePlayer player = collision.gameObject.GetComponent<InGamePlayer>();
+
+            if (player.isPrision)
+                return;
+
             ApplyStatus(player);
             Destroy(gameObject);
         }
