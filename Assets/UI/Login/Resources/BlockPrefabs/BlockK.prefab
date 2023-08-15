@@ -94,8 +94,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6378314597051317568}
   - component: {fileID: 7335873144658574968}
-  - component: {fileID: 8400983416032590299}
   - component: {fileID: 5438735470994401708}
+  - component: {fileID: 8400983416032590299}
+  - component: {fileID: 4214632451671011177}
   m_Layer: 7
   m_Name: BlockK
   m_TagString: Untagged
@@ -145,20 +146,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9042736, y: 0.44742024}
   m_EdgeRadius: 0
---- !u!114 &8400983416032590299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7741490723808173498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1785c52464e91f499012de26de2ba96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropTable:
-  - {fileID: 11400000, guid: 24604ac840f46254caf5da0c708d7a5f, type: 2}
 --- !u!50 &5438735470994401708
 Rigidbody2D:
   serializedVersion: 4
@@ -180,3 +167,42 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &8400983416032590299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7741490723808173498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1785c52464e91f499012de26de2ba96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropTableResource:
+  - Item/Bubble
+  - Item/Fluid
+  - Item/Roller
+--- !u!114 &4214632451671011177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7741490723808173498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 8400983416032590299}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
