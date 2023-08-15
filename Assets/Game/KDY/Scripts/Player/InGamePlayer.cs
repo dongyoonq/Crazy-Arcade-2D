@@ -43,20 +43,12 @@ namespace KDY
             currTeam = GetTeamFromProperty();
             nameTxt.color = GetColorFromProperty();
             gameManager = GameObject.Find("InGameManager").GetComponent<InGameManager>();
+            playerName = photonView.Owner.NickName;
+            nameTxt.text = playerName;
 
             if (photonView.IsMine)
             {
-                playerName = photonView.Owner.NickName;
-                nameTxt.text = playerName;
                 gameManager.AddPlayerTeamList(this);
-            }
-        }
-
-        private void Update()
-        {
-            if (!photonView.IsMine)
-            {
-                nameTxt.text = playerName;
             }
         }
 
@@ -112,20 +104,6 @@ namespace KDY
             }
         }
 
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.IsWriting)
-            {
-                stream.SendNext(playerName);
-                stream.SendNext(currTeam);
-            }
-            else
-            {
-                playerName = (string)stream.ReceiveNext();
-                currTeam = (TEAM)stream.ReceiveNext();
-            }
-        }
-
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("WaterBlock") && !isPrision)
@@ -176,6 +154,11 @@ namespace KDY
             yield return new WaitForSeconds(3f);
 
             Destroy(gameObject);
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+
         }
     }
 }

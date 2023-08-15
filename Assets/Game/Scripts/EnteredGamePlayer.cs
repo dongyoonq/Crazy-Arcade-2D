@@ -6,10 +6,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Extension;
+using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class EnteredGamePlayer : MonoBehaviourPunCallbacks
 {
-	public Player CurPalyer;
+	[SerializeField]
+	private List<Sprite> characterImgs;
 
 	[SerializeField]
 	private Image PlayerCharacter;
@@ -23,17 +26,56 @@ public class EnteredGamePlayer : MonoBehaviourPunCallbacks
 	[SerializeField]
 	private Image TeamColor;
 
-	public void SetEnteredPlayer(Player player)
-	{
-		CurPalyer = player;
+    private void Awake()
+    {
+        transform.SetParent(GameObject.Find("EnteredPlayerList").transform, false);
+        SetCharacterImg();
+        TeamColor.color = GetColorFromProperty();
+        NickName.color = GetColorFromProperty();
+        PlayerLevel.gameObject.SetActive(false);
+        NickName.text = photonView.Owner.NickName;
+    }
 
-		NickName.text = player.NickName;
+    private Color GetColorFromProperty()
+    {
+        PhotonHashtable property = photonView.Owner.CustomProperties;
 
-        Color teamColor; 
-		string hexColor = player.CustomProperties[PlayerProp.TEAM].ToString();
-		ColorUtility.TryParseHtmlString(hexColor, out teamColor);
-		TeamColor.color = teamColor;
+        string hexColor = (string)property[PlayerProp.TEAMCOLOR];
 
-		PlayerLevel.gameObject.SetActive(false);
-	}
+        if (ColorUtility.TryParseHtmlString(hexColor, out Color color))
+        {
+            return color;
+        }
+        else
+        {
+            Debug.LogWarning("Invalid hex color string: " + hexColor);
+            return Color.white; // 또는 다른 기본값
+        }
+    }
+
+    private void SetCharacterImg()
+    {
+        PhotonHashtable property = photonView.Owner.CustomProperties;
+
+        if (!property.ContainsKey(PlayerProp.CHARACTER))
+        {
+            Debug.Log("프로퍼티가 없습니다");
+        }
+
+        switch ((CharacterEnum)property[PlayerProp.CHARACTER])
+        {
+            case CharacterEnum.Dao:
+                PlayerCharacter.sprite = characterImgs[0];
+                break;
+            case CharacterEnum.Cappi:
+                PlayerCharacter.sprite = characterImgs[1];
+                break;
+            case CharacterEnum.Marid:
+                PlayerCharacter.sprite = characterImgs[2];
+                break;
+            case CharacterEnum.Bazzi:
+                PlayerCharacter.sprite = characterImgs[3];
+                break;
+        }
+    }
 }

@@ -235,6 +235,7 @@ RectTransform:
   m_Children:
   - {fileID: 1074908169}
   - {fileID: 151192355}
+  - {fileID: 347340648}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -840,6 +841,92 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7951209620751571835, guid: 6e2c68c52b51ada4c95eae77aedbf9b3, type: 3}
   m_PrefabInstance: {fileID: 5856275823603273062}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &347340647
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 347340648}
+  - component: {fileID: 347340650}
+  - component: {fileID: 347340649}
+  m_Layer: 5
+  m_Name: EnteredPlayerList
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &347340648
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347340647}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 65401776}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 766.44165, y: 54.39789}
+  m_SizeDelta: {x: 300.4159, y: 615.1996}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &347340649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347340647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 286
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &347340650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347340647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 6
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 1
+  m_ReverseArrangement: 0
 --- !u!4 &348933015 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5580464037589850771, guid: dcfb9c32a5adf01439b10124af779c0d, type: 3}
@@ -2941,6 +3028,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be71d14f4bd449649bd43fc9d7c0ce88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enteredPlayerList: {fileID: 347340648}
   infoText: {fileID: 151192356}
   countdownTimer: 5
   playerSpawn: {fileID: 1550432371}

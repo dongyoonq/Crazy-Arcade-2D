@@ -14,13 +14,16 @@ using static Extension;
 using KDY;
 using UnityEngine.Events;
 using System.IO;
-using static Photon.Pun.UtilityScripts.PunTeams;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
 public class InGameManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] TMP_Text infoText;
-    [SerializeField] float countdownTimer;
-    [SerializeField] PlayerSpawn playerSpawn;
+    [SerializeField] private RectTransform enteredPlayerList;
+    [SerializeField] private TMP_Text infoText;
+    [SerializeField] private float countdownTimer;
+    [SerializeField] private PlayerSpawn playerSpawn;
 
     public Dictionary<string, TEAM> teamPlayerDic = new Dictionary<string, TEAM>();
     public List<InGamePlayer> playerList = new List<InGamePlayer>();
@@ -110,8 +113,11 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     private void GameStart()
     {
-        // Todo : debug game start
-        CharacterPropertyInstantiate();
+        // Character Set
+        CharacterInstantiate();
+
+        // PlayerList Update
+        SetEnteredPlayerList();
     }
 
     IEnumerator DebugGameSetupDelay()
@@ -123,16 +129,14 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     private void DebugGameStart()
     {
-        // Team Property Test : 실제로는 Room에서 프로퍼티 설정함
-        string[] randoms = { "Red", "Yellow", "Orange", "Green", "Skyblue", "Blue", "Purple", "Pink" };
+        // Team Set
+        SetPlayerProperty();
 
-        SetPlayerTeamProperty(randoms[Random.Range(0,8)]);
+        // Debug Character Instantiate
+        CharacterInstantiate();
 
-        Debug.Log(PhotonNetwork.LocalPlayer.GetPlayerNumber());
-        Vector3 position = playerSpawn.spawnPoints[PhotonNetwork.LocalPlayer.GetPlayerNumber()].transform.position;
-
-        // Debug Character
-        PhotonNetwork.Instantiate("Prefabs/Marid", position, Quaternion.identity); 
+        // PlayerList Update
+        SetEnteredPlayerList();
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
@@ -142,25 +146,29 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     private int PlayerLoadCount()
     {
-        int loadCount = 0;
-        foreach (Player player in PhotonNetwork.PlayerList)
-            if (player.GetLoad())
-                loadCount++;
-
-        return loadCount;
+        return PhotonNetwork.PlayerList.Where(x => x.GetLoad()).Count();
     }
 
-    private void SetPlayerTeamProperty(string team)
+    private void SetPlayerProperty()
     {
         PhotonHashtable property = PhotonNetwork.LocalPlayer.CustomProperties;
-        property[PlayerProp.TEAM] = team;
+        property[PlayerProp.TEAM] = "Red";
+        property[PlayerProp.TEAMCOLOR] = $"#{Color.red.ToHexString()}";
+        property[PlayerProp.CHARACTER] = CharacterEnum.Dao;
         PhotonNetwork.LocalPlayer.SetCustomProperties(property);
+    }
+
+    private void SetEnteredPlayerList()
+    {
+        PhotonNetwork.Instantiate("EnteredPlayer", Vector3.zero, Quaternion.identity);
+        //enteredPlayer.transform.SetParent(enteredPlayerList, false);
+        //enteredPlayer.SetEnteredPlayer(PhotonNetwork.LocalPlayer);
     }
 
     /// <summary>
     /// 방에서 선택된 캐릭터로 생성될수 있게 함수 작성
     /// </summary>
-    private void CharacterPropertyInstantiate()
+    private void CharacterInstantiate()
     {
         PhotonHashtable property = PhotonNetwork.LocalPlayer.CustomProperties;
 
@@ -295,18 +303,6 @@ public class InGameManager : MonoBehaviourPunCallbacks
                 break;
             }
         }
-
-        /*
-        // MannerMode Check
-        if ((RoomMode)property[RoomProp.ROOM_MODE] == RoomMode.Manner)
-        {
-
-        }
-        else if ((RoomMode)property[RoomProp.ROOM_MODE] == RoomMode.Free)
-        {
-
-        }
-        */
     }
 
     private void ShowGameResult(TEAM winTeam)
