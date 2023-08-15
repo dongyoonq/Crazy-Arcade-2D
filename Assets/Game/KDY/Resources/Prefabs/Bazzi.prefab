@@ -133,6 +133,7 @@ MonoBehaviour:
   currTeam: 0
   isPrision: 0
   prevMoveSpeed: 0
+  playerName: 
   animator: {fileID: 0}
 --- !u!114 &5843863825986997073
 MonoBehaviour:

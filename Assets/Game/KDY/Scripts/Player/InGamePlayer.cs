@@ -1,6 +1,7 @@
 using CustomProperty;
 using Photon.Pun;
 using RoomUI.ChooseTeam;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -27,12 +28,13 @@ namespace KDY
         [SerializeField] float dieTimer;
         [SerializeField] PlayerHitBox hitBox;
 
+        InGameManager gameManager;
+
         public TEAM currTeam;
         public bool isPrision;
         public float prevMoveSpeed;
+        public string playerName;
         public Animator animator;
-
-        private string playerName;
 
         private void Awake()
         {
@@ -40,11 +42,13 @@ namespace KDY
             animator = GetComponent<Animator>();
             currTeam = GetTeamFromProperty();
             nameTxt.color = GetColorFromProperty();
+            gameManager = GameObject.Find("InGameManager").GetComponent<InGameManager>();
 
             if (photonView.IsMine)
             {
                 playerName = photonView.Owner.NickName;
                 nameTxt.text = playerName;
+                gameManager.AddPlayerTeamList(this);
             }
         }
 
@@ -148,6 +152,13 @@ namespace KDY
             animator.SetBool("Die", false);
             animator.SetBool("Died", true);
             StartCoroutine(DissapearRoutime());
+
+            // 사망 후 게임 승리조건 판단
+            if (PhotonNetwork.IsMasterClient)
+            {
+                gameManager.RemovePlayerTeamList(this);
+                gameManager.CheckGameState();
+            }
         }
 
         public void OnRescueAnimationFinish()
