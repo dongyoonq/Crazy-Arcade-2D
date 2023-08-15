@@ -335,5 +335,6 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
         // 결과창 표시
         // 보상 적용
+        // 게임 종료 및 방이동
     }
 }
