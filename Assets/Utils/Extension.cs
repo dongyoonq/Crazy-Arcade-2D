@@ -9,7 +9,8 @@ public class Extension : MonoBehaviour
 		Dao,
 		Cappi,
 		Marid,
-		Bazzi
+		Bazzi,
+		None
 	}
 
     public enum TEAM { RED, YELLOW, ORANGE, GREEN, SKY, BLUE, PURPLE, PINK, NONE }

@@ -160,7 +160,9 @@ namespace KDY
             if (string.IsNullOrEmpty(roomName))
                 roomName = $"Room {UnityEngine.Random.Range(0, 1000)}";
 
-            int maxPlayer = 8;
+			RoomMode mode = createRoomPanel.roomMode.GetSeletedRoom();
+
+			int maxPlayer = 8;
             int roomNumber = GetRoomNumber();
 
 			RoomOptions roomOptions = new RoomOptions();
@@ -168,15 +170,16 @@ namespace KDY
 
 			roomOptions.CustomRoomProperties = new PhotonHashtable() {
 				{ RoomProp.ROOM_NAME, roomName },
-				{ RoomProp.ROOM_MODE, RoomMode.Free },
+				{ RoomProp.ROOM_MODE, mode },
 				{ RoomProp.ROOM_PASSWORD, createRoomPanel.passwordToggle.isOn ? createRoomPanel.passwordInput.text : "" },
 				{ RoomProp.ROOM_ID, roomNumber },
 				{ RoomProp.ROOM_STATE, "Waiting" },
-                {RoomProp.ROOM_MAP_GROUP, "Camp" },
+                { RoomProp.ROOM_MAP_GROUP, "Random" },
+				{ RoomProp.ROOM_MAP_FILE, "RandomData" },
 			};
 
 			roomOptions.CustomRoomPropertiesForLobby = new string[]
-			{ RoomProp.ROOM_NAME, RoomProp.ROOM_PASSWORD, RoomProp.ROOM_ID, RoomProp.ROOM_STATE, RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MODE };
+			{ RoomProp.ROOM_NAME, RoomProp.ROOM_PASSWORD, RoomProp.ROOM_ID, RoomProp.ROOM_STATE, RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MAP_FILE, RoomProp.ROOM_MODE };
 
             PhotonNetwork.CreateRoom(roomNumber.ToString(), roomOptions, null);
 
@@ -200,15 +203,15 @@ namespace KDY
 					changedRoom.SetChangedRoomInfo(RoomProp.ROOM_PASSWORD, propertiesThatChanged[RoomProp.ROOM_NAME].ToString().Trim());
 				}
 
-				else if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_PASSWORD))
+				if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_PASSWORD))
 				{
                     changedRoom.SetChangedRoomInfo(RoomProp.ROOM_PASSWORD, propertiesThatChanged[RoomProp.ROOM_PASSWORD].ToString().Trim());
 				}
 
-                else if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_MODE))
+				if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_MODE))
 				{
 					RoomMode mode = (RoomMode)Enum.Parse(typeof(RoomMode), propertiesThatChanged[RoomProp.ROOM_MODE].ToString().Trim());
-                    changedRoom.SetChangedRoomInfo(mode);
+                    createRoomPanel.roomMode.ChooseRoomMode(mode);
 				}
 			}
 		}

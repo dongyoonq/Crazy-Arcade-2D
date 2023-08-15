@@ -26,37 +26,41 @@ namespace RoomUI.ChooseMap
         private ChooseMapView chooseMapUI;
 
         private bool isActiveUI;
+		private int chooseMapID;
 
-        private void Awake()
-        {
-            if (PhotonNetwork.IsMasterClient)
-                btnPickedMap.onClick.AddListener(() => OpenChooseMapUI());
+		private void Awake()
+		{
+			if (PhotonNetwork.IsMasterClient)
+				btnPickedMap.onClick.AddListener(() => OpenChooseMapUI());
 
-            isActiveUI = false;
+			isActiveUI = false;
 
-            for (int i = 0; i < mapList.Maps.Count; i++)
-                mapList.Maps[i].Id = i;
-        }
+			for (int i = 0; i < mapList.Maps.Count; i++)
+				mapList.Maps[i].Id = i;
 
-        private void Start()
-        {
-            if (mapList != null && mapList.Maps.Count > 0)
-                gameMap.InitGameMap(mapList.Maps[0]);
-        }
+			chooseMapID = 0;
+		}
+
+		private void Start()
+		{
+			if (mapList != null && mapList.Maps.Count > 0)
+				gameMap.InitGameMap(mapList.Maps[0]);
+		}
 
 		private void OpenChooseMapUI()
 		{
 			if (isActiveUI == false)
 			{
 				chooseMapUI.gameObject.SetActive(true);
-				chooseMapUI.SetMapInfo(mapList);
+				chooseMapUI.SetMapInfo(mapList, chooseMapID);
 				chooseMapUI.OnClosedMapView += ClosedMapView;
 				isActiveUI = true;
 			}
 		}
 
-		private void ClosedMapView()
+		private void ClosedMapView(int choosedId)
 		{
+			chooseMapID = choosedId;
 			chooseMapUI.OnClosedMapView -= ClosedMapView;
 			isActiveUI = false;
 		}
