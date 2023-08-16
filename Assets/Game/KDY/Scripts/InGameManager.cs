@@ -324,13 +324,38 @@ public class InGameManager : MonoBehaviourPunCallbacks
             }
         }
 
-        Debug.Log("승리 팀원");
-        foreach (string player in winPlayerList) { Debug.Log(player); }
-        Debug.Log("패배 팀원");
-        foreach (string player in losePlayerList) { Debug.Log(player); }
-
         // 결과창 표시
+        photonView.RPC("ShowResultAll", RpcTarget.All, winPlayerList.ToArray(), losePlayerList.ToArray());
         // 보상 적용
         // 게임 종료 및 방이동
+        StartCoroutine(ReturnRoom());
+    }
+
+    [PunRPC]
+    private void ShowResultAll(string[] winPlayerList, string[] losePlayerList)
+    {
+        foreach (string playerName in winPlayerList)
+        {
+            if (playerName == PhotonNetwork.LocalPlayer.NickName)
+            {
+                infoText.text = "승리";
+                return;
+            }
+        }
+
+        foreach (string playerName in losePlayerList)
+        {
+            if (playerName == PhotonNetwork.LocalPlayer.NickName)
+            {
+                infoText.text = "패배";
+                return;
+            }
+        }
+    }
+
+    private IEnumerator ReturnRoom()
+    {
+        yield return new WaitForSeconds(5f);
+        PhotonNetwork.LoadLevel("BeforeGameScene");
     }
 }

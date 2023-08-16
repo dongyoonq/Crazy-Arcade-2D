@@ -19,7 +19,6 @@ using CustomProperty;
 using static Extension;
 using UnityEngine.Networking.Types;
 using UnityEngine.Events;
-using Unity.VisualScripting;
 
 namespace RoomUI
 {
@@ -64,6 +63,16 @@ namespace RoomUI
 
 		private void OnEnable()
 		{
+			if (CheckPlayingRoom())
+			{
+                ReturnPlayerSet();
+                NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{PhotonNetwork.NickName}님이 참가하셨습니다.");
+                PhotonHashtable property = new PhotonHashtable();
+                property[RoomProp.ROOM_PLAYING] = false;
+                PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+                return;
+            }
+
 			SetInPlayer();
 			CheckPlayerReadyState();
 
@@ -79,6 +88,28 @@ namespace RoomUI
 			playerDictionary.Clear();
 			pickedMap.ResetChooseID();
 		}
+
+		private bool CheckPlayingRoom()
+		{
+			PhotonHashtable property = PhotonNetwork.CurrentRoom.CustomProperties;
+
+			if (property.ContainsKey(RoomProp.ROOM_PLAYING) && (bool)property[RoomProp.ROOM_PLAYING])
+			{
+				return true;
+            }
+
+			return false;
+		}
+
+		private void ReturnPlayerSet()
+		{
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                InstantiateReturnPlayer(player);
+            }
+
+            CheckPlayerReadyState();
+        }
 
 		public void EntryPlayer(Player player)
 		{
@@ -149,7 +180,32 @@ namespace RoomUI
 			}
 		}
 
-		public void PlayerPropertiesUpdate(Player player, PhotonHashtable changedProps)
+		private void InstantiateReturnPlayer(Player player)
+		{
+            int index = playerDictionary.Count();
+
+            if (index == 8)
+                return;
+
+            WaitingPlayer waitingPlayer = playerContent.GetComponentsInChildren<WaitingPlayer>()[index];
+
+            if (waitingPlayer.CurrentSlotState == SlotState.Close)
+            {
+                waitingPlayer.UpdateSlotState(SlotState.Close);
+                return;
+            }
+
+            waitingPlayer.SetPlayer(player);
+			string hexColor = (string)player.CustomProperties[PlayerProp.TEAMCOLOR];
+			ColorUtility.TryParseHtmlString(hexColor, out Color color);
+			waitingPlayer.PlayerSet.TeamColor.color = color;
+            playerDictionary.Add(player.ActorNumber, waitingPlayer);
+
+            if (player.CustomProperties.ContainsKey(PlayerProp.CHARACTER))
+                UpdateOtherPlayerCharacter(waitingPlayer, player.CustomProperties[PlayerProp.CHARACTER].ToString());
+        }
+
+        public void PlayerPropertiesUpdate(Player player, PhotonHashtable changedProps)
 		{
 			WaitingPlayer updatedPlayer = playerDictionary.ContainsKey(player.ActorNumber) ? playerDictionary[player.ActorNumber] : GetPalyerEntry(player);
 
@@ -360,6 +416,10 @@ namespace RoomUI
 
 		private void LoadMapScene()
 		{
+			PhotonHashtable property = new PhotonHashtable();
+			property[RoomProp.ROOM_PLAYING] = true;
+			PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+
             // ROOM_MAP is MapData.Title
             switch ((string)PhotonNetwork.CurrentRoom.CustomProperties[RoomProp.ROOM_MAP])
 			{
