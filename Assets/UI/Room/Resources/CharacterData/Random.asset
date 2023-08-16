@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb3d9ed9455d2e42bd1868935633a7c, type: 3}
+  m_Name: Random
+  m_EditorClassIdentifier: 
+  Name: Random
+  NameKOR: "\uB79C\uB364"
+  CharacterEnum: 8
+  Character: {fileID: 21300000, guid: a0545d28de25b3c4391a752311c05dd1, type: 3}
+  Description: {fileID: 1501418886, guid: d8a9863970ed20f4bb672bd9ac1fee25, type: 3}
+  DefaultImage: {fileID: 563297837, guid: 4dd6e22cd9f16e7409f6230cb68ca949, type: 3}
+  ActiveImage: {fileID: -1436246768, guid: d8a9863970ed20f4bb672bd9ac1fee25, type: 3}
+  CharacterSpec: {fileID: 2095618711, guid: d8a9863970ed20f4bb672bd9ac1fee25, type: 3}
+  SelectedImage: {fileID: -2123995602, guid: e9f1cb058efa2274d89268fad529e2e0, type: 3}

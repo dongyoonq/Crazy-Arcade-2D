@@ -32,6 +32,9 @@ namespace RoomUI
 		private RectTransform playerContent;
 
 		[SerializeField]
+		private PlayerCharacterSetter characterSetter;
+
+		[SerializeField]
 		private PickedTeam pickedTeam;
 
 		[SerializeField]
@@ -42,10 +45,7 @@ namespace RoomUI
 
 		[SerializeField]
 		private RoomNotify roomNotifyPopup;
-
-		[SerializeField]
-		private List<CharacterData> characterDatas;
-
+		
 		private Dictionary<int, WaitingPlayer> playerDictionary;
 
 		private bool isPassableStarting;
@@ -99,6 +99,7 @@ namespace RoomUI
 
 			if(PhotonNetwork.IsMasterClient)
 				NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{leavePlayer.NickName}님이 퇴장하셨습니다,");
+
 		}
 
 		private void AddPlayer()
@@ -113,6 +114,7 @@ namespace RoomUI
 
 		private void SetInPlayer()
 		{
+			var contents = playerContent.GetComponentInChildren<WaitingPlayer>();
 			foreach (Player player in PhotonNetwork.PlayerList)
 			{
 				InstantiatePlayer(player);
@@ -127,12 +129,6 @@ namespace RoomUI
 				return;
 
 			WaitingPlayer waitingPlayer = playerContent.GetComponentsInChildren<WaitingPlayer>()[index];
-
-			if (waitingPlayer.CurrentSlotState == SlotState.Close)
-			{
-				waitingPlayer.UpdateSlotState(SlotState.Close);
-				return;
-			}
 
 			waitingPlayer.SetPlayer(player);
 			playerDictionary.Add(player.ActorNumber, waitingPlayer);
@@ -153,8 +149,8 @@ namespace RoomUI
 		{
 			WaitingPlayer updatedPlayer = playerDictionary.ContainsKey(player.ActorNumber) ? playerDictionary[player.ActorNumber] : GetPalyerEntry(player);
 
-			if (updatedPlayer == null) { Debug.Log("NULL"); return; }
-				//return;
+			if (updatedPlayer == null) 
+				return;
 
 			if (changedProps.ContainsKey(PlayerProp.READY))
 			{
@@ -204,7 +200,6 @@ namespace RoomUI
 
 			if(changedProps.ContainsKey(RoomProp.SLOT_NUMBER))
 			{
-				Debug.Log("SLOT_NUMBER");
 				int number = int.Parse(changedProps[RoomProp.SLOT_NUMBER].ToString());
 				SlotState state = (SlotState)int.Parse(changedProps[RoomProp.SLOT_STATE].ToString());
 
@@ -216,19 +211,21 @@ namespace RoomUI
 
 		private void UpdateOtherPlayerSlot(int number, SlotState state)
 		{
-			Debug.Log("UpdateOtherPlayerSlot");
-
 			var changedSlot = playerContent.GetComponentsInChildren<WaitingPlayer>().Where(x => x.SlotNumber == number).FirstOrDefault();
 
 			if(changedSlot != null)
 			{
 				changedSlot.UpdateSlotState(state);
 			}
+
+			PhotonHashtable property = new PhotonHashtable();
+			property[RoomProp.ROOM_MAX] = playerContent.GetComponentsInChildren<WaitingPlayer>().Count(x => x.CurrentSlotState != SlotState.Close);
+			PhotonNetwork.CurrentRoom.SetCustomProperties(property);
 		}
 
 		private CharacterData GetCharacterData(CharacterEnum characterEnum)
 		{
-			return characterDatas.Where(x => x.Name == characterEnum.ToString()).FirstOrDefault();
+			return characterSetter.CharacterDatas?.Where(x => x.Name == characterEnum.ToString()).FirstOrDefault();
 		}
 
 		public void UpdatePlayerState(WaitingPlayer player, bool isReady)

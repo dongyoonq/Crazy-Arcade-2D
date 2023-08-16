@@ -43,6 +43,8 @@ namespace KDY
         private string roomPassword;
         private bool isPasswordRoom;
 
+        public int MaxPlayerNum { get; private set; } = 8;
+
         public RoomInfo RoomInfo { get; private set; }
         public int RoomNumber { get; private set; }
 
@@ -54,30 +56,13 @@ namespace KDY
 
         public void Initialized(RoomInfo info, int number, PasswordRoomPanel passwordRoomPanel)
         {
-            RoomNumber = number;
+			RoomNumber = number;
             passwordPanel = passwordRoomPanel;
             RoomInfo = info;
+            MaxPlayerNum = 8;
 
-            roomName.text = info.CustomProperties[RoomProp.ROOM_NAME].ToString();
-            currentPlayer.text = string.Format("{0} / {1}", info.PlayerCount, info.MaxPlayers);
-            joinRoomButton.interactable = info.PlayerCount < info.MaxPlayers;
-
-            if (info.PlayerCount < info.MaxPlayers)
-            {
-                Sprite[] all = Resources.LoadAll<Sprite>("대기방");
-
-                foreach (Sprite s in all)
-                    if (s.name == "대기방_5")
-                        roomState.sprite = s;
-
-                info.CustomProperties[RoomProp.ROOM_STATE] = "Waiting";
-            }
-            else
-            {
-                roomState.sprite = Resources.Load<Sprite>("Full");
-                info.CustomProperties[RoomProp.ROOM_STATE] = "Full";
-            }
-
+			roomName.text = info.CustomProperties[RoomProp.ROOM_NAME].ToString();
+           
             roomNumber.text = string.Format("{0:D3}", number);
             info.CustomProperties[RoomProp.ROOM_ID] = number;
 
@@ -93,6 +78,35 @@ namespace KDY
                 MapData data = Resources.Load<MapData>(path);
 				if (data != null)
 					roomImg.sprite = data.MapIcon;
+			}
+
+            if(info.CustomProperties.ContainsKey(RoomProp.ROOM_MAX))
+            {
+				MaxPlayerNum = (int)info.CustomProperties[RoomProp.ROOM_MAX];
+				currentPlayer.text = string.Format("{0} / {1}", info.PlayerCount, MaxPlayerNum);
+			}
+
+            SetParticipatedPlayer(info, MaxPlayerNum, info.PlayerCount);
+		}
+
+        private void SetParticipatedPlayer(RoomInfo info, int maxPlayers, int playerCnt)
+        {
+			joinRoomButton.interactable = playerCnt < maxPlayers;
+
+			if (joinRoomButton.interactable)
+			{
+				Sprite[] all = Resources.LoadAll<Sprite>("대기방");
+
+				foreach (Sprite s in all)
+					if (s.name == "대기방_5")
+						roomState.sprite = s;
+
+				info.CustomProperties[RoomProp.ROOM_STATE] = "Waiting";
+			}
+			else
+			{
+				roomState.sprite = Resources.Load<Sprite>("Full");
+				info.CustomProperties[RoomProp.ROOM_STATE] = "Full";
 			}
 		}
 

@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: None
   m_EditorClassIdentifier: 
   Name: None
+  NameKOR: X
   CharacterEnum: 4
   Character: {fileID: 0}
   Description: {fileID: 0}
+  DefaultImage: {fileID: 0}
+  ActiveImage: {fileID: 0}
+  CharacterSpec: {fileID: 0}

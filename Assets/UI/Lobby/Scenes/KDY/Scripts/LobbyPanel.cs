@@ -18,27 +18,40 @@ namespace KDY
 {
     public class LobbyPanel : MonoBehaviour
     {
-		[SerializeField] private RoomEntry roomEntryPrefab;
+        [SerializeField] private RoomEntry roomEntryPrefab;
         [SerializeField] private RectTransform roomContent;
         [SerializeField] private Canvas popUpCanvas;
         [SerializeField] private PasswordRoomPanel PasswordPanel;
+        [SerializeField] private QuickStartPopup quickStartPopup;
 
-		[SerializeField] private TMP_Text playerName;
+        [SerializeField] private TMP_Text playerName;
         [SerializeField] private TMP_Text playerLevel;
         [SerializeField] private TMP_Text playerExp;
 
         [SerializeField] RectTransform playerContent;
         [SerializeField] LobbyPlayer playerPrefab;
 
-        private CreateRoomPanel createRoomPanel;
-        public Dictionary<int, RoomInfo> roomDictionary { get ; private set; }
+        [SerializeField]
+        private Button btnFastStart;
 
-		private void Awake()
+        private bool isActiveQuickStarView = false;
+
+
+		private CreateRoomPanel createRoomPanel;
+        public Dictionary<int, RoomInfo> roomDictionary { get; private set; }
+
+        private void Awake()
         {
             roomDictionary = new Dictionary<int, RoomInfo>();
+            btnFastStart.onClick.AddListener(() => ActiveFastStart());
+        }
+
+		private void OnEnable()
+		{
+            isActiveQuickStarView = false;
 		}
 
-        private void Update()
+		private void Update()
         {
             playerName.text = PhotonNetwork.NickName;
             //ReadSqlData();
@@ -98,36 +111,39 @@ namespace KDY
             {
                 try
                 {
-					int roomNum = int.Parse(room.Name);
+                    int roomNum = int.Parse(room.Name);
 
-					// 방이 사라질 예정이면 or 방이 비공개가 되었으면 or 방이 닫혔으면
-					if (room.RemovedFromList || !room.IsOpen)
-					{
-						if (roomDictionary.ContainsKey(roomNum))
-							roomDictionary.Remove(roomNum);
-						continue;
-					}
+                    // 방이 사라질 예정이면 or 방이 비공개가 되었으면 or 방이 닫혔으면
+                    if (room.RemovedFromList || !room.IsOpen)
+                    {
+                        if (roomDictionary.ContainsKey(roomNum))
+                            roomDictionary.Remove(roomNum);
+                        continue;
+                    }
 
-					// 방이 자료구조에 있었으면 (그냥 무조건 이름이 있었던 방이면 최신으로)
-					if (roomDictionary.ContainsKey(roomNum))
-						roomDictionary[roomNum] = room;
+                    // 방이 자료구조에 있었으면 (그냥 무조건 이름이 있었던 방이면 최신으로)
+                    if (roomDictionary.ContainsKey(roomNum))
+                        roomDictionary[roomNum] = room;
 
-					else
-						roomDictionary.Add(roomNum, room);
-				}
+                    else
+                        roomDictionary.Add(roomNum, room);
+                }
                 catch (FormatException e)
                 {
                     continue;
                 }
-			}
+            }
 
             foreach (var data in roomDictionary)
             {
-                if(data.Value.IsVisible) //방이 공개 상태일 때만
-				{
-					RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
-					entry.Initialized(data.Value, data.Key, PasswordPanel);
-				}
+                if (data.Value.IsVisible) //방이 공개 상태일 때만
+                {
+                    if (data.Value.MaxPlayers > 8) //빠른 시작을 위한 방
+                        continue;
+
+                    RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
+                    entry.Initialized(data.Value, data.Key, PasswordPanel);
+                }
             }
         }
 
@@ -160,65 +176,75 @@ namespace KDY
             if (string.IsNullOrEmpty(roomName))
                 roomName = $"Room {UnityEngine.Random.Range(0, 1000)}";
 
-			RoomMode mode = createRoomPanel.roomMode.GetSeletedRoom();
+            RoomMode mode = createRoomPanel.roomMode.GetSeletedRoom();
 
-			int maxPlayer = 8;
+            int maxPlayer = 8;
             int roomNumber = GetRoomNumber();
 
-			RoomOptions roomOptions = new RoomOptions();
+            RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = maxPlayer;
 
-			roomOptions.CustomRoomProperties = new PhotonHashtable() {
-				{ RoomProp.ROOM_NAME, roomName },
-				{ RoomProp.ROOM_MODE, mode },
-				{ RoomProp.ROOM_PASSWORD, createRoomPanel.passwordToggle.isOn ? createRoomPanel.passwordInput.text : "" },
-				{ RoomProp.ROOM_ID, roomNumber },
-				{ RoomProp.ROOM_STATE, "Waiting" },
+            roomOptions.CustomRoomProperties = new PhotonHashtable() {
+                { RoomProp.ROOM_NAME, roomName },
+                { RoomProp.ROOM_PASSWORD, createRoomPanel.passwordToggle.isOn ? createRoomPanel.passwordInput.text : "" },
+                { RoomProp.ROOM_ID, roomNumber },
+                { RoomProp.ROOM_STATE, "Waiting" },
+                { RoomProp.ROOM_MODE, mode },
+                { RoomProp.ROOM_MAX, maxPlayer },
                 { RoomProp.ROOM_MAP_GROUP, "Random" },
-				{ RoomProp.ROOM_MAP_FILE, "RandomData" },
-			};
+                { RoomProp.ROOM_MAP_FILE, "RandomData" },
+            };
 
-			roomOptions.CustomRoomPropertiesForLobby = new string[]
-			{ RoomProp.ROOM_NAME, RoomProp.ROOM_PASSWORD, RoomProp.ROOM_ID, RoomProp.ROOM_STATE, RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MAP_FILE, RoomProp.ROOM_MODE };
+            roomOptions.CustomRoomPropertiesForLobby = new string[]
+            { RoomProp.ROOM_NAME, RoomProp.ROOM_PASSWORD, RoomProp.ROOM_ID,
+              RoomProp.ROOM_STATE, RoomProp.ROOM_MODE, RoomProp.ROOM_MAX,
+              RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MAP_FILE };
 
             PhotonNetwork.CreateRoom(roomNumber.ToString(), roomOptions, null);
 
             Destroy(createRoomPanel.gameObject);
         }
 
+
         private int GetRoomNumber()
         {
             return roomDictionary.Count() + 1;
-		}
+        }
 
-		public void RoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
-		{
+        public void RoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
+        {
             int roomNumber = int.Parse(PhotonNetwork.CurrentRoom.Name);
             RoomEntry changedRoom = GetRoomEntry(roomNumber);
 
-			if (changedRoom != null)
+            if (changedRoom != null)
             {
-				if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_NAME))
-				{
-					changedRoom.SetChangedRoomInfo(RoomProp.ROOM_PASSWORD, propertiesThatChanged[RoomProp.ROOM_NAME].ToString().Trim());
-				}
+                if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_NAME))
+                {
+                    changedRoom.SetChangedRoomInfo(RoomProp.ROOM_PASSWORD, propertiesThatChanged[RoomProp.ROOM_NAME].ToString().Trim());
+                }
 
-				if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_PASSWORD))
-				{
+                if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_PASSWORD))
+                {
                     changedRoom.SetChangedRoomInfo(RoomProp.ROOM_PASSWORD, propertiesThatChanged[RoomProp.ROOM_PASSWORD].ToString().Trim());
-				}
+                }
 
-				if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_MODE))
-				{
-					RoomMode mode = (RoomMode)Enum.Parse(typeof(RoomMode), propertiesThatChanged[RoomProp.ROOM_MODE].ToString().Trim());
+                if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_MODE))
+                {
+                    RoomMode mode = (RoomMode)Enum.Parse(typeof(RoomMode), propertiesThatChanged[RoomProp.ROOM_MODE].ToString().Trim());
                     createRoomPanel.roomMode.ChooseRoomMode(mode);
-				}
-			}
-		}
+                }
+            }
+        }
 
-		private RoomEntry GetRoomEntry(int roomNumber)
-		{
-			return roomContent.GetComponentsInChildren<RoomEntry>().Where(x => x.RoomNumber == roomNumber).FirstOrDefault();
+        private RoomEntry GetRoomEntry(int roomNumber)
+        {
+            return roomContent.GetComponentsInChildren<RoomEntry>().Where(x => x.RoomNumber == roomNumber).FirstOrDefault();
+        }
+
+        private void ActiveFastStart()
+        {
+			quickStartPopup.gameObject.SetActive(true);
+			quickStartPopup.InitView();
 		}
 	}
 }

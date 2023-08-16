@@ -27,8 +27,11 @@ namespace CustomProperty
         // ROOM_NAME is RoomEntry, RoomChangedInfo used
         public const string ROOM_NAME = "RoomName";
 
-        // ROOM_PASSWORD is RoomEntry, RoomChangedInfo used
-        public const string ROOM_PASSWORD = "Password";
+		// ROOM_MAX is Mas Players 
+		public const string ROOM_MAX = "RoomMaxNum";
+
+		// ROOM_PASSWORD is RoomEntry, RoomChangedInfo used
+		public const string ROOM_PASSWORD = "Password";
 
         // ROOM_STATE is RoomEntry used,, expected WaitingRoomEnter used
         public const string ROOM_STATE = "RoomState";
