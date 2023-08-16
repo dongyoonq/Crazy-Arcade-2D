@@ -27,6 +27,7 @@ namespace KDY
 
         private void CreateUserInfoPanel()
         {
+            GameManager.Sound.Onclick();
             MyPage infoPanel = GameManager.Resource.Instantiate<MyPage>("Prefabs/UserPage");
             infoPanel.transform.SetParent(popupCanvas.transform, false);
     }

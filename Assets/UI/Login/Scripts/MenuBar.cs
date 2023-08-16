@@ -37,6 +37,7 @@ namespace Gangbie
 
         public void OnMenuButtonClicked()
         {
+            GameManager.Sound.Onclick();
             if (menuPopUpCheck == false)
             {
                 menuPopUp.SetActive(true);
@@ -60,6 +61,7 @@ namespace Gangbie
 
         public void OnShopButtonClicked()
         {
+            GameManager.Sound.Onclick();
             Debug.Log("Shop Button Clicked");
             menuPopUpClose();
             lobbyManager.SetActivePanel(LobbyManager.Panel.Shop);
@@ -67,6 +69,7 @@ namespace Gangbie
 
         public void OnItemButtonClicked()
         {
+            GameManager.Sound.Onclick();
             Debug.Log("Item Button Clicked");
             menuPopUpClose();
             myPage.SetActive(true);
@@ -75,6 +78,7 @@ namespace Gangbie
 
         public void OnInfoButtonClicked()
         {
+            GameManager.Sound.Onclick();
             Debug.Log("Info Button Clicked");
             menuPopUpClose();
             myPage.SetActive(true);
@@ -83,6 +87,7 @@ namespace Gangbie
 
         public void OnBackButtonClicked()
         {
+            GameManager.Sound.Onclick();
             Debug.Log("Back Button Clicked");
             menuPopUpClose();
 
@@ -103,6 +108,7 @@ namespace Gangbie
 
         public void OnExitButtonClicked()
         {
+            GameManager.Sound.Onclick();
             Debug.Log("Exit Button Clicked");
             menuPopUpClose();
             exitPopUp.SetActive(true);

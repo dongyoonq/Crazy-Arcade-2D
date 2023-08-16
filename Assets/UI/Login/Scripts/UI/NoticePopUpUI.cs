@@ -11,6 +11,6 @@ public class NoticePopUpUI : PopUpUI
     {
         base.Awake();
 
-        buttons["OkButton"].onClick.AddListener(() => { GameManager.UI.ClosePopUpUI(); });
+        buttons["OkButton"].onClick.AddListener(() => { GameManager.Sound.Onclick(); GameManager.UI.ClosePopUpUI(); });
     }
 }
