@@ -58,57 +58,85 @@ namespace RoomUI
 			int num = 0;
 			var slots = playerContent.GetComponentsInChildren<WaitingPlayer>();
 			foreach (var waitSlot in slots)
-				waitSlot.Slot.SlotNumber = num++;
+				waitSlot.SlotNumber = num++;
 		}
 
 		private void OnEnable()
 		{
+			if (CheckPlayingRoom())
+			{
+                ReturnPlayerSet();
+                NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{PhotonNetwork.NickName}님이 참가하셨습니다.");
+                PhotonHashtable property = new PhotonHashtable();
+                property[RoomProp.ROOM_PLAYING] = false;
+                PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+                return;
+            }
+
 			SetInPlayer();
 			CheckPlayerReadyState();
 
-			NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{PhotonNetwork.NickName}님이 참가하셨습니다.");
-
-			SetPlayerList();
-
-			
+			NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{PhotonNetwork.NickName}님이 참가하셨습니다.");		
 		}
 
 		private void OnDisable()
 		{
 			foreach (int actorNumber in playerDictionary.Keys)
 			{
-				Destroy(playerDictionary[actorNumber].gameObject);
+				 playerDictionary[actorNumber].InitWaitState();
 			}
 			playerDictionary.Clear();
+			pickedMap.ResetChooseID();
 		}
+
+		private bool CheckPlayingRoom()
+		{
+			PhotonHashtable property = PhotonNetwork.CurrentRoom.CustomProperties;
+
+			if (property.ContainsKey(RoomProp.ROOM_PLAYING) && (bool)property[RoomProp.ROOM_PLAYING])
+			{
+				return true;
+            }
+
+			return false;
+		}
+
+		private void ReturnPlayerSet()
+		{
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                InstantiateReturnPlayer(player);
+            }
+
+            CheckPlayerReadyState();
+        }
 
 		public void EntryPlayer(Player player)
 		{
 			InstantiatePlayer(player);
 			CheckPlayerReadyState();
-			SetPlayerList();
 		}
 
 		public void LeavePlayer(Player leavePlayer)
 		{
-			Destroy(playerDictionary[leavePlayer.ActorNumber].gameObject);
+			playerDictionary[leavePlayer.ActorNumber].InitWaitState();
 			playerDictionary.Remove(leavePlayer.ActorNumber);
 
-			int maxID = playerContent.GetComponentsInChildren<WaitingPlayer>().Max(x => x.Slot.SlotNumber);
-			WaitingPlayer newslot = Instantiate<WaitingPlayer>(Resources.Load<WaitingPlayer>("WaitingPlayer"), playerContent);
-			newslot.Slot.SlotNumber = maxID + 1;
+			//int maxID = playerContent.GetComponentsInChildren<WaitingPlayer>().Max(x => x.SlotNumber);
+			//WaitingPlayer newslot = Instantiate<WaitingPlayer>(Resources.Load<WaitingPlayer>("WaitingPlayer"), playerContent);
+			//newslot.SlotNumber = maxID + 1;
 
 			CheckPlayerReadyState();
 
 			if(PhotonNetwork.IsMasterClient)
 				NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{leavePlayer.NickName}님이 퇴장하셨습니다,");
-
-			SetPlayerList();
 		}
 
 		private void AddPlayer()
 		{
-			if (playerContent.childCount < 8)
+			int max = 8 - playerContent.childCount;
+
+			for(int i=max; i>=0; i--)
 			{
 				Instantiate<WaitingPlayer>(Resources.Load<WaitingPlayer>("WaitingPlayer"), playerContent);
 			}	
@@ -130,6 +158,13 @@ namespace RoomUI
 				return;
 
 			WaitingPlayer waitingPlayer = playerContent.GetComponentsInChildren<WaitingPlayer>()[index];
+
+			if (waitingPlayer.CurrentSlotState == SlotState.Close)
+			{
+				waitingPlayer.UpdateSlotState(SlotState.Close);
+				return;
+			}
+
 			waitingPlayer.SetPlayer(player);
 			playerDictionary.Add(player.ActorNumber, waitingPlayer);
 
@@ -141,45 +176,62 @@ namespace RoomUI
 			else
 			{
 				if (player.CustomProperties.ContainsKey(PlayerProp.CHARACTER))
-					UpdateOtherPlayerCharacter(player.ActorNumber, player.CustomProperties[PlayerProp.CHARACTER].ToString());
+					UpdateOtherPlayerCharacter(waitingPlayer, player.CustomProperties[PlayerProp.CHARACTER].ToString());
 			}
 		}
 
-		private void SetPlayerList()
+		private void InstantiateReturnPlayer(Player player)
 		{
-			/*
-			if (PhotonNetwork.IsMasterClient == false)
-				return;
+            int index = playerDictionary.Count();
 
-			var list = playerDictionary.Select(x => x.Value.player.NickName).ToList();
-			string players = string.Join(";", list);
-			PhotonNetwork.CurrentRoom.SetRoomProperty(RoomProp.PLAYER_LIST, players);
-			//*/
-		}
+            if (index == 8)
+                return;
 
+            WaitingPlayer waitingPlayer = playerContent.GetComponentsInChildren<WaitingPlayer>()[index];
 
-		public void PlayerPropertiesUpdate(Player player, PhotonHashtable changedProps)
+            if (waitingPlayer.CurrentSlotState == SlotState.Close)
+            {
+                waitingPlayer.UpdateSlotState(SlotState.Close);
+                return;
+            }
+
+            waitingPlayer.SetPlayer(player);
+			string hexColor = (string)player.CustomProperties[PlayerProp.TEAMCOLOR];
+			ColorUtility.TryParseHtmlString(hexColor, out Color color);
+			waitingPlayer.PlayerSet.TeamColor.color = color;
+            playerDictionary.Add(player.ActorNumber, waitingPlayer);
+
+            if (player.CustomProperties.ContainsKey(PlayerProp.CHARACTER))
+                UpdateOtherPlayerCharacter(waitingPlayer, player.CustomProperties[PlayerProp.CHARACTER].ToString());
+        }
+
+        public void PlayerPropertiesUpdate(Player player, PhotonHashtable changedProps)
 		{
+			WaitingPlayer updatedPlayer = playerDictionary.ContainsKey(player.ActorNumber) ? playerDictionary[player.ActorNumber] : GetPalyerEntry(player);
+
+			if (updatedPlayer == null) { Debug.Log("NULL"); return; }
+				//return;
+
 			if (changedProps.ContainsKey(PlayerProp.READY))
 			{
-				GetPalyerEntry(player)?.UpdateReadyInfo();
+				updatedPlayer.UpdateReadyInfo();
 
 				if (PhotonNetwork.IsMasterClient)
 					CheckPlayerReadyState();
 			}
 
-			else if (changedProps.ContainsKey(PlayerProp.TEAMCOLOR))
+			if (changedProps.ContainsKey(PlayerProp.TEAMCOLOR))
 			{
 				Color teamColor;
 				string hexColor = player.CustomProperties[PlayerProp.TEAMCOLOR].ToString();
 				UnityEngine.ColorUtility.TryParseHtmlString(hexColor, out teamColor);
 
-				UpdateOtherPlayerTeam(player.ActorNumber, teamColor, player.CustomProperties[PlayerProp.TEAM].ToString());
+				UpdateOtherPlayerTeam(updatedPlayer, teamColor, player.CustomProperties[PlayerProp.TEAM].ToString());
 			}
 
-			else if (changedProps.ContainsKey(PlayerProp.CHARACTER))
+			if (changedProps.ContainsKey(PlayerProp.CHARACTER))
 			{
-				UpdateOtherPlayerCharacter(player.ActorNumber, player.CustomProperties[PlayerProp.CHARACTER].ToString());
+				UpdateOtherPlayerCharacter(updatedPlayer, player.CustomProperties[PlayerProp.CHARACTER].ToString());
 			}
 		}
 
@@ -193,10 +245,12 @@ namespace RoomUI
 				int mapId = int.Parse(changedProps[RoomProp.ROOM_MAP_ID].ToString());
 				var data = pickedMap.mapList.Maps.Where(x => x.Id == mapId).Select(x => x).FirstOrDefault();
 
-				PhotonHashtable mapTitle = new PhotonHashtable();
+				PhotonHashtable property = new PhotonHashtable();
 
-				PhotonNetwork.CurrentRoom.SetRoomProperty(RoomProp.ROOM_MAP, data.Title);
-				PhotonNetwork.CurrentRoom.SetRoomProperty(RoomProp.ROOM_MAP_GROUP, data.Group);
+				property[RoomProp.ROOM_MAP] = data.Title;
+				property[RoomProp.ROOM_MAP_GROUP] = data.Group;
+				property[RoomProp.ROOM_MAP_FILE] = data.MapFileName;
+				PhotonNetwork.CurrentRoom.SetCustomProperties(property);
 
 				if (data != null)
 				{
@@ -206,6 +260,7 @@ namespace RoomUI
 
 			if(changedProps.ContainsKey(RoomProp.SLOT_NUMBER))
 			{
+				Debug.Log("SLOT_NUMBER");
 				int number = int.Parse(changedProps[RoomProp.SLOT_NUMBER].ToString());
 				SlotState state = (SlotState)int.Parse(changedProps[RoomProp.SLOT_STATE].ToString());
 
@@ -217,11 +272,13 @@ namespace RoomUI
 
 		private void UpdateOtherPlayerSlot(int number, SlotState state)
 		{
-			var changedSlot = playerContent.GetComponentsInChildren<WaitingPlayer>().Where(x => x.Slot.SlotNumber == number).FirstOrDefault();
+			Debug.Log("UpdateOtherPlayerSlot");
+
+			var changedSlot = playerContent.GetComponentsInChildren<WaitingPlayer>().Where(x => x.SlotNumber == number).FirstOrDefault();
 
 			if(changedSlot != null)
 			{
-				changedSlot.Slot.SetSlot(state);
+				changedSlot.UpdateSlotState(state);
 			}
 		}
 
@@ -230,39 +287,39 @@ namespace RoomUI
 			return characterDatas.Where(x => x.Name == characterEnum.ToString()).FirstOrDefault();
 		}
 
-		public void UpdatePlayerState(Player player, bool isReady)
+		public void UpdatePlayerState(WaitingPlayer player, bool isReady)
 		{
-			GetPalyerEntry(player)?.UpdateReadyInfo();
+			player?.UpdateReadyInfo();
 
 			if (PhotonNetwork.IsMasterClient)
 				CheckPlayerReadyState();
 		}
 
-		private void UpdateOtherPlayerCharacter(int actorNumber, string characterKey)
+		private void UpdateOtherPlayerCharacter(WaitingPlayer player, string characterKey)
 		{
 			CharacterEnum character = (CharacterEnum)Enum.Parse(typeof(CharacterEnum), characterKey);
 
 			CharacterData data = GetCharacterData((CharacterEnum)character);
 			if (data != null)
 			{
-				playerDictionary[actorNumber].PlayerSet.PlayerImg.sprite = data.Character;
+				player.PlayerSet.PlayerImg.sprite = data.Character;
 			}
 		}
 
-		private void UpdateOtherPlayerTeam(int actorNumber, Color color, string teamName)
+		private void UpdateOtherPlayerTeam(WaitingPlayer player, Color color, string teamName)
 		{
-			playerDictionary[actorNumber].PlayerSet.TeamColor.color = color;
-			playerDictionary[actorNumber].PlayerSet.Team = teamName;
+			player.PlayerSet.TeamColor.color = color;
+			player.PlayerSet.Team = teamName;
 		}
 
-		private void UpdateOtherPlayerState(int actorNumber, bool isReady)
+		private void UpdateOtherPlayerState(WaitingPlayer player, bool isReady)
 		{
-			playerDictionary[actorNumber].WaitState.UpdateReadyInfo(isReady);
+			player.WaitState.UpdateReadyInfo(isReady);
 		}
 
-		private void UpdateMasterPlayerState(int actorNumber)
+		private void UpdateMasterPlayerState(WaitingPlayer player)
 		{
-			playerDictionary[actorNumber].WaitState.UpdateMasterInfo();
+			player.WaitState.UpdateMasterInfo();
 		}
 
 
@@ -282,7 +339,7 @@ namespace RoomUI
 
 			if (PhotonNetwork.IsMasterClient) 
 			{
-				int totalPlayer = playerDictionary.Count(x => x.Value.Slot.SlotCurState == SlotState.Use);
+				int totalPlayer = playerDictionary.Count(x => x.Value.CurrentSlotState == SlotState.Use);
 				int readyCount = PhotonNetwork.PlayerList.Count(x => x.GetReady());
 
 				if (readyCount > 1)
@@ -298,20 +355,21 @@ namespace RoomUI
 
 			if(mode == RoomMode.Manner)
 			{
-				int totalPlayer = playerDictionary.Count(x => x.Value.Slot.SlotCurState == SlotState.Use);
-				var teams = playerDictionary.Where(x => x.Value.Slot.SlotCurState == SlotState.Use)
-											.GroupBy(x => x.Value.PlayerSet.Team)
-											.Select(x => new
-											{
-												Team = x.Key,
-												Count = x.Count()
-											});
+				var userList = playerDictionary.Where(x => x.Value.CurrentSlotState == SlotState.Use);
+
+				int totalPlayer = userList.Count();
+				var teams = userList.GroupBy(x => x.Value.PlayerSet.Team)
+									.Select(x => new
+									{
+										Team = x.Key,
+										Count = x.Count()
+									});
 
 				int CntByTeam = teams.Count() / totalPlayer;
 
 				if(teams.Any(x => x.Count != CntByTeam))
 				{
-					roomNotifyPopup.OnNotifyPopup("팀 구성이 맞지 않아 게임을 시작할 수 없습니다.");
+					//roomNotifyPopup.OnNotifyPopup("팀 구성이 맞지 않아 게임을 시작할 수 없습니다.");
 					NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Critical, "팀 구성이 맞지 않아 게임을 시작할 수 없습니다."); 
 					return false;
 				}
@@ -322,11 +380,10 @@ namespace RoomUI
 		public void SwitchedMasterPlayer(Player newMaster)
 		{
 			roomInfo.SetMasterRoomInfo();
-			playerDictionary[newMaster.ActorNumber].WaitState.UpdateMasterInfo();
 			playerDictionary[newMaster.ActorNumber].UpdateMasterInfo();
 			gameStartController.BtnGameReady.SetReadyBtnImg();
-			newMaster.SetReady(true);
-			UpdateMasterPlayerState(newMaster.ActorNumber);
+			UpdateMasterPlayerState(playerDictionary[newMaster.ActorNumber]);
+			pickedMap.AddOpenChooseMap();
 		}
 
 		public void StartGame()
@@ -359,6 +416,10 @@ namespace RoomUI
 
 		private void LoadMapScene()
 		{
+			PhotonHashtable property = new PhotonHashtable();
+			property[RoomProp.ROOM_PLAYING] = true;
+			PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+
             // ROOM_MAP is MapData.Title
             switch ((string)PhotonNetwork.CurrentRoom.CustomProperties[RoomProp.ROOM_MAP])
 			{

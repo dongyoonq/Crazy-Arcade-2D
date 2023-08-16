@@ -9,9 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5560330989934295747}
-  - component: {fileID: -1425467291292910209}
   - component: {fileID: 217944637813682863}
+  - component: {fileID: -1425467291292910209}
   - component: {fileID: 7508403649661421524}
+  - component: {fileID: 8008111385040146131}
   m_Layer: 7
   m_Name: Block3
   m_TagString: Untagged
@@ -35,27 +36,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &-1425467291292910209
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2825048946347237063}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 7
 --- !u!61 &217944637813682863
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -82,6 +62,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9042736, y: 0.44742024}
   m_EdgeRadius: 0
+--- !u!50 &-1425467291292910209
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2825048946347237063}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
 --- !u!114 &7508403649661421524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,6 +95,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cdce020f0573ce4db3dbea1d1f8aa8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropTableResource:
+  - Item/Bubble
+  - Item/Fluid
+  - Item/Roller
+--- !u!114 &8008111385040146131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2825048946347237063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 7508403649661421524}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &5993810807127592936
 GameObject:
   m_ObjectHideFlags: 0

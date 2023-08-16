@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -83.62743, y: 1.8704}
-  m_SizeDelta: {x: 99.5686, y: 58.6601}
+  m_AnchoredPosition: {x: -82.97, y: 1.8704}
+  m_SizeDelta: {x: 82.54, y: 58.66}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8495600512537697426
 CanvasRenderer:
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.4117647}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -373,6 +373,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8495600513528070601}
   - component: {fileID: 8495600513528070598}
+  - component: {fileID: 3716680368162264169}
   m_Layer: 5
   m_Name: EnteredPlayer
   m_TagString: Untagged
@@ -416,7 +417,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ac17f86d8789da478d4cb2dbd250c01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterImgs:
+  - {fileID: 21300002, guid: 17a4b8b8d82a6d14d9f4569be9b4c170, type: 3}
+  - {fileID: 21300002, guid: 25897e843d18bc24896759d4fc82eda6, type: 3}
+  - {fileID: 21300002, guid: 834c524eedd963649839c21ae63ba3a3, type: 3}
+  - {fileID: 21300002, guid: fd4504cc8b95974408cf339b3bc647eb, type: 3}
   PlayerCharacter: {fileID: 8495600512537697429}
   PlayerLevel: {fileID: 8495600513436839790}
   NickName: {fileID: 8495600513247593611}
   TeamColor: {fileID: 8495600512977339658}
+--- !u!114 &3716680368162264169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8495600513528070600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

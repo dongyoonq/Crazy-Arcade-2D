@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8294876141710619478}
   - component: {fileID: 3230968128143159630}
-  - component: {fileID: 8245661598141266502}
   - component: {fileID: -8995970626848183591}
+  - component: {fileID: 8245661598141266502}
+  - component: {fileID: -3550654209000080947}
   m_Layer: 7
   m_Name: Block2
   m_TagString: Untagged
@@ -61,18 +62,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9042736, y: 0.44742024}
   m_EdgeRadius: 0
---- !u!114 &8245661598141266502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 729171635786179961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1785c52464e91f499012de26de2ba96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &-8995970626848183591
 Rigidbody2D:
   serializedVersion: 4
@@ -94,6 +83,45 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &8245661598141266502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 729171635786179961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1785c52464e91f499012de26de2ba96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropTableResource:
+  - Item/Bubble
+  - Item/Fluid
+  - Item/Roller
+--- !u!114 &-3550654209000080947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 729171635786179961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 8245661598141266502}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7217865963998530443
 GameObject:
   m_ObjectHideFlags: 0

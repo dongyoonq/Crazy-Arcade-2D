@@ -1,3 +1,4 @@
+using CustomProperty;
 using CustomProperty.Utils;
 using KDY;
 using Photon.Pun;
@@ -27,16 +28,16 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        if (PhotonNetwork.IsConnected)
-            OnConnectedToMaster();
-        else if (PhotonNetwork.InRoom)
+        SetActivePanel(Panel.Login);
+
+        if (PhotonNetwork.InRoom)
             OnJoinedRoom();
         else if (PhotonNetwork.InLobby)
             OnJoinedLobby();
+        else if (PhotonNetwork.IsConnected)
+            OnConnectedToMaster();
         else
             OnDisconnected(DisconnectCause.None);
-
-        SetActivePanel(Panel.Login);
     }
 
     public override void OnConnectedToMaster()
@@ -59,10 +60,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         SetActivePanel(Panel.Room);
 
-        PhotonNetwork.LocalPlayer.SetReady(PhotonNetwork.IsMasterClient);
-        PhotonNetwork.LocalPlayer.SetLoad(false);
+		PhotonHashtable playerProperty = new PhotonHashtable();
+        playerProperty[PlayerProp.READY] = PhotonNetwork.IsMasterClient;
+        playerProperty[PlayerProp.LOAD] = false;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperty);
 
-        PhotonNetwork.AutomaticallySyncScene = true;
+		PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)

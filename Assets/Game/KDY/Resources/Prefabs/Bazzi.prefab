@@ -40,6 +40,7 @@ Transform:
   m_Children:
   - {fileID: 5843863827639273357}
   - {fileID: 5843863827688057673}
+  - {fileID: 1532833008156476982}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -122,11 +123,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26f91053fa85e8844b993fa390177d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
   bombPower: 1
+  maxbombCount: 1
+  currbombCount: 0
+  moveSpeed: 3
   nameTxt: {fileID: 5843863827438227553}
   dieTimer: 5
+  hitBox: {fileID: 2501517807606678770}
   currTeam: 0
+  isPrision: 0
+  prevMoveSpeed: 0
+  playerName: 
+  animator: {fileID: 0}
 --- !u!114 &5843863825986997073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,7 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5170cf8d349298459ef74d2afa0c1db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackCoolTime: 0
+  attackCoolTime: 0.2
 --- !u!95 &5843863825986997074
 Animator:
   serializedVersion: 5
@@ -229,14 +237,20 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: moveSpeed
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: BeforeDie
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: Die
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: Died
+  - Type: 4
+    SynchronizeType: 1
+    Name: Dissapear
+  - Type: 4
+    SynchronizeType: 1
+    Name: Rescue
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0
@@ -578,3 +592,75 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &9185978760819909401
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1532833008156476982}
+  - component: {fileID: 6090584483741239596}
+  - component: {fileID: 2501517807606678770}
+  m_Layer: 12
+  m_Name: hitBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1532833008156476982
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9185978760819909401}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5843863825986997076}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &6090584483741239596
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9185978760819909401}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.00014534593, y: -0.039058015}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5099439, y: 0.47953776}
+  m_EdgeRadius: 0
+--- !u!114 &2501517807606678770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9185978760819909401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17fdc46f572f52043b07b76b05143d0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 0}

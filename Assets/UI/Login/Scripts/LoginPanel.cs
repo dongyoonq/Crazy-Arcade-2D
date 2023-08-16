@@ -44,9 +44,9 @@ public class LoginPanel : MonoBehaviour
             string id = idInputField.text;
             string password = passwordInputField.text;
 
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(password))
             {
-                noticePopUp.notice.text = "아이디를 입력해주세요.";
+                noticePopUp.notice.text = "아이디와 비밀번호를 입력해주세요.";
                 GameManager.UI.popUpStack.Push(noticePopUp);
                 noticePopUp.gameObject.SetActive(true);
                 return;
@@ -82,6 +82,7 @@ public class LoginPanel : MonoBehaviour
                 {
                     Debug.Log("Success");
                     noticePopUp.notice.text = "회원가입이 완료되었습니다.\n로그인 후 이용하세요.";
+                    GameManager.UI.popUpStack.Push(noticePopUp);
                     noticePopUp.gameObject.SetActive(true);
                 }
                 else

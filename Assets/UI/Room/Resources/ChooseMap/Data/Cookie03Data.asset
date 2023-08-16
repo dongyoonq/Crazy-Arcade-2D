@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb0235a30ed8e645bd88285ed9644aa, type: 3}
+  m_Name: Cookie03Data
+  m_EditorClassIdentifier: 
+  Id: 0
+  Group: Cookie
+  Title: "\uCFE0\uD0A4"
+  MaxPlayer: 8
+  Level: 1
+  Popularity: 1
+  Rank: 0
+  info: "\uBC84\uBE14\uD790\uB9C8\uC744\uC5D0 \uB9DB\uC788\uB294 \uCFE0\uD0A4 \uC0C1\uC810\uC774
+    \uC0DD\uACBC\uC2B5\uB2C8\uB2E4. \uC815\uB9D0 \uB9DB\uC788\uC5B4 \uBCF4\uC774\uB294
+    \uCFE0\uD0A4\uB4E4\uC774 \uD55C\uAC00\uB4DD!! \uC54C\uB85D\uB2EC\uB85D \uC544\uAE30\uC790\uAE30\uD55C
+    \uCFE0\uD0A4\uB4E4\uACFC \uD568\uAED8 \uAC8C\uC784\uC744 \uC990\uACA8\uBCF4\uC138\uC694. "
+  Favorites: 0
+  MapImg: {fileID: -493663542, guid: 07644a5a649fa58478cc0f79133edfd9, type: 3}
+  MapIcon: {fileID: -417698056, guid: 07644a5a649fa58478cc0f79133edfd9, type: 3}
+  MapFileName: Cookie03Data

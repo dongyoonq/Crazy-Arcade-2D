@@ -35,7 +35,7 @@ namespace RoomUI.PlayerSetting
 
 		private void Awake()
 		{
-			BtnChangeSlot.onClick.AddListener(ChangedSlotState);
+			AddCloseSlot();
 		}
 
 		/// <summary>
@@ -51,11 +51,13 @@ namespace RoomUI.PlayerSetting
 		/// </summary>
 		public void AddCloseSlot()
 		{
-			BtnChangeSlot.onClick.AddListener(ChangedSlotState);
+			BtnChangeSlot.onClick.AddListener(() => ChangedSlotState());
 		}
 
 		private void ChangedSlotState()
 		{
+			Debug.Log("ChangedSlotState");
+
 			if (PhotonNetwork.IsMasterClient)
 			{
 				if (SlotCurState == SlotState.Use)
@@ -74,8 +76,17 @@ namespace RoomUI.PlayerSetting
 			}
 		}
 
+		public void clickedBtn()
+		{
+
+			Debug.Log("clickedBtn");
+			ChangedSlotState();
+		}
+
 		public void SetSlot(SlotState state)
 		{
+			Debug.Log($"SetSlot {state.ToString()}");
+
 			bool isOpen = state == SlotState.Open;
 			OpenSlot.gameObject.SetActive(isOpen);
 			CloseSlot.gameObject.SetActive(!isOpen);

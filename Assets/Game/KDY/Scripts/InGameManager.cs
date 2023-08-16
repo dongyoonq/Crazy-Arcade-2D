@@ -11,13 +11,22 @@ using CustomProperty.Utils;
 using GameUI;
 using CustomProperty;
 using static Extension;
-
+using KDY;
+using UnityEngine.Events;
+using System.IO;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
 public class InGameManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] TMP_Text infoText;
-    [SerializeField] float countdownTimer;
-    [SerializeField] PlayerSpawn playerSpawn;
+    [SerializeField] private RectTransform enteredPlayerList;
+    [SerializeField] private TMP_Text infoText;
+    [SerializeField] private float countdownTimer;
+    [SerializeField] private PlayerSpawn playerSpawn;
+
+    public Dictionary<string, TEAM> teamPlayerDic = new Dictionary<string, TEAM>();
+    public List<InGamePlayer> playerList = new List<InGamePlayer>();
 
     private void Start()
     {
@@ -104,8 +113,11 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     private void GameStart()
     {
-        // Todo : debug game start
-        CharacterPropertyInstantiate();
+        // Character Set
+        CharacterInstantiate();
+
+        // PlayerList Update
+        SetEnteredPlayerList();
     }
 
     IEnumerator DebugGameSetupDelay()
@@ -117,18 +129,14 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     private void DebugGameStart()
     {
-        // Team Property Test : 실제로는 Room에서 프로퍼티 설정함
-        string[] randoms = { "Red", "Yellow", "Orange", "Green", "Skyblue", "Blue", "Purple", "Pink" };
+        // Team Set
+        SetPlayerProperty();
 
-        SetPlayerTeamProperty(randoms[Random.Range(0,8)]);
+        // Debug Character Instantiate
+        CharacterInstantiate();
 
-        Debug.Log(PhotonNetwork.LocalPlayer.GetPlayerNumber());
-        Vector3 position = playerSpawn.spawnPoints[PhotonNetwork.LocalPlayer.GetPlayerNumber()].transform.position;
-
-        Debug.Log($"[SetPlayer] {PhotonNetwork.LocalPlayer.NickName}");
-
-        PhotonNetwork.Instantiate("Prefabs/Bazzi", position, Quaternion.identity); 
-        // Complete Room than Replace CharacterPropertyInstantiate() Method
+        // PlayerList Update
+        SetEnteredPlayerList();
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
@@ -138,25 +146,29 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     private int PlayerLoadCount()
     {
-        int loadCount = 0;
-        foreach (Player player in PhotonNetwork.PlayerList)
-            if (player.GetLoad())
-                loadCount++;
-
-        return loadCount;
+        return PhotonNetwork.PlayerList.Where(x => x.GetLoad()).Count();
     }
 
-    private void SetPlayerTeamProperty(string team)
+    private void SetPlayerProperty()
     {
         PhotonHashtable property = PhotonNetwork.LocalPlayer.CustomProperties;
-        property[PlayerProp.TEAM] = team;
+        property[PlayerProp.TEAM] = "Red";
+        property[PlayerProp.TEAMCOLOR] = $"#{Color.red.ToHexString()}";
+        property[PlayerProp.CHARACTER] = CharacterEnum.Dao;
         PhotonNetwork.LocalPlayer.SetCustomProperties(property);
+    }
+
+    private void SetEnteredPlayerList()
+    {
+        PhotonNetwork.Instantiate("EnteredPlayer", Vector3.zero, Quaternion.identity);
+        //enteredPlayer.transform.SetParent(enteredPlayerList, false);
+        //enteredPlayer.SetEnteredPlayer(PhotonNetwork.LocalPlayer);
     }
 
     /// <summary>
     /// 방에서 선택된 캐릭터로 생성될수 있게 함수 작성
     /// </summary>
-    private void CharacterPropertyInstantiate()
+    private void CharacterInstantiate()
     {
         PhotonHashtable property = PhotonNetwork.LocalPlayer.CustomProperties;
 
@@ -186,5 +198,164 @@ public class InGameManager : MonoBehaviourPunCallbacks
                 Debug.Log("Bazzi Create");
                 break;
         }
+    }
+
+    public void AddPlayerTeamList(InGamePlayer teamPlayer)
+    {
+        photonView.RPC("SyncAllAddTeamList", RpcTarget.All, SerializePlayerData(teamPlayer));
+    }
+
+    public void RemovePlayerTeamList(InGamePlayer teamPlayer)
+    {
+        photonView.RPC("SyncAllRemoveTeamList", RpcTarget.All, SerializePlayerData(teamPlayer));
+    }
+
+    public void CheckGameState()
+    {
+        photonView.RPC("SyncCheckGameState", RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    private void SyncAllAddTeamList(byte[] serializedData)
+    {
+        InGamePlayer receivedData = DeserializePlayerData(serializedData);
+        teamPlayerDic.Add(receivedData.playerName, receivedData.currTeam);
+        playerList.Add(receivedData);
+    }
+
+    [PunRPC]
+    private void SyncAllRemoveTeamList(byte[] serializedData)
+    {
+        InGamePlayer receivedData = DeserializePlayerData(serializedData);
+        //teamPlayerDic.Remove(teamPlayerDic.Find(x => x.playerName == receivedData.playerName));
+
+        foreach (string player in teamPlayerDic.Keys)
+        {
+            if (player == receivedData.playerName)
+            {
+                Debug.Log($"{player} 리스트 삭제");
+                teamPlayerDic.Remove(player);
+                break;
+            }
+        }
+    }
+
+    public byte[] SerializePlayerData(InGamePlayer data)
+    {
+        using (MemoryStream stream = new MemoryStream())
+        {
+            using (BinaryWriter writer = new BinaryWriter(stream))
+            {
+                writer.Write((int)data.currTeam);
+                writer.Write(data.playerName);
+            }
+            return stream.ToArray();
+        }
+    }
+
+    public InGamePlayer DeserializePlayerData(byte[] data)
+    {
+        InGamePlayer result = new InGamePlayer();
+        using (MemoryStream stream = new MemoryStream(data))
+        {
+            using (BinaryReader reader = new BinaryReader(stream))
+            {
+                result.currTeam = (TEAM)reader.ReadInt32();
+                result.playerName = reader.ReadString();
+            }
+        }
+        return result;
+    }
+
+    [PunRPC]
+    public void SyncCheckGameState()
+    {
+        /*
+         * 		Manner = 0,
+         * 		Free = 1,
+         * 		Random = 2
+        */
+        foreach (KeyValuePair<string, TEAM> player in teamPlayerDic)
+        {
+            Debug.Log($"{player.Key} : {player.Value} 생존");
+        }
+
+        PhotonHashtable property = PhotonNetwork.CurrentRoom.CustomProperties;
+
+        Dictionary<TEAM, int> aliveTeams = new Dictionary<TEAM, int>();
+
+        // 생존하는 팀들을 저장
+        foreach (KeyValuePair<string, TEAM> player in teamPlayerDic)
+        {
+            if (!aliveTeams.ContainsKey(player.Value))
+                aliveTeams.Add(player.Value, 0);
+
+            aliveTeams[player.Value] += 1;
+        }
+
+        // 팀이 하나만 남아있으면
+        if (aliveTeams.Count == 1)
+        {
+            foreach (TEAM team in aliveTeams.Keys)
+            {
+                // 결과 표시
+                ShowGameResult(team);
+                break;
+            }
+        }
+    }
+
+    private void ShowGameResult(TEAM winTeam)
+    {
+        Debug.Log($"{winTeam} 팀 승리");
+
+        List<string> winPlayerList = new List<string>();
+        List<string> losePlayerList = new List<string>();
+
+        foreach (InGamePlayer player in playerList)
+        {
+            if (player.currTeam == winTeam)
+            {
+                winPlayerList.Add(player.playerName);
+            }
+            else
+            {
+                losePlayerList.Add(player.playerName);
+            }
+        }
+
+        // 결과창 표시
+        photonView.RPC("ShowResultAll", RpcTarget.All, winPlayerList.ToArray(), losePlayerList.ToArray());
+        // 보상 적용
+        // 게임 종료 및 방이동
+        StartCoroutine(ReturnRoom());
+    }
+
+    [PunRPC]
+    private void ShowResultAll(string[] winPlayerList, string[] losePlayerList)
+    {
+        foreach (string playerName in winPlayerList)
+        {
+            if (playerName == PhotonNetwork.LocalPlayer.NickName)
+            {
+                infoText.text = "승리";
+                return;
+            }
+        }
+
+        foreach (string playerName in losePlayerList)
+        {
+            if (playerName == PhotonNetwork.LocalPlayer.NickName)
+            {
+                infoText.text = "패배";
+                return;
+            }
+        }
+    }
+
+    private IEnumerator ReturnRoom()
+    {
+        yield return new WaitForSeconds(5f);
+        PhotonNetwork.LoadLevel("BeforeGameScene");
     }
 }
