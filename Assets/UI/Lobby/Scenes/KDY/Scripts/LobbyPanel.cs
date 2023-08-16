@@ -176,10 +176,11 @@ namespace KDY
 				{ RoomProp.ROOM_STATE, "Waiting" },
                 { RoomProp.ROOM_MAP_GROUP, "Random" },
 				{ RoomProp.ROOM_MAP_FILE, "RandomData" },
+                { RoomProp.ROOM_PLAYING, false },
 			};
 
 			roomOptions.CustomRoomPropertiesForLobby = new string[]
-			{ RoomProp.ROOM_NAME, RoomProp.ROOM_PASSWORD, RoomProp.ROOM_ID, RoomProp.ROOM_STATE, RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MAP_FILE, RoomProp.ROOM_MODE };
+			{ RoomProp.ROOM_NAME, RoomProp.ROOM_PASSWORD, RoomProp.ROOM_ID, RoomProp.ROOM_STATE, RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MAP_FILE, RoomProp.ROOM_MODE, RoomProp.ROOM_PLAYING };
 
             PhotonNetwork.CreateRoom(roomNumber.ToString(), roomOptions, null);
 

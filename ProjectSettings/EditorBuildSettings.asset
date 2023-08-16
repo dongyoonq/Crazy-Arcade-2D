@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/BeforeGameScene.unity
-    guid: 5b9a8c8e83fd12e46a7eec294d849c76
+    path: Assets/Game/KDY/BeforeGameScene.unity
+    guid: d003f5adbe0ffd4448bb0f761f6b253b
   - enabled: 1
     path: Assets/Game/KDY/GameScene.unity
     guid: a2066de2a20992c40bcdf19fdb10d711

@@ -69,7 +69,6 @@ namespace KDY
             }
         }
 
-
         private TEAM GetTeamFromProperty()
         {
             PhotonHashtable property = photonView.Owner.CustomProperties;

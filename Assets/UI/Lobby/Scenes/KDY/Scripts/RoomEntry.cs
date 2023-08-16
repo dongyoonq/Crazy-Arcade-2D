@@ -88,12 +88,17 @@ namespace KDY
             }
 
             // 방 상태 체크
-            if (info.PlayerCount < info.MaxPlayers)
+            if ((bool)info.CustomProperties[RoomProp.ROOM_PLAYING])
+            {
+                // roomState.sprite = 플레이이미지
+                info.CustomProperties[RoomProp.ROOM_STATE] = "Playing";
+            }
+            else if (info.PlayerCount < info.MaxPlayers)
             {
                 roomState.sprite = stateSprites[0];
                 info.CustomProperties[RoomProp.ROOM_STATE] = "Waiting";
             }
-            else
+            else if (info.PlayerCount >= info.MaxPlayers)
             {
                 roomState.sprite = stateSprites[1];
                 info.CustomProperties[RoomProp.ROOM_STATE] = "Full";

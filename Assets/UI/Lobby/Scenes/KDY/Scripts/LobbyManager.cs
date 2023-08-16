@@ -28,16 +28,16 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        if (PhotonNetwork.IsConnected)
-            OnConnectedToMaster();
-        else if (PhotonNetwork.InRoom)
+        SetActivePanel(Panel.Login);
+
+        if (PhotonNetwork.InRoom)
             OnJoinedRoom();
         else if (PhotonNetwork.InLobby)
             OnJoinedLobby();
+        else if (PhotonNetwork.IsConnected)
+            OnConnectedToMaster();
         else
             OnDisconnected(DisconnectCause.None);
-
-        SetActivePanel(Panel.Login);
     }
 
     public override void OnConnectedToMaster()
