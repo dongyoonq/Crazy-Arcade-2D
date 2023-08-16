@@ -8,15 +8,12 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 using CustomProperty.Utils;
-using GameUI;
 using CustomProperty;
 using static Extension;
 using KDY;
-using UnityEngine.Events;
 using System.IO;
 using System.Linq;
 using Unity.VisualScripting;
-using UnityEngine.UIElements;
 
 public class InGameManager : MonoBehaviourPunCallbacks
 {
@@ -24,6 +21,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_Text infoText;
     [SerializeField] private float countdownTimer;
     [SerializeField] private PlayerSpawn playerSpawn;
+    [SerializeField] private ResultScreen resultPanel;
 
     public Dictionary<string, TEAM> teamPlayerDic = new Dictionary<string, TEAM>();
     public List<InGamePlayer> playerList = new List<InGamePlayer>();
@@ -161,8 +159,6 @@ public class InGameManager : MonoBehaviourPunCallbacks
     private void SetEnteredPlayerList()
     {
         PhotonNetwork.Instantiate("EnteredPlayer", Vector3.zero, Quaternion.identity);
-        //enteredPlayer.transform.SetParent(enteredPlayerList, false);
-        //enteredPlayer.SetEnteredPlayer(PhotonNetwork.LocalPlayer);
     }
 
     /// <summary>
@@ -334,22 +330,36 @@ public class InGameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void ShowResultAll(string[] winPlayerList, string[] losePlayerList)
     {
+        resultPanel.gameObject.SetActive(true);
+
         foreach (string playerName in winPlayerList)
         {
+            InstantiateResultPlayer(playerName, "Win", out ResultLine resultPlayer);
+
             if (playerName == PhotonNetwork.LocalPlayer.NickName)
             {
-                infoText.text = "½Â¸®";
-                return;
+                GameManager.Sound.SFXPlay("Win", GameManager.Sound.win);
+                resultPanel.SetCharacterImg(PhotonNetwork.LocalPlayer);
+                resultPanel.SetResultImg("Win");
+                resultPanel.SetExpMoney((Mathf.Round((300f / resultPlayer.prevMaxExp) * 100) * 0.01f) * 100.0f, 600f);
             }
+
+            resultPlayer.UpdateInfo(playerName);
         }
 
         foreach (string playerName in losePlayerList)
         {
+            InstantiateResultPlayer(playerName, "Lose", out ResultLine resultPlayer);
+
             if (playerName == PhotonNetwork.LocalPlayer.NickName)
             {
-                infoText.text = "ÆÐ¹è";
-                return;
+                GameManager.Sound.SFXPlay("Lose", GameManager.Sound.lose);
+                resultPanel.SetCharacterImg(PhotonNetwork.LocalPlayer);
+                resultPanel.SetResultImg("Lose");
+                resultPanel.SetExpMoney((Mathf.Round((200f / resultPlayer.prevMaxExp) * 100) * 0.01f) * 100.0f, 400f);
             }
+
+            resultPlayer.UpdateInfo(playerName);
         }
     }
 
@@ -357,5 +367,15 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(5f);
         PhotonNetwork.LoadLevel("BeforeGameScene");
+    }
+
+    private void InstantiateResultPlayer(string playerName, string res, out ResultLine resultPlayer)
+    {
+        ResultLine result = GameManager.Resource.Instantiate<ResultLine>("ResultLine");
+        result.SetResultImg(res);
+        result.SetID(playerName);
+        result.SetInfo(playerName);
+        result.transform.SetParent(resultPanel.content, false);
+        resultPlayer = result;
     }
 }

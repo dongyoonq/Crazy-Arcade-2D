@@ -107,6 +107,7 @@ namespace KDY
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("WaterBlock") && !isPrision)
             {
+                GameManager.Sound.SFXPlay("BombLocked", GameManager.Sound.bombLocked);
                 isPrision = true;
                 animator.SetBool("BeforeDie", true);
                 prevMoveSpeed = moveSpeed;
@@ -117,6 +118,7 @@ namespace KDY
 
         public void OnBeforeDieAnimationFinish()
         {
+            GameManager.Sound.SFXPlay("BombDead", GameManager.Sound.bombDead);
             animator.SetBool("BeforeDie", false);
             animator.SetBool("Die", true);
 

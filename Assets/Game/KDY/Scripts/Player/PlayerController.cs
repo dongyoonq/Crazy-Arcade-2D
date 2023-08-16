@@ -174,6 +174,7 @@ namespace KDY
         {
             float lag = (float)(PhotonNetwork.Time - sentTime);
 
+            GameManager.Sound.SFXPlay("SetBomb", GameManager.Sound.bombSet);
             Bomb bomb = GameManager.Resource.Instantiate<Bomb>("Prefabs/Bomb", position, rotation);
             bomb.owner = this.player;
 
