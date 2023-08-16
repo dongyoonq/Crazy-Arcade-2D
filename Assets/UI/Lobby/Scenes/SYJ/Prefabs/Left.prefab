@@ -544,6 +544,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2565999029867503023}
   - component: {fileID: 2565999029867503016}
+  - component: {fileID: 109027997591139156}
   - component: {fileID: 2565999029867503017}
   - component: {fileID: 2565999029867503022}
   m_Layer: 5
@@ -581,6 +582,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2565999029867503020}
   m_CullTransparentMesh: 1
+--- !u!114 &109027997591139156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2565999029867503020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eab7474a77654b34fbaf4784bff69a2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentPanel: {fileID: 2565999030492227258}
+  moveDistance: -500
+  moveDuration: 0.7
 --- !u!114 &2565999029867503017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,7 +670,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2565999029867503017}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 109027997591139156}
+        m_TargetAssemblyTypeName: MovePanel, Assembly-CSharp
+        m_MethodName: TogglePanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2565999029943766245
 GameObject:
   m_ObjectHideFlags: 0
@@ -1107,7 +1135,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2565999030492227259}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
