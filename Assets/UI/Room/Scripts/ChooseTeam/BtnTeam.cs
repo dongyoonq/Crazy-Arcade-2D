@@ -33,7 +33,8 @@ namespace RoomUI.ChooseTeam
 
 		private void PickedTeam()
 		{
-			togChecked.isOn = true;
+            GameManager.Sound.Onclick();
+            togChecked.isOn = true;
 
 			PhotonHashtable property = new PhotonHashtable();
 			property[PlayerProp.TEAMCOLOR] = $"#{teamData.TeamColor.ToHexString()}";

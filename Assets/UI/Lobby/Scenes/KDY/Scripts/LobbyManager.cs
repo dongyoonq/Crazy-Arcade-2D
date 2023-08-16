@@ -139,6 +139,15 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         roomPanel.gameObject?.SetActive(panel == Panel.Room);
         shopPanel.gameObject?.SetActive(panel == Panel.Shop);
 
-        Debug.Log(curPanel);
+        if (panel == Panel.Login)
+        {
+            GameManager.Sound.BgmStop(GameManager.Sound.lobbySource);
+            GameManager.Sound.BgmPlay(GameManager.Sound.loginSource);
+        }
+        else
+        {
+            GameManager.Sound.BgmStop(GameManager.Sound.loginSource);
+            GameManager.Sound.BgmPlay(GameManager.Sound.lobbySource);
+        }
     }
 }

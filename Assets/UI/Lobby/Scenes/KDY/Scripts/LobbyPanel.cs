@@ -133,11 +133,13 @@ namespace KDY
 
         public void OnLeaveLobbyButtonClicked()
         {
+            GameManager.Sound.Onclick();
             PhotonNetwork.LeaveLobby();
         }
 
         public void OnCreateRoomButtonClicked()
         {
+            GameManager.Sound.Onclick();
             createRoomPanel = Instantiate(Resources.Load<CreateRoomPanel>("Prefabs/CreateRoom"));
             createRoomPanel.transform.SetParent(popUpCanvas.transform, false);
             createRoomPanel.okBtn.onClick.AddListener(OnCreateRoomConfirmButtonClicked);
@@ -146,11 +148,13 @@ namespace KDY
 
         public void OnCreateRoomCancelButtonClicked()
         {
+            GameManager.Sound.Onclick();
             Destroy(createRoomPanel.gameObject);
         }
 
         public void OnCreateRoomConfirmButtonClicked()
         {
+            GameManager.Sound.Onclick();
             CreateRoom();
         }
 
@@ -164,7 +168,7 @@ namespace KDY
             int roomNumber = GetRoomNumber();
 
 			RoomOptions roomOptions = new RoomOptions();
-            roomOptions.MaxPlayers = maxPlayer;
+            roomOptions.MaxPlayers = (byte)maxPlayer;
 
 			roomOptions.CustomRoomProperties = new PhotonHashtable() {
 				{ RoomProp.ROOM_NAME, roomName },
@@ -217,5 +221,10 @@ namespace KDY
 		{
 			return roomContent.GetComponentsInChildren<RoomEntry>().Where(x => x.RoomNumber == roomNumber).FirstOrDefault();
 		}
+
+        public void OnClicked()
+        {
+            GameManager.Sound.Onclick();
+        }
 	}
 }

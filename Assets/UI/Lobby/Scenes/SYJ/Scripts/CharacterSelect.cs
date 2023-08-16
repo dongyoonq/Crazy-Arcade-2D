@@ -80,6 +80,7 @@ public class CharacterSelect : MonoBehaviour
 
     public void OnClickCharacter()
     {
+        GameManager.Sound.Onclick();
         foreach (CharacterImage image in imageLists)
         {
             if (image.isActive)

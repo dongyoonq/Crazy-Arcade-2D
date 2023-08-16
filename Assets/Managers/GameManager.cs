@@ -11,14 +11,14 @@ public class GameManager : MonoBehaviour
     private static PoolManager poolManager;
     private static ResourceManager resource;
     private static UIManager ui;
-    // private static SceneManager sceneManager;
+    private static SoundManager soundManager;
     private static DataManager dataManager;
 
     public static GameManager Instance { get { return instance; } }
     public static PoolManager Pool { get { return poolManager; } }
     public static ResourceManager Resource { get { return resource; } }
     public static UIManager UI { get { return ui; } }
-    // public static SceneManager Scene { get { return sceneManager; } }
+    public static SoundManager Sound { get { return soundManager; } }
     public static DataManager Data { get { return dataManager; } }
 
 
@@ -59,10 +59,10 @@ public class GameManager : MonoBehaviour
         UIObj.transform.parent = transform;
         ui = UIObj.AddComponent<UIManager>();
 
-        // GameObject sceneObj = new GameObject();
-        // sceneObj.name = "SceneManager";
-        // sceneObj.transform.parent = transform;
-        // sceneManager = sceneObj.AddComponent<SceneManager>();
+        GameObject soundObj = new GameObject();
+        soundObj.name = "SoundManager";
+        soundObj.transform.parent = transform;
+        soundManager = soundObj.AddComponent<SoundManager>();
 
         GameObject dataObj = new GameObject();
         dataObj.name = "DataManager";
