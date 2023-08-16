@@ -18,27 +18,40 @@ namespace KDY
 {
     public class LobbyPanel : MonoBehaviour
     {
-		[SerializeField] private RoomEntry roomEntryPrefab;
+        [SerializeField] private RoomEntry roomEntryPrefab;
         [SerializeField] private RectTransform roomContent;
         [SerializeField] private Canvas popUpCanvas;
         [SerializeField] private PasswordRoomPanel PasswordPanel;
+        [SerializeField] private QuickStartPopup quickStartPopup;
 
-		[SerializeField] private TMP_Text playerName;
+        [SerializeField] private TMP_Text playerName;
         [SerializeField] private TMP_Text playerLevel;
         [SerializeField] private TMP_Text playerExp;
 
         [SerializeField] RectTransform playerContent;
         [SerializeField] LobbyPlayer playerPrefab;
 
-        private CreateRoomPanel createRoomPanel;
-        public Dictionary<int, RoomInfo> roomDictionary { get ; private set; }
+        [SerializeField]
+        private Button btnFastStart;
 
-		private void Awake()
+        private bool isActiveQuickStarView = false;
+
+
+		private CreateRoomPanel createRoomPanel;
+        public Dictionary<int, RoomInfo> roomDictionary { get; private set; }
+
+        private void Awake()
         {
             roomDictionary = new Dictionary<int, RoomInfo>();
+            btnFastStart.onClick.AddListener(() => ActiveFastStart());
+        }
+
+		private void OnEnable()
+		{
+            isActiveQuickStarView = false;
 		}
 
-        private void Update()
+		private void Update()
         {
             playerName.text = PhotonNetwork.NickName;
             //ReadSqlData();
@@ -98,36 +111,39 @@ namespace KDY
             {
                 try
                 {
-					int roomNum = int.Parse(room.Name);
+                    int roomNum = int.Parse(room.Name);
 
-					// πÊ¿Ã ªÁ∂Û¡˙ øπ¡§¿Ã∏È or πÊ¿Ã ∫Ò∞¯∞≥∞° µ«æ˙¿∏∏È or πÊ¿Ã ¥›«˚¿∏∏È
-					if (room.RemovedFromList || !room.IsOpen)
-					{
-						if (roomDictionary.ContainsKey(roomNum))
-							roomDictionary.Remove(roomNum);
-						continue;
-					}
+                    // Î∞©Ïù¥ ÏÇ¨ÎùºÏßà ÏòàÏ†ïÏù¥Î©¥ or Î∞©Ïù¥ ÎπÑÍ≥µÍ∞úÍ∞Ä ÎêòÏóàÏúºÎ©¥ or Î∞©Ïù¥ Îã´ÌòîÏúºÎ©¥
+                    if (room.RemovedFromList || !room.IsOpen)
+                    {
+                        if (roomDictionary.ContainsKey(roomNum))
+                            roomDictionary.Remove(roomNum);
+                        continue;
+                    }
 
-					// πÊ¿Ã ¿⁄∑·±∏¡∂ø° ¿÷æ˙¿∏∏È (±◊≥… π´¡∂∞« ¿Ã∏ß¿Ã ¿÷æ˙¥¯ πÊ¿Ã∏È √÷Ω≈¿∏∑Œ)
-					if (roomDictionary.ContainsKey(roomNum))
-						roomDictionary[roomNum] = room;
+                    // Î∞©Ïù¥ ÏûêÎ£åÍµ¨Ï°∞Ïóê ÏûàÏóàÏúºÎ©¥ (Í∑∏ÎÉ• Î¨¥Ï°∞Í±¥ Ïù¥Î¶ÑÏù¥ ÏûàÏóàÎçò Î∞©Ïù¥Î©¥ ÏµúÏã†ÏúºÎ°ú)
+                    if (roomDictionary.ContainsKey(roomNum))
+                        roomDictionary[roomNum] = room;
 
-					else
-						roomDictionary.Add(roomNum, room);
-				}
+                    else
+                        roomDictionary.Add(roomNum, room);
+                }
                 catch (FormatException e)
                 {
                     continue;
                 }
-			}
+            }
 
             foreach (var data in roomDictionary)
             {
-                if(data.Value.IsVisible) //πÊ¿Ã ∞¯∞≥ ªÛ≈¬¿œ ∂ß∏∏
-				{
-					RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
-					entry.Initialized(data.Value, data.Key, PasswordPanel);
-				}
+                if (data.Value.IsVisible) //Î∞©Ïù¥ Í≥µÍ∞ú ÏÉÅÌÉúÏùº ÎïåÎßå
+                {
+                    if (data.Value.MaxPlayers > 8) //Îπ†Î•∏ ÏãúÏûëÏùÑ ÏúÑÌïú Î∞©
+                        continue;
+
+                    RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
+                    entry.Initialized(data.Value, data.Key, PasswordPanel);
+                }
             }
         }
 
@@ -164,66 +180,76 @@ namespace KDY
             if (string.IsNullOrEmpty(roomName))
                 roomName = $"Room {UnityEngine.Random.Range(0, 1000)}";
 
-			RoomMode mode = createRoomPanel.roomMode.GetSeletedRoom();
+            RoomMode mode = createRoomPanel.roomMode.GetSeletedRoom();
 
-			int maxPlayer = 8;
+            int maxPlayer = 8;
             int roomNumber = GetRoomNumber();
+            
+            RoomOptions roomOptions = new RoomOptions();
+            roomOptions.MaxPlayers = maxPlayer;
 
-			RoomOptions roomOptions = new RoomOptions();
-            roomOptions.MaxPlayers = (byte)maxPlayer;
-
-			roomOptions.CustomRoomProperties = new PhotonHashtable() {
-				{ RoomProp.ROOM_NAME, roomName },
-				{ RoomProp.ROOM_MODE, mode },
-				{ RoomProp.ROOM_PASSWORD, createRoomPanel.passwordToggle.isOn ? createRoomPanel.passwordInput.text : "" },
-				{ RoomProp.ROOM_ID, roomNumber },
-				{ RoomProp.ROOM_STATE, "Waiting" },
+            roomOptions.CustomRoomProperties = new PhotonHashtable() {
+                { RoomProp.ROOM_NAME, roomName },
+                { RoomProp.ROOM_PASSWORD, createRoomPanel.passwordToggle.isOn ? createRoomPanel.passwordInput.text : "" },
+                { RoomProp.ROOM_ID, roomNumber },
+                { RoomProp.ROOM_STATE, "Waiting" },
+                { RoomProp.ROOM_MODE, mode },
+                { RoomProp.ROOM_MAX, maxPlayer },
                 { RoomProp.ROOM_MAP_GROUP, "Random" },
-				{ RoomProp.ROOM_MAP_FILE, "RandomData" },
+                { RoomProp.ROOM_MAP_FILE, "RandomData" },
                 { RoomProp.ROOM_PLAYING, false },
-			};
-
-			roomOptions.CustomRoomPropertiesForLobby = new string[]
-			{ RoomProp.ROOM_NAME, RoomProp.ROOM_PASSWORD, RoomProp.ROOM_ID, RoomProp.ROOM_STATE, RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MAP_FILE, RoomProp.ROOM_MODE, RoomProp.ROOM_PLAYING };
-
+                
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { 
+              RoomProp.ROOM_NAME, RoomProp.ROOM_PASSWORD, RoomProp.ROOM_ID,
+              RoomProp.ROOM_STATE, RoomProp.ROOM_MODE, RoomProp.ROOM_MAX,
+              RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MAP_FILE,
+              RoomProp.ROOM_PLAYING };   
+              
             PhotonNetwork.CreateRoom(roomNumber.ToString(), roomOptions, null);
 
             Destroy(createRoomPanel.gameObject);
         }
 
+
         private int GetRoomNumber()
         {
             return roomDictionary.Count() + 1;
-		}
+        }
 
-		public void RoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
-		{
+        public void RoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
+        {
             int roomNumber = int.Parse(PhotonNetwork.CurrentRoom.Name);
             RoomEntry changedRoom = GetRoomEntry(roomNumber);
 
-			if (changedRoom != null)
+            if (changedRoom != null)
             {
-				if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_NAME))
-				{
-					changedRoom.SetChangedRoomInfo(RoomProp.ROOM_PASSWORD, propertiesThatChanged[RoomProp.ROOM_NAME].ToString().Trim());
-				}
+                if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_NAME))
+                {
+                    changedRoom.SetChangedRoomInfo(RoomProp.ROOM_PASSWORD, propertiesThatChanged[RoomProp.ROOM_NAME].ToString().Trim());
+                }
 
-				if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_PASSWORD))
-				{
+                if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_PASSWORD))
+                {
                     changedRoom.SetChangedRoomInfo(RoomProp.ROOM_PASSWORD, propertiesThatChanged[RoomProp.ROOM_PASSWORD].ToString().Trim());
-				}
+                }
 
-				if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_MODE))
-				{
-					RoomMode mode = (RoomMode)Enum.Parse(typeof(RoomMode), propertiesThatChanged[RoomProp.ROOM_MODE].ToString().Trim());
+                if (propertiesThatChanged.ContainsKey(RoomProp.ROOM_MODE))
+                {
+                    RoomMode mode = (RoomMode)Enum.Parse(typeof(RoomMode), propertiesThatChanged[RoomProp.ROOM_MODE].ToString().Trim());
                     createRoomPanel.roomMode.ChooseRoomMode(mode);
-				}
-			}
-		}
+                }
+            }
+        }
 
-		private RoomEntry GetRoomEntry(int roomNumber)
-		{
-			return roomContent.GetComponentsInChildren<RoomEntry>().Where(x => x.RoomNumber == roomNumber).FirstOrDefault();
+        private RoomEntry GetRoomEntry(int roomNumber)
+        {
+            return roomContent.GetComponentsInChildren<RoomEntry>().Where(x => x.RoomNumber == roomNumber).FirstOrDefault();
+        }
+
+        private void ActiveFastStart()
+        {
+			quickStartPopup.gameObject.SetActive(true);
+			quickStartPopup.InitView();
 		}
 
         public void OnClicked()

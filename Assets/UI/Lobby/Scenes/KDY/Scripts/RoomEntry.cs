@@ -51,6 +51,8 @@ namespace KDY
         private string roomPassword;
         private bool isPasswordRoom;
 
+        public int MaxPlayerNum { get; private set; } = 8;
+
         public RoomInfo RoomInfo { get; private set; }
         public int RoomNumber { get; private set; }
 
@@ -62,15 +64,16 @@ namespace KDY
 
         public void Initialized(RoomInfo info, int number, PasswordRoomPanel passwordRoomPanel)
         {
-            RoomNumber = number;
+			RoomNumber = number;
             passwordPanel = passwordRoomPanel;
             RoomInfo = info;
-
+            MaxPlayerNum = 8;
+            
             roomName.text = info.CustomProperties[RoomProp.ROOM_NAME].ToString();
             currentPlayer.text = string.Format("{0} / {1}", info.PlayerCount, info.MaxPlayers);
             joinRoomButton.interactable = info.PlayerCount < info.MaxPlayers;
 
-            // πÊ ∏µÂ √º≈©
+            // Î∞© Î™®Îìú Ï≤¥ÌÅ¨
             if ((RoomMode)info.CustomProperties[RoomProp.ROOM_MODE] == RoomMode.Manner)
             {
                 Debug.Log(modeSprites[0].name);
@@ -86,29 +89,12 @@ namespace KDY
                 Debug.Log(modeSprites[2].name);
                 roomMode.sprite = modeSprites[2];
             }
-
-            // πÊ ªÛ≈¬ √º≈©
-            if ((bool)info.CustomProperties[RoomProp.ROOM_PLAYING])
-            {
-                // roomState.sprite = «√∑π¿Ã¿ÃπÃ¡ˆ
-                info.CustomProperties[RoomProp.ROOM_STATE] = "Playing";
-            }
-            else if (info.PlayerCount < info.MaxPlayers)
-            {
-                roomState.sprite = stateSprites[0];
-                info.CustomProperties[RoomProp.ROOM_STATE] = "Waiting";
-            }
-            else if (info.PlayerCount >= info.MaxPlayers)
-            {
-                roomState.sprite = stateSprites[1];
-                info.CustomProperties[RoomProp.ROOM_STATE] = "Full";
-            }
-
-            // πÊ π¯»£ √º≈©
+            
+            // Î∞© Î≤àÌò∏ Ï≤¥ÌÅ¨
             roomNumber.text = string.Format("{0:D3}", number);
             info.CustomProperties[RoomProp.ROOM_ID] = number;
 
-            // ∫Òπ¯πÊ √º≈©
+            // ÎπÑÎ≤àÎ∞© Ï≤¥ÌÅ¨
             if (info.CustomProperties.ContainsKey(RoomProp.ROOM_PASSWORD))
             {
                 roomPassword = info.CustomProperties[RoomProp.ROOM_PASSWORD].ToString().Trim();
@@ -120,15 +106,47 @@ namespace KDY
             else
                 passwordImg.gameObject.SetActive(false);
 
-            // πÊ ∏  √º≈©
+            // Î∞© Îßµ Ï≤¥ÌÅ¨
             if (info.CustomProperties.ContainsKey(RoomProp.ROOM_MAP_FILE))
             {
-				string path = $"{MAP_PATH}/{info.CustomProperties[RoomProp.ROOM_MAP_FILE]}";
+                string path = $"{MAP_PATH}/{info.CustomProperties[RoomProp.ROOM_MAP_FILE]}";
                 MapData data = Resources.Load<MapData>(path);
-				if (data != null)
-					roomImg.sprite = data.MapIcon;
-			}
-		}
+			        	if (data != null)
+				        	roomImg.sprite = data.MapIcon;
+			      }
+
+            // Î∞© ÏÉÅÌÉú Ï≤¥ÌÅ¨
+            if ((bool)info.CustomProperties[RoomProp.ROOM_PLAYING])
+            {
+                // roomState.sprite = ÌîåÎ†àÏù¥Ïù¥ÎØ∏ÏßÄ
+                info.CustomProperties[RoomProp.ROOM_STATE] = "Playing";
+            }
+            else 
+            {
+                if(info.CustomProperties.ContainsKey(RoomProp.ROOM_MAX))
+                {
+				            MaxPlayerNum = (int)info.CustomProperties[RoomProp.ROOM_MAX];
+				            currentPlayer.text = string.Format("{0} / {1}", info.PlayerCount, MaxPlayerNum);
+		    	      }
+                SetParticipatedPlayer(info, MaxPlayerNum, info.PlayerCount);
+            }       
+		    }
+
+        private void SetParticipatedPlayer(RoomInfo info, int maxPlayers, int playerCnt)
+        {
+			      joinRoomButton.interactable = playerCnt < maxPlayers;
+
+			      if (joinRoomButton.interactable)
+			      {
+                roomState.sprite = stateSprites[0];
+                info.CustomProperties[RoomProp.ROOM_STATE] = "Waiting";
+		      	}
+			      else
+			      {
+				        roomState.sprite = stateSprites[1];
+				        info.CustomProperties[RoomProp.ROOM_STATE] = "Full";
+			      }
+		    }
 
         public void OnJoinButtonClicked()
         {
@@ -156,7 +174,7 @@ namespace KDY
             else
             {
                 // Todo Fail Match Password
-                Debug.Log("πÊ ∫Òπ–π¯»£∞° ¥Ÿ∏®¥œ¥Ÿ");
+                Debug.Log("Î∞© ÎπÑÎ∞ÄÎ≤àÌò∏Í∞Ä Îã§Î¶ÖÎãàÎã§");
             }
         }
 
@@ -183,7 +201,7 @@ namespace KDY
                     isPasswordRoom = !(value == "");
                     roomPassword = value;
                     break;
-			}
+			      }
         }
     }
 }

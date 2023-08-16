@@ -1,6 +1,7 @@
 using CustomProperty;
 using CustomProperty.Utils;
 using KDY;
+using LobbyUI.QuickStart;
 using Photon.Pun;
 using Photon.Realtime;
 using RoomUI;
@@ -10,7 +11,9 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
-    public enum Panel { Login, Lobby, Room, Shop }
+    public const string QUICK_MATCH_ROOM_NAME = "9999";
+
+    public enum Panel { Login, Lobby, Room, Shop, Matching }
 
     [SerializeField]
     private LoginPanel loginPanel;
@@ -20,8 +23,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private LobbyPanel lobbyPanel;
     [SerializeField]
     private ShopPanel shopPanel;
+	[SerializeField]
+	private QuickMatching quickMatchPanel;
 
-    public List<RoomInfo> Rooms { get; private set; }
+	public List<RoomInfo> Rooms { get; private set; }
 
     public Panel curPanel;
     public Panel prevPanel;
@@ -58,14 +63,19 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        SetActivePanel(Panel.Room);
-
-		PhotonHashtable playerProperty = new PhotonHashtable();
-        playerProperty[PlayerProp.READY] = PhotonNetwork.IsMasterClient;
-        playerProperty[PlayerProp.LOAD] = false;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperty);
-
 		PhotonNetwork.AutomaticallySyncScene = true;
+
+		if (PhotonNetwork.CurrentRoom.MaxPlayers > 8)
+            SetActivePanel(Panel.Matching);
+        else
+        {
+			SetActivePanel(Panel.Room);
+
+			PhotonHashtable playerProperty = new PhotonHashtable();
+			playerProperty[PlayerProp.READY] = PhotonNetwork.IsMasterClient;
+			playerProperty[PlayerProp.LOAD] = false;
+			PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperty);
+		}
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
@@ -97,7 +107,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        roomPanel.EntryPlayer(newPlayer);
+        if (PhotonNetwork.CurrentRoom.MaxPlayers > 8)
+			quickMatchPanel.EntryPlayer(newPlayer);
+        else
+            roomPanel.EntryPlayer(newPlayer);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -138,11 +151,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         curPanel = panel;
 
         loginPanel.gameObject?.SetActive(panel == Panel.Login);
-        lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby);
+        lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby || panel == Panel.Matching);
         roomPanel.gameObject?.SetActive(panel == Panel.Room);
         shopPanel.gameObject?.SetActive(panel == Panel.Shop);
-
-        if (panel == Panel.Login)
+        quickMatchPanel.gameObject?.SetActive(panel == Panel.Matching);
+        
+         if (panel == Panel.Login)
         {
             GameManager.Sound.BgmStop(GameManager.Sound.lobbySource);
             GameManager.Sound.BgmPlay(GameManager.Sound.loginSource);

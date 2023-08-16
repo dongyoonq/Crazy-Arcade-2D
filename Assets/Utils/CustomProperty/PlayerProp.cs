@@ -22,5 +22,5 @@ namespace CustomProperty
 
         // CHARACTER is selected room character, used Room : set, Game : instantiate
         public const string CHARACTER = "Character";
-    }
+	}
 }

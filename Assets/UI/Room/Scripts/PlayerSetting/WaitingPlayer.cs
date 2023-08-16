@@ -86,10 +86,14 @@ namespace RoomUI.PlayerSetting
 		{
 			PlayerSet.PlayerImg.sprite = data.Character;
 			player.SetPlayerProperty(PlayerProp.CHARACTER, data.CharacterEnum);
+		}
 
-			//PhotonHashtable property = new PhotonHashtable();
-			//property[PlayerProp.CHARACTER] = data.CharacterEnum;
-			//player.SetCustomProperties(property);
+		public void OnFocusOnCharacter(CharacterData data)
+		{
+		}
+
+		public void OnFocusOffCharacter()
+		{
 		}
 
 		/*

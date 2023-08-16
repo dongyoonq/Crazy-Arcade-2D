@@ -11,10 +11,20 @@ namespace RoomUI.PlayerSetting
 	{
 		public string Name;
 
+		public string NameKOR;
+
 		public CharacterEnum CharacterEnum; 
 
 		public Sprite Character;
 
 		public Sprite Description;
+
+		public Sprite DefaultImage;
+
+		public Sprite ActiveImage;
+
+		public Sprite CharacterSpec;
+
+		public Sprite SelectedImage;
 	}
 }

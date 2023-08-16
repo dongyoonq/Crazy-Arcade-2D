@@ -31,7 +31,7 @@ namespace RoomUI.ChooseMap
 
 		public void SetPopularity(int score)
 		{
-			if(starPoints.Count >= MAX_CNT)
+			if (starPoints.Count >= MAX_CNT)
 			{
 				for (int i = 0; i < MAX_CNT; i++)
 					starPoints[i].SetStar(i < score);

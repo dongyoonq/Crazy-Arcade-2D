@@ -10,6 +10,11 @@ public class Extension : MonoBehaviour
 		Cappi,
 		Marid,
 		Bazzi,
+		Dizni,
+		Ethi,
+		Mos,
+		Uni,
+		Random,
 		None
 	}
 

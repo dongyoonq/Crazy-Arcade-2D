@@ -49,10 +49,10 @@ namespace RoomUI.ChooseMap
 
         private void SetRoomProperty(string propertyKey, string value)
         {
-            PhotonHashtable property = PhotonNetwork.CurrentRoom.CustomProperties;
+			PhotonHashtable property = PhotonNetwork.CurrentRoom.CustomProperties;
 
-            property[propertyKey] = value;
-            PhotonNetwork.CurrentRoom.SetCustomProperties(property);
-        }
+			property[propertyKey] = value;
+			PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+		}
     }
 }
