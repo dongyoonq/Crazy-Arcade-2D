@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class ResultScreen : MonoBehaviour
 {
-    [SerializeField] Image winImg;
-    [SerializeField] Image loseImg;
-    private Image resultImg;
+    [SerializeField] Sprite winImg;
+    [SerializeField] Sprite loseImg;
+    [SerializeField] private Image resultImg;
 
     private Image characterImg;
 

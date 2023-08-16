@@ -1858,8 +1858,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1d2c1e423aaaea4d83eaf718e975884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  winImg: {fileID: 0}
-  loseImg: {fileID: 0}
+  winImg: {fileID: 21300000, guid: 3931a790d9b730a4095f324a6f1ac66b, type: 3}
+  loseImg: {fileID: 21300000, guid: 050b2a2ebc53ac648863a02f405a78fc, type: 3}
+  resultImg: {fileID: 3389409261024572635}
   expText: {fileID: 3389409260505847932}
   moneyText: {fileID: 7077548053341709046}
 --- !u!1 &6289504880913601075
@@ -1916,12 +1917,12 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 1
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
+  m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
