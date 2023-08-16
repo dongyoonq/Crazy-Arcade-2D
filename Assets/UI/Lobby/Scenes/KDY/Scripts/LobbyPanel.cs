@@ -197,9 +197,9 @@ namespace KDY
                 { RoomProp.ROOM_MAX, maxPlayer },
                 { RoomProp.ROOM_MAP_GROUP, "Random" },
                 { RoomProp.ROOM_MAP_FILE, "RandomData" },
-                { RoomProp.ROOM_PLAYING, false },
-                
-            roomOptions.CustomRoomPropertiesForLobby = new string[] { 
+                { RoomProp.ROOM_PLAYING, false } };
+
+			roomOptions.CustomRoomPropertiesForLobby = new string[] { 
               RoomProp.ROOM_NAME, RoomProp.ROOM_PASSWORD, RoomProp.ROOM_ID,
               RoomProp.ROOM_STATE, RoomProp.ROOM_MODE, RoomProp.ROOM_MAX,
               RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MAP_FILE,

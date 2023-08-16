@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7777911328228953671}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 761.8596, y: 548.809, z: -5.2834044}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -48,5 +48,6 @@ MonoBehaviour:
   roomPanel: {fileID: 0}
   lobbyPanel: {fileID: 0}
   shopPanel: {fileID: 0}
+  quickMatchPanel: {fileID: 0}
   curPanel: 0
   prevPanel: 0
