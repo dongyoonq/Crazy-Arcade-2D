@@ -33,16 +33,16 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        if (PhotonNetwork.IsConnected)
-            OnConnectedToMaster();
-        else if (PhotonNetwork.InRoom)
+        SetActivePanel(Panel.Login);
+
+        if (PhotonNetwork.InRoom)
             OnJoinedRoom();
         else if (PhotonNetwork.InLobby)
             OnJoinedLobby();
+        else if (PhotonNetwork.IsConnected)
+            OnConnectedToMaster();
         else
             OnDisconnected(DisconnectCause.None);
-
-        SetActivePanel(Panel.Login);
     }
 
     public override void OnConnectedToMaster()
@@ -154,6 +154,17 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby || panel == Panel.Matching);
         roomPanel.gameObject?.SetActive(panel == Panel.Room);
         shopPanel.gameObject?.SetActive(panel == Panel.Shop);
-		quickMatchPanel.gameObject?.SetActive(panel == Panel.Matching);
-	}
+        quickMatchPanel.gameObject?.SetActive(panel == Panel.Matching);
+        
+         if (panel == Panel.Login)
+        {
+            GameManager.Sound.BgmStop(GameManager.Sound.lobbySource);
+            GameManager.Sound.BgmPlay(GameManager.Sound.loginSource);
+        }
+        else
+        {
+            GameManager.Sound.BgmStop(GameManager.Sound.loginSource);
+            GameManager.Sound.BgmPlay(GameManager.Sound.lobbySource);
+        }
+    }
 }

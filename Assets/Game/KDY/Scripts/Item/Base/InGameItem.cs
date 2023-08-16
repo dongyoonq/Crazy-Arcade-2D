@@ -10,7 +10,7 @@ public abstract class InGameItem : Item
 
     private void OnEnable()
     {
-        StartCoroutine(collisionActive(0.4f));
+        StartCoroutine(collisionActive(0.5f));
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -18,6 +18,10 @@ public abstract class InGameItem : Item
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             InGamePlayer player = collision.gameObject.GetComponent<InGamePlayer>();
+
+            if (player.isPrision)
+                return;
+
             ApplyStatus(player);
             Destroy(gameObject);
         }

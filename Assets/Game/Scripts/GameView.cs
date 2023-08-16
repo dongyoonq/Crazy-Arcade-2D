@@ -70,7 +70,7 @@ public class GameView : MonoBehaviourPunCallbacks
 		foreach (var player in PhotonNetwork.CurrentRoom.Players)
 		{
 			//player.Value.GetPlayerNumber()
-			enteredList[player.Value.GetPlayerNumber()].SetEnteredPlayer(player.Value);
+			//enteredList[player.Value.GetPlayerNumber()].SetEnteredPlayer(player.Value);
 		}
 	}
 
@@ -129,8 +129,6 @@ public class GameView : MonoBehaviourPunCallbacks
 		}
 		GameStart();
 	}
-
-
 
 	private void GameStart()
 	{

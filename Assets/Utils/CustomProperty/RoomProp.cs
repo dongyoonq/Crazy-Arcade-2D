@@ -39,6 +39,8 @@ namespace CustomProperty
         // ROOM_MODE is RoomEntry, WaitingRoomEnter,, expected RoomChangedInfo used
         public const string ROOM_MODE = "Mode";
 
+        public const string ROOM_PLAYING = "RoomPlay";
+
         // In GameScene All Player Load than LoadTime used
         public const string LOAD_TIME = "LoadTime";
 

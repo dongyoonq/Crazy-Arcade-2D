@@ -39,14 +39,15 @@ public class LoginPanel : MonoBehaviour
 
     public void OnSignUpButtonClicked()
     {
+        GameManager.Sound.Onclick();
         try
         {
             string id = idInputField.text;
             string password = passwordInputField.text;
 
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(password))
             {
-                noticePopUp.notice.text = "아이디를 입력해주세요.";
+                noticePopUp.notice.text = "아이디와 비밀번호를 입력해주세요.";
                 GameManager.UI.popUpStack.Push(noticePopUp);
                 noticePopUp.gameObject.SetActive(true);
                 return;
@@ -82,6 +83,7 @@ public class LoginPanel : MonoBehaviour
                 {
                     Debug.Log("Success");
                     noticePopUp.notice.text = "회원가입이 완료되었습니다.\n로그인 후 이용하세요.";
+                    GameManager.UI.popUpStack.Push(noticePopUp);
                     noticePopUp.gameObject.SetActive(true);
                 }
                 else
@@ -98,6 +100,7 @@ public class LoginPanel : MonoBehaviour
 
     public void OnLoginButtonClicked()
     {
+        GameManager.Sound.Onclick();
         try
         {
             string id = idInputField.text;
@@ -177,6 +180,7 @@ public class LoginPanel : MonoBehaviour
 
     public void Quit()
     {
+        GameManager.Sound.Onclick();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #elif UNITY_WEBPLAYER
@@ -190,6 +194,7 @@ public class LoginPanel : MonoBehaviour
 
     public void OnUpButtonClicked()
     {
+        GameManager.Sound.Onclick();
         if (chatingHideButtonCheck == false)
         {
             chatingHide.transform.Translate(Vector3.up * 330);
@@ -200,6 +205,7 @@ public class LoginPanel : MonoBehaviour
 
     public void OnDownButtonClicked()
     {
+        GameManager.Sound.Onclick();
         if (chatingHideButtonCheck == true)
         {
             chatingHide.transform.Translate(Vector3.down * 330);
@@ -210,6 +216,7 @@ public class LoginPanel : MonoBehaviour
 
     public void OnSpeakerButtonClicked()
     {
+        GameManager.Sound.Onclick();
         if (speakerPopUp.active == false)
         {
             speakerPopUp.SetActive(true);

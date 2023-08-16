@@ -18,8 +18,8 @@ TagManager:
   - Monster
   - Tile
   - StaticBlock
-  - 
-  - 
+  - PlayerHitbox
+  - Bomb
   - 
   - 
   - 

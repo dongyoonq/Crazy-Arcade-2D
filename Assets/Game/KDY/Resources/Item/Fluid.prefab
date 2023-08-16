@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3758880888686213737}
   - component: {fileID: 6851746379998160354}
   - component: {fileID: 2368667240214351356}
+  - component: {fileID: -9216507891282744315}
   m_Layer: 0
   m_Name: Fluid
   m_TagString: Untagged
@@ -99,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0a604c66cd18fc4ea9ac6746eb1c711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: 24604ac840f46254caf5da0c708d7a5f, type: 2}
 --- !u!50 &6851746379998160354
 Rigidbody2D:
   serializedVersion: 4
@@ -147,3 +148,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.36, y: 0.28004223}
   m_EdgeRadius: 0
+--- !u!114 &-9216507891282744315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7127653060540981593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

@@ -70,4 +70,9 @@ public class MyPage : MonoBehaviour
             }
         }
     }
+
+    public void OnButtonClicked()
+    {
+        GameManager.Sound.Onclick();
+    }
 }

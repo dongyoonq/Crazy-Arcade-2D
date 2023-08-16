@@ -49,15 +49,15 @@ public class CharacterSelect : MonoBehaviour
 	{
 		CurrentCharInfo.UnSelectedCharacter();
 	}
-
-	private void SetCharacterInfo(CharacterInfo data)
+ 
+  private void SetCharacterInfo(CharacterInfo data)
 	{
-		CurrentCharInfo.UnSelectedCharacter();
+		  CurrentCharInfo.UnSelectedCharacter();
 
-		CurrentCharInfo = data;
+		  CurrentCharInfo = data;
 
-		characterDesc.sprite = data.characterData.Description;
-		characterSpec.sprite = data.characterData.CharacterSpec;
+		  characterDesc.sprite = data.characterData.Description;
+		  characterSpec.sprite = data.characterData.CharacterSpec;
 	}
 
 	private void ColsedView()

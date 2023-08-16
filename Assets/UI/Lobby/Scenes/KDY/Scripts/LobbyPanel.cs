@@ -113,7 +113,7 @@ namespace KDY
                 {
                     int roomNum = int.Parse(room.Name);
 
-                    // πÊ¿Ã ªÁ∂Û¡˙ øπ¡§¿Ã∏È or πÊ¿Ã ∫Ò∞¯∞≥∞° µ«æ˙¿∏∏È or πÊ¿Ã ¥›«˚¿∏∏È
+                    // Î∞©Ïù¥ ÏÇ¨ÎùºÏßà ÏòàÏ†ïÏù¥Î©¥ or Î∞©Ïù¥ ÎπÑÍ≥µÍ∞úÍ∞Ä ÎêòÏóàÏúºÎ©¥ or Î∞©Ïù¥ Îã´ÌòîÏúºÎ©¥
                     if (room.RemovedFromList || !room.IsOpen)
                     {
                         if (roomDictionary.ContainsKey(roomNum))
@@ -121,7 +121,7 @@ namespace KDY
                         continue;
                     }
 
-                    // πÊ¿Ã ¿⁄∑·±∏¡∂ø° ¿÷æ˙¿∏∏È (±◊≥… π´¡∂∞« ¿Ã∏ß¿Ã ¿÷æ˙¥¯ πÊ¿Ã∏È √÷Ω≈¿∏∑Œ)
+                    // Î∞©Ïù¥ ÏûêÎ£åÍµ¨Ï°∞Ïóê ÏûàÏóàÏúºÎ©¥ (Í∑∏ÎÉ• Î¨¥Ï°∞Í±¥ Ïù¥Î¶ÑÏù¥ ÏûàÏóàÎçò Î∞©Ïù¥Î©¥ ÏµúÏã†ÏúºÎ°ú)
                     if (roomDictionary.ContainsKey(roomNum))
                         roomDictionary[roomNum] = room;
 
@@ -136,9 +136,9 @@ namespace KDY
 
             foreach (var data in roomDictionary)
             {
-                if (data.Value.IsVisible) //πÊ¿Ã ∞¯∞≥ ªÛ≈¬¿œ ∂ß∏∏
+                if (data.Value.IsVisible) //Î∞©Ïù¥ Í≥µÍ∞ú ÏÉÅÌÉúÏùº ÎïåÎßå
                 {
-                    if (data.Value.MaxPlayers > 8) //∫¸∏• Ω√¿€¿ª ¿ß«— πÊ
+                    if (data.Value.MaxPlayers > 8) //Îπ†Î•∏ ÏãúÏûëÏùÑ ÏúÑÌïú Î∞©
                         continue;
 
                     RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
@@ -149,11 +149,13 @@ namespace KDY
 
         public void OnLeaveLobbyButtonClicked()
         {
+            GameManager.Sound.Onclick();
             PhotonNetwork.LeaveLobby();
         }
 
         public void OnCreateRoomButtonClicked()
         {
+            GameManager.Sound.Onclick();
             createRoomPanel = Instantiate(Resources.Load<CreateRoomPanel>("Prefabs/CreateRoom"));
             createRoomPanel.transform.SetParent(popUpCanvas.transform, false);
             createRoomPanel.okBtn.onClick.AddListener(OnCreateRoomConfirmButtonClicked);
@@ -162,11 +164,13 @@ namespace KDY
 
         public void OnCreateRoomCancelButtonClicked()
         {
+            GameManager.Sound.Onclick();
             Destroy(createRoomPanel.gameObject);
         }
 
         public void OnCreateRoomConfirmButtonClicked()
         {
+            GameManager.Sound.Onclick();
             CreateRoom();
         }
 
@@ -180,7 +184,7 @@ namespace KDY
 
             int maxPlayer = 8;
             int roomNumber = GetRoomNumber();
-
+            
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = maxPlayer;
 
@@ -193,13 +197,14 @@ namespace KDY
                 { RoomProp.ROOM_MAX, maxPlayer },
                 { RoomProp.ROOM_MAP_GROUP, "Random" },
                 { RoomProp.ROOM_MAP_FILE, "RandomData" },
-            };
-
-            roomOptions.CustomRoomPropertiesForLobby = new string[]
-            { RoomProp.ROOM_NAME, RoomProp.ROOM_PASSWORD, RoomProp.ROOM_ID,
+                { RoomProp.ROOM_PLAYING, false },
+                
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { 
+              RoomProp.ROOM_NAME, RoomProp.ROOM_PASSWORD, RoomProp.ROOM_ID,
               RoomProp.ROOM_STATE, RoomProp.ROOM_MODE, RoomProp.ROOM_MAX,
-              RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MAP_FILE };
-
+              RoomProp.ROOM_MAP_GROUP, RoomProp.ROOM_MAP_FILE,
+              RoomProp.ROOM_PLAYING };   
+              
             PhotonNetwork.CreateRoom(roomNumber.ToString(), roomOptions, null);
 
             Destroy(createRoomPanel.gameObject);
@@ -246,5 +251,10 @@ namespace KDY
 			quickStartPopup.gameObject.SetActive(true);
 			quickStartPopup.InitView();
 		}
+
+        public void OnClicked()
+        {
+            GameManager.Sound.Onclick();
+        }
 	}
 }
