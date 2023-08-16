@@ -42,6 +42,7 @@ namespace KDY
         IEnumerator BombCoolTimer()
         {
             yield return new WaitForSeconds(bombCoolTime);
+            GameManager.Sound.SFXPlay("ExplosionBomb", GameManager.Sound.bombExplosion);
             Explosion(owner.bombPower);
             Destroy(gameObject);
         }

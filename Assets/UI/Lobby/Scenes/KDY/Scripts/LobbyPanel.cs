@@ -54,7 +54,7 @@ namespace KDY
 		private void Update()
         {
             playerName.text = PhotonNetwork.NickName;
-            //ReadSqlData();
+            ReadSqlData();
         }
 
         private void OnDisable()
@@ -84,6 +84,9 @@ namespace KDY
 
                 return;
             }
+
+            if (!GameManager.Data.reader.IsClosed)
+                GameManager.Data.reader.Close();
         }
 
         public void UpdatePlayerList(ChatChannel chatChannel)
