@@ -53,12 +53,15 @@ namespace RoomUI.ChangedRoomInfo
 
 		private void CancelView()
 		{
-			gameObject.SetActive(false);
+            GameManager.Sound.Onclick();
+            gameObject.SetActive(false);
 		}
 
 		private void CloseView()
 		{
-			if(roomName.text.Trim() == "")
+            GameManager.Sound.Onclick();
+
+            if (roomName.text.Trim() == "")
 			{
 				//TODO. error popup 
 				Debug.Log("방 제목은 공백이 될 수 없습니다");

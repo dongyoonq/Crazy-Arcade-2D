@@ -16,6 +16,7 @@ namespace KDY
         private void Start()
         {
             popupCanvas = GameObject.Find("PopUp").GetComponent<Canvas>();
+            GetComponent<Button>().onClick.AddListener(() => GameManager.Sound.Onclick());
         }
 
         public void Initialized(string name)

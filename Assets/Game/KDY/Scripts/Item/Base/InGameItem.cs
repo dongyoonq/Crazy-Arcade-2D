@@ -17,12 +17,12 @@ public abstract class InGameItem : Item
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            GameManager.Sound.SFXPlay("GetItem", GameManager.Sound.getItem);
-
             InGamePlayer player = collision.gameObject.GetComponent<InGamePlayer>();
 
             if (player.isPrision)
                 return;
+
+            GameManager.Sound.SFXPlay("GetItem", GameManager.Sound.getItem);
 
             ApplyStatus(player);
             Destroy(gameObject);

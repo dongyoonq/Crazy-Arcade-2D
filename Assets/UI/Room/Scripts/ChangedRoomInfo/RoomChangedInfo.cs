@@ -64,7 +64,9 @@ namespace RoomUI.ChangedRoomInfo
 
 		private void OpenChangedRoomInfoUI()
 		{
-			if (isActiveChangedView == false)
+            GameManager.Sound.Onclick();
+
+            if (isActiveChangedView == false)
 			{
 				viewChangedRoomInfo.SetExistingInfo();
 				viewChangedRoomInfo.gameObject.SetActive(true);

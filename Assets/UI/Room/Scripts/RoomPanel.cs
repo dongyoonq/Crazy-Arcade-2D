@@ -65,7 +65,8 @@ namespace RoomUI
 		{
 			if (CheckPlayingRoom())
 			{
-                ReturnPlayerSet();
+				// 플레이어가 방으로 돌아갔을때 구현
+
                 NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{PhotonNetwork.NickName}님이 참가하셨습니다.");
                 PhotonHashtable property = new PhotonHashtable();
                 property[RoomProp.ROOM_PLAYING] = false;
@@ -101,15 +102,6 @@ namespace RoomUI
 			return false;
 		}
 
-		private void ReturnPlayerSet()
-		{
-            foreach (Player player in PhotonNetwork.PlayerList)
-            {
-                InstantiateReturnPlayer(player);
-            }
-
-            CheckPlayerReadyState();
-        }
 
 		public void EntryPlayer(Player player)
 		{
@@ -175,31 +167,6 @@ namespace RoomUI
 					UpdateOtherPlayerCharacter(waitingPlayer, player.CustomProperties[PlayerProp.CHARACTER].ToString());
 			}
 		}
-
-		private void InstantiateReturnPlayer(Player player)
-		{
-            int index = playerDictionary.Count();
-
-            if (index == 8)
-                return;
-
-            WaitingPlayer waitingPlayer = playerContent.GetComponentsInChildren<WaitingPlayer>()[index];
-
-            if (waitingPlayer.CurrentSlotState == SlotState.Close)
-            {
-                waitingPlayer.UpdateSlotState(SlotState.Close);
-                return;
-            }
-
-            waitingPlayer.SetPlayer(player);
-			string hexColor = (string)player.CustomProperties[PlayerProp.TEAMCOLOR];
-			ColorUtility.TryParseHtmlString(hexColor, out Color color);
-			waitingPlayer.PlayerSet.TeamColor.color = color;
-            playerDictionary.Add(player.ActorNumber, waitingPlayer);
-
-            if (player.CustomProperties.ContainsKey(PlayerProp.CHARACTER))
-                UpdateOtherPlayerCharacter(waitingPlayer, player.CustomProperties[PlayerProp.CHARACTER].ToString());
-        }
 
         public void PlayerPropertiesUpdate(Player player, PhotonHashtable changedProps)
 		{
@@ -385,6 +352,11 @@ namespace RoomUI
 
 		public void StartGame()
 		{
+			if (PhotonNetwork.IsMasterClient && !isPassableStarting)
+			{
+                NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Critical, "모든 플레이어가 레디하지 않았습니다.");
+            }
+
 			if (PhotonNetwork.IsMasterClient && isPassableStarting)
 			{
 				if(CheckPlayerTeamBalance() == false)

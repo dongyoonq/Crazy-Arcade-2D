@@ -46,6 +46,8 @@ namespace RoomUI.ChooseMap
 
 		private void OpenChooseMapUI()
 		{
+			GameManager.Sound.Onclick();
+
 			if (isActiveUI == false)
 			{
 				chooseMapUI.gameObject.SetActive(true);

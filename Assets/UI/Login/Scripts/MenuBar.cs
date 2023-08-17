@@ -116,6 +116,8 @@ namespace Gangbie
 
         public void ReLogin()
         {
+            GameManager.Sound.Onclick();
+
             lobbyManager.SetActivePanel(LobbyManager.Panel.Login);
             PhotonNetwork.LeaveLobby();
             PhotonNetwork.Disconnect();
@@ -123,6 +125,11 @@ namespace Gangbie
             chatArea.SetActive(false);
             if (!GameManager.Data.reader.IsClosed)
                 GameManager.Data.reader.Close();
+        }
+
+        public void OnClicked()
+        {
+            GameManager.Sound.Onclick();
         }
     }
 }

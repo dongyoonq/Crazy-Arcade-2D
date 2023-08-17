@@ -44,6 +44,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
         chatClient = new ChatClient(this);
         chatAppSettings = PhotonNetwork.PhotonServerSettings.AppSettings.GetChatSettings();
         chatClient.Connect(chatAppSettings.AppIdChat, chatAppSettings.AppVersion, new Photon.Chat.AuthenticationValues(userName));
+        lobbyPanel.chatClient = chatClient;
 
         AddLine(string.Format("연결시도", userName));
     }

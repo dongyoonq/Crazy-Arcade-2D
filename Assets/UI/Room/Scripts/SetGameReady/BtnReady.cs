@@ -30,14 +30,7 @@ namespace RoomUI.SetGameReady
 
 		public void OnStartButtonClicked()
 		{
-			if (PhotonNetwork.IsMasterClient)
-			{
-				GameManager.Sound.SFXPlay("Start", GameManager.Sound.startSound);
-			}
-			else
-			{
-				GameManager.Sound.SFXPlay("Ready", GameManager.Sound.clickSound);
-			}
+			GameManager.Sound.Onclick();
 		}
 	}
 

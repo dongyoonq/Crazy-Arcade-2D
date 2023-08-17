@@ -156,7 +156,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         shopPanel.gameObject?.SetActive(panel == Panel.Shop);
         quickMatchPanel.gameObject?.SetActive(panel == Panel.Matching);
         
-         if (panel == Panel.Login)
+        if (panel == Panel.Login)
         {
             GameManager.Sound.BgmStop(GameManager.Sound.lobbySource);
             GameManager.Sound.BgmPlay(GameManager.Sound.loginSource);

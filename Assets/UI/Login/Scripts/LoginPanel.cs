@@ -1,6 +1,7 @@
 using Gangbie;
 using MySql.Data.MySqlClient;
 using Photon.Pun;
+using KDY;
 using Photon.Pun.Demo.PunBasics;
 using Photon.Pun.UtilityScripts;
 using System;
@@ -18,13 +19,7 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] GameObject chatingArea;
     [SerializeField] GameObject loginPanel;
 
-    [SerializeField] GameObject chatingView;
-    [SerializeField] GameObject chatingHide;
-
-    [SerializeField] GameObject speakerPopUp;
-
-    [SerializeField] KDY.LobbyPanel lobbyPanel;
-
+    [SerializeField] LobbyPanel lobbyPanel;
     [SerializeField] LobbyManager lobbyManager;
 
     private void OnEnable()
@@ -188,38 +183,5 @@ public class LoginPanel : MonoBehaviour
 #else
             Application.Quit();
 #endif
-    }
-
-    private bool chatingHideButtonCheck = true;
-
-    public void OnUpButtonClicked()
-    {
-        GameManager.Sound.Onclick();
-        if (chatingHideButtonCheck == false)
-        {
-            chatingHide.transform.Translate(Vector3.up * 330);
-            chatingView.SetActive(true);
-        }
-        chatingHideButtonCheck = true;
-    }
-
-    public void OnDownButtonClicked()
-    {
-        GameManager.Sound.Onclick();
-        if (chatingHideButtonCheck == true)
-        {
-            chatingHide.transform.Translate(Vector3.down * 330);
-            chatingView.SetActive(false);
-        }
-        chatingHideButtonCheck = false;
-    }
-
-    public void OnSpeakerButtonClicked()
-    {
-        GameManager.Sound.Onclick();
-        if (speakerPopUp.active == false)
-        {
-            speakerPopUp.SetActive(true);
-        }
     }
 }

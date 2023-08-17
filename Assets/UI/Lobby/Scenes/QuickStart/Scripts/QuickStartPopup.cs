@@ -57,7 +57,7 @@ public class QuickStartPopup : MonoBehaviourPunCallbacks
 		mapChoose.onClick.AddListener(() => OpenChoosedMapView());
 		charChoose.onClick.AddListener(() => OpenChoosedCharView());
 		btnSelected.onClick.AddListener(() => QuickStartGame());
-		btnClosed.onClick.AddListener(() => CloseView());
+		//btnClosed.onClick.AddListener(() => CloseView());
 		MapData initMap = choosedMap.GetInitMapData();
 		PickedMapData(initMap);
 		choosedMapId = 0;
@@ -138,4 +138,9 @@ public class QuickStartPopup : MonoBehaviourPunCallbacks
 		chooseCharacter.DisableView();
 		gameObject.SetActive(false);
 	}
+
+    public void OnClicked()
+    {
+        GameManager.Sound.Onclick();
+    }
 }

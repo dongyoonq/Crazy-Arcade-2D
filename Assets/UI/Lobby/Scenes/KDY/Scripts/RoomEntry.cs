@@ -60,6 +60,7 @@ namespace KDY
         {
             infoButton.onClick.AddListener(ShowRoomPlayers);
             popUpCanvas = GameObject.Find("PopUp").GetComponent<Canvas>();
+            GetComponent<Button>().onClick.AddListener(() => GameManager.Sound.Onclick());
         }
 
         public void Initialized(RoomInfo info, int number, PasswordRoomPanel passwordRoomPanel)

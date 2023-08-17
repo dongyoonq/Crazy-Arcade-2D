@@ -22,8 +22,11 @@ public class MyPage : MonoBehaviour
     // private MySqlConnection connection;
     private MySqlDataReader reader;
 
-    private void Awake()
+    private void OnEnable()
     {
+        if (!GameManager.Data.reader.IsClosed)
+            GameManager.Data.reader.Close();
+
         GameManager.Data.ConnectDataBase();
 
         string id = PhotonNetwork.LocalPlayer.NickName;

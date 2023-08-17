@@ -31,7 +31,6 @@ public class EnteredGamePlayer : MonoBehaviourPunCallbacks
         transform.SetParent(GameObject.Find("EnteredPlayerList").transform, false);
         SetCharacterImg();
         TeamColor.color = GetColorFromProperty();
-        NickName.color = GetColorFromProperty();
         PlayerLevel.gameObject.SetActive(false);
         NickName.text = photonView.Owner.NickName;
     }

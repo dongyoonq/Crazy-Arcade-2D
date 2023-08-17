@@ -7,10 +7,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using WebSocketSharp;
 using static Extension;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -18,15 +20,22 @@ namespace KDY
 {
     public class LobbyPanel : MonoBehaviour
     {
+        private const string currentChannelName = "Channel 001";
+
         [SerializeField] private RoomEntry roomEntryPrefab;
         [SerializeField] private RectTransform roomContent;
         [SerializeField] private Canvas popUpCanvas;
         [SerializeField] private PasswordRoomPanel PasswordPanel;
         [SerializeField] private QuickStartPopup quickStartPopup;
 
+        [SerializeField] GameObject chatingView;
+        [SerializeField] GameObject chatingHide;
+        [SerializeField] GameObject speakerPopUp;
+
         [SerializeField] private TMP_Text playerName;
         [SerializeField] private TMP_Text playerLevel;
         [SerializeField] private TMP_Text playerExp;
+        [SerializeField] private Slider expSlider;
 
         [SerializeField] RectTransform playerContent;
         [SerializeField] LobbyPlayer playerPrefab;
@@ -35,6 +44,8 @@ namespace KDY
         private Button btnFastStart;
 
         private bool isActiveQuickStarView = false;
+
+        public ChatClient chatClient;
 
 
 		private CreateRoomPanel createRoomPanel;
@@ -48,12 +59,16 @@ namespace KDY
 
 		private void OnEnable()
 		{
+            if (chatClient.TryGetChannel(currentChannelName, out ChatChannel channel))
+            {
+                UpdatePlayerList(channel);
+            }
+
             isActiveQuickStarView = false;
 		}
 
 		private void Update()
         {
-            playerName.text = PhotonNetwork.NickName;
             ReadSqlData();
         }
 
@@ -67,7 +82,10 @@ namespace KDY
 
         public void ReadSqlData()
         {
-            string sqlCommand = string.Format("SELECT Level,Exp FROM user_info WHERE ID ='{0}'", PhotonNetwork.NickName);
+            if (!GameManager.Data.reader.IsClosed)
+                GameManager.Data.reader.Close();
+
+            string sqlCommand = string.Format("SELECT ID, Level, Exp, ExpMax FROM user_info WHERE ID ='{0}'", PhotonNetwork.NickName);
             MySqlCommand cmd = new MySqlCommand(sqlCommand, GameManager.Data.Connection);
             GameManager.Data.reader = cmd.ExecuteReader();
 
@@ -75,18 +93,18 @@ namespace KDY
             {
                 while (GameManager.Data.reader.Read())
                 {
+                    playerName.text = GameManager.Data.reader["ID"].ToString();
                     playerLevel.text = string.Format("Lv.  {0}", GameManager.Data.reader["Level"].ToString());
-                    playerExp.text = GameManager.Data.reader["Exp"].ToString();
-                }
+                    float exp = float.Parse(GameManager.Data.reader["Exp"].ToString());
+                    float expMax = float.Parse(GameManager.Data.reader["ExpMax"].ToString());
+                    expSlider.maxValue = expMax;
+                    expSlider.value = exp;
 
-                if (!GameManager.Data.reader.IsClosed)
-                    GameManager.Data.reader.Close();
+                    playerExp.text = $"{(Mathf.Round((exp / expMax) * 100) * 0.01f) * 100.0f}%";
+                }
 
                 return;
             }
-
-            if (!GameManager.Data.reader.IsClosed)
-                GameManager.Data.reader.Close();
         }
 
         public void UpdatePlayerList(ChatChannel chatChannel)
@@ -259,5 +277,38 @@ namespace KDY
         {
             GameManager.Sound.Onclick();
         }
-	}
+
+        private bool chatingHideButtonCheck = true;
+
+        public void OnUpButtonClicked()
+        {
+            GameManager.Sound.Onclick();
+            if (chatingHideButtonCheck == false)
+            {
+                chatingHide.transform.Translate(Vector3.up * 330);
+                chatingView.SetActive(true);
+            }
+            chatingHideButtonCheck = true;
+        }
+
+        public void OnDownButtonClicked()
+        {
+            GameManager.Sound.Onclick();
+            if (chatingHideButtonCheck == true)
+            {
+                chatingHide.transform.Translate(Vector3.down * 330);
+                chatingView.SetActive(false);
+            }
+            chatingHideButtonCheck = false;
+        }
+
+        public void OnSpeakerButtonClicked()
+        {
+            GameManager.Sound.Onclick();
+            if (speakerPopUp.active == false)
+            {
+                speakerPopUp.SetActive(true);
+            }
+        }
+    }
 }

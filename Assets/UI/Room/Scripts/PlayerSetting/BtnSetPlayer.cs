@@ -37,7 +37,9 @@ namespace RoomUI.PlayerSetting
 
 		private void SelectedCharacter()
 		{
-			btnChooseCharacter.image.sprite = charData.ActiveImage;
+            GameManager.Sound.Onclick();
+
+            btnChooseCharacter.image.sprite = charData.ActiveImage;
 			characterChanger.ChooseCharacter(charData);
 			OnChooseCharacter?.Invoke(this);
 		}

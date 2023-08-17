@@ -19,7 +19,7 @@ namespace RoomUI
 
 		private void Awake()
 		{
-			btnOK.onClick.AddListener(() => { transform.gameObject.SetActive(false); });
+			btnOK.onClick.AddListener(() => { GameManager.Sound.Onclick(); transform.gameObject.SetActive(false); });
 		}
 
 		private void OnEnable()
