@@ -1,5 +1,7 @@
 using CustomProperty;
+using CustomProperty.Utils;
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -56,23 +58,24 @@ namespace RoomUI.PlayerSetting
 
 		private void ChangedSlotState()
 		{
-			Debug.Log("ChangedSlotState");
-
 			if (PhotonNetwork.IsMasterClient)
 			{
 				if (SlotCurState == SlotState.Use)
 					return;
 
-				SlotCurState = SlotCurState == SlotState.Open ? SlotState.Close : SlotState.Open;
+				byte state = (byte)PhotonNetwork.CurrentRoom.CustomProperties[RoomProp.SLOT_STATE];
 
-				//OpenSlot.gameObject.SetActive(isSlotOpen);
-				//CloseSlot.gameObject.SetActive(!isSlotOpen);
+				if(SlotCurState == SlotState.Open)
+				{
+					//close
+				}
+				else
+				{
+					//open
+				}
 
-				PhotonHashtable property = new PhotonHashtable();
-				property[RoomProp.SLOT_NUMBER] = SlotNumber;
-				property[RoomProp.SLOT_STATE] = (int)SlotCurState;
-
-				PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+				
+				PhotonNetwork.CurrentRoom.SetRoomProperty(RoomProp.SLOT_STATE, Convert.ToString(state, 2));
 			}
 		}
 

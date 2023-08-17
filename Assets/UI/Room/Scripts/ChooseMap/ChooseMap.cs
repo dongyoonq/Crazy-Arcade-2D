@@ -41,7 +41,7 @@ namespace RoomUI.ChooseMap
 			curChoosedMap = data;
 
 			mapTitle.text = data.Title;
-			maxPlayer.text = data.MaxPlayer.ToString();
+			maxPlayer.text = data.MaxPlayer == 99 ? "??" : data.MaxPlayer.ToString();
 			mapImg.sprite = data.MapImg;
             //levelImg.sprite = data.Level
             popularity.SetPopularity(data.Popularity);

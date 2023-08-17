@@ -63,17 +63,6 @@ namespace RoomUI
 
 		private void OnEnable()
 		{
-			if (CheckPlayingRoom())
-			{
-				// 플레이어가 방으로 돌아갔을때 구현
-
-                NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{PhotonNetwork.NickName}님이 참가하셨습니다.");
-                PhotonHashtable property = new PhotonHashtable();
-                property[RoomProp.ROOM_PLAYING] = false;
-                PhotonNetwork.CurrentRoom.SetCustomProperties(property);
-                return;
-            }
-
 			SetInPlayer();
 			CheckPlayerReadyState();
 
@@ -158,14 +147,10 @@ namespace RoomUI
 
 			if (player.IsLocal)
 			{
-				pickedTeam.InitTeam();
-				InitCharacter();
+				pickedTeam.InitTeam(player);
+				InitCharacter(player);
 			}
-			else
-			{
-				if (player.CustomProperties.ContainsKey(PlayerProp.CHARACTER))
-					UpdateOtherPlayerCharacter(waitingPlayer, player.CustomProperties[PlayerProp.CHARACTER].ToString());
-			}
+			PlayerPropertiesUpdate(player, player.CustomProperties);
 		}
 
         public void PlayerPropertiesUpdate(Player player, PhotonHashtable changedProps)
@@ -221,29 +206,44 @@ namespace RoomUI
 				}
 			}
 
-			if(changedProps.ContainsKey(RoomProp.SLOT_NUMBER))
+			if(changedProps.ContainsKey(RoomProp.SLOT_STATE))
 			{
-				int number = int.Parse(changedProps[RoomProp.SLOT_NUMBER].ToString());
-				SlotState state = (SlotState)int.Parse(changedProps[RoomProp.SLOT_STATE].ToString());
-
-				UpdateOtherPlayerSlot(number, state);
+				UpdateOtherPlayerSlot(changedProps[RoomProp.SLOT_STATE].ToString());
 			}
 
 			roomInfo.SetChangedRoomInfo(changedProps);
 		}
 
-		private void UpdateOtherPlayerSlot(int number, SlotState state)
+		private void UpdateOtherPlayerSlot(string state)
 		{
-			var changedSlot = playerContent.GetComponentsInChildren<WaitingPlayer>().Where(x => x.SlotNumber == number).FirstOrDefault();
+			var changedSlots = playerContent.GetComponentsInChildren<WaitingPlayer>();
 
-			if(changedSlot != null)
+			char[] states = state.ToCharArray();
+
+			int index = -1;
+			if (changedSlots != null)
 			{
-				changedSlot.UpdateSlotState(state);
-			}
+				foreach(var slot in changedSlots) 
+				{
+					++index;
 
-			PhotonHashtable property = new PhotonHashtable();
-			property[RoomProp.ROOM_MAX] = playerContent.GetComponentsInChildren<WaitingPlayer>().Count(x => x.CurrentSlotState != SlotState.Close);
-			PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+					if (slot.CurrentSlotState == SlotState.Use)
+						continue;
+
+					if(states[index++] == '0' && slot.CurrentSlotState != SlotState.Close) 
+					{
+						slot.UpdateSlotState(SlotState.Close);
+					}
+					else if (states[index++] == '1' && slot.CurrentSlotState != SlotState.Open) 
+					{
+						slot.UpdateSlotState(SlotState.Open);
+					}
+				}
+
+				PhotonHashtable property = new PhotonHashtable();
+				property[RoomProp.ROOM_MAX] = playerContent.GetComponentsInChildren<WaitingPlayer>().Count(x => x.CurrentSlotState != SlotState.Close);
+				PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+			}
 		}
 
 		private CharacterData GetCharacterData(CharacterEnum characterEnum)
@@ -376,11 +376,14 @@ namespace RoomUI
 			PhotonNetwork.LeaveRoom(); 
 		}
 
-		private void InitCharacter()
+		private void InitCharacter(Player player)
 		{
-            PhotonHashtable property = new PhotonHashtable();
-			property[PlayerProp.CHARACTER] = CharacterEnum.Dao;
-            PhotonNetwork.LocalPlayer.SetCustomProperties(property);
+			if(player.CustomProperties.ContainsKey(PlayerProp.CHARACTER) ==false)
+			{
+				PhotonHashtable property = new PhotonHashtable();
+				property[PlayerProp.CHARACTER] = CharacterEnum.Dao;
+				PhotonNetwork.LocalPlayer.SetCustomProperties(property);
+			}
         }
 
 		private void LoadMapScene()

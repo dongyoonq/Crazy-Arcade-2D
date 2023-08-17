@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Extension;
 
 namespace RoomUI.PlayerSetting
 {
@@ -12,7 +13,7 @@ namespace RoomUI.PlayerSetting
 
 		private BtnSetPlayer currentSetData;
 
-		public List<CharacterData> CharacterDatas {  get; private set; }
+		public List<CharacterData> CharacterDatas { get; private set; }
 
 		private void Awake()
 		{
@@ -35,8 +36,18 @@ namespace RoomUI.PlayerSetting
 		{
 			if(currentSetData.CharacterData.CharacterEnum != value.CharacterData.CharacterEnum)
 			{
-				currentSetData.UnSelectedCharacter();
+				currentSetData?.UnSelectedCharacter();
 				currentSetData = value;
+			}
+		}
+
+		public void SelectedCharacter(CharacterEnum character)
+		{
+			var btnPlayer = characterContents.GetComponentsInChildren<BtnSetPlayer>()?.Where(x => x.CharacterData.CharacterEnum == character).FirstOrDefault();
+
+			if(btnPlayer != null)
+			{
+				SelectedCharacter(btnPlayer);
 			}
 		}
 	}

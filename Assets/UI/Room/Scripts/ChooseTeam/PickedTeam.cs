@@ -1,5 +1,6 @@
 using CustomProperty;
 using Photon.Pun;
+using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -62,12 +63,15 @@ namespace RoomUI.ChooseTeam
 			findTeam.togChecked.isOn = true;
         }
 
-        public void InitTeam()
+        public void InitTeam(Player player)
 		{
-            PhotonHashtable property = new PhotonHashtable();
-			property[PlayerProp.TEAMCOLOR] = $"#{TempDatas[0].TeamColor.ToHexString()}";
-			property[PlayerProp.TEAM] = TempDatas[0].TeamName;
-            PhotonNetwork.LocalPlayer.SetCustomProperties(property);
+			if(player.CustomProperties.ContainsKey(PlayerProp.TEAM) == false) 
+			{
+				PhotonHashtable property = new PhotonHashtable();
+				property[PlayerProp.TEAMCOLOR] = $"#{TempDatas[0].TeamColor.ToHexString()}";
+				property[PlayerProp.TEAM] = TempDatas[0].TeamName;
+				PhotonNetwork.LocalPlayer.SetCustomProperties(property);
+			}
 		}
 
         private bool CheckPlayingRoom()

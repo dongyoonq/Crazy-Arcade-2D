@@ -47,8 +47,6 @@ namespace CustomProperty
 		// NickName of All Player in the room
 		public const string PLAYER_LIST = "PlayerList";
 
-        public const string SLOT_NUMBER = "SlotNumber";
-
         public const string SLOT_STATE = "SlotState";
     }
 }

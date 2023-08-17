@@ -10,5 +10,10 @@ namespace KDY
     {
         [SerializeField] public TMP_InputField passwordInput;
         [SerializeField] public Button confirmBtn;
-    }
+
+		private void OnDisable()
+		{
+			passwordInput.text = string.Empty;
+		}
+	}
 }
