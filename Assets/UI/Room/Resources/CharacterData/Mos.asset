@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Mos
   NameKOR: "\uBAA8\uC2A4"
   CharacterEnum: 6
-  Character: {fileID: 0}
+  Character: {fileID: 824787192, guid: 8d9b7413e16e2d44481f5d43a4f038bd, type: 3}
   Description: {fileID: -1640160824, guid: f5b94041198d89d4981cdb4885ea91dc, type: 3}
   DefaultImage: {fileID: 1808289795, guid: a6500ba23575a6a459bbc8ca554f8796, type: 3}
   ActiveImage: {fileID: -1099915598, guid: f5b94041198d89d4981cdb4885ea91dc, type: 3}
