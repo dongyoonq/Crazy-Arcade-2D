@@ -30,6 +30,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         GameManager.Sound.SFXPlay("Start", GameManager.Sound.startSound);
         GameManager.Sound.BgmStop(GameManager.Sound.lobbySource);
+        GameManager.Sound.BgmPlay(GameManager.Sound.patritSource);  // ¸Ê¿¡ ¸Â´Â À½¾Ç ¼³Á¤
 
         // Normal game mode
         if (PhotonNetwork.InRoom)
