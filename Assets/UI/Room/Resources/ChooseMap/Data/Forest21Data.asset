@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb0235a30ed8e645bd88285ed9644aa, type: 3}
+  m_Name: Forest21Data
+  m_EditorClassIdentifier: 
+  Id: 4
+  Group: Forest
+  Title: "\uD3EC\uB808\uC2A4\uD2B8"
+  MaxPlayer: 8
+  Level: 2
+  Popularity: 4
+  Rank: 0
+  info: "\uBC84\uBE14\uD790\uB9C8\uC744 \uC11C\uCABD\uC5D0 \uC788\uB294 \uC6B8\uCC3D\uD55C
+    \uC232 \uC785\uB2C8\uB2E4. \uC544\uAE30\uC790\uAE30\uD55C \uAF43\uACFC \uB098\uBB34\uB4E4\uC774
+    \uC815\uB9D0 \uC608\uBED0\uC694."
+  Favorites: 0
+  MapImg: {fileID: 1031512242, guid: 07644a5a649fa58478cc0f79133edfd9, type: 3}
+  MapIcon: {fileID: -1239209640, guid: 07644a5a649fa58478cc0f79133edfd9, type: 3}
+  MapFileName: Forest21Data

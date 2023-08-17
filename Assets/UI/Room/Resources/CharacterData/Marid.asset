@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb3d9ed9455d2e42bd1868935633a7c, type: 3}
+  m_Name: Marid
+  m_EditorClassIdentifier: 
+  Name: Marid
+  NameKOR: "\uB9C8\uB9AC\uB4DC"
+  CharacterEnum: 2
+  Character: {fileID: 21300000, guid: 9db4df2d0aa31d84d8b1771e17c5046e, type: 3}
+  Description: {fileID: 21300000, guid: fe600cfd110201f4d8cebc148e49fed3, type: 3}
+  DefaultImage: {fileID: 1894705492, guid: a6500ba23575a6a459bbc8ca554f8796, type: 3}
+  ActiveImage: {fileID: 492938625, guid: 2d5e03f91c53cba44a23557e07febc67, type: 3}
+  CharacterSpec: {fileID: 533326025, guid: 2d5e03f91c53cba44a23557e07febc67, type: 3}
+  SelectedImage: {fileID: -1307013493, guid: e9f1cb058efa2274d89268fad529e2e0, type: 3}

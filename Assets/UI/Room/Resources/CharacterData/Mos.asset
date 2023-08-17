@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb3d9ed9455d2e42bd1868935633a7c, type: 3}
+  m_Name: Mos
+  m_EditorClassIdentifier: 
+  Name: Mos
+  NameKOR: "\uBAA8\uC2A4"
+  CharacterEnum: 6
+  Character: {fileID: 824787192, guid: 8d9b7413e16e2d44481f5d43a4f038bd, type: 3}
+  Description: {fileID: -1640160824, guid: f5b94041198d89d4981cdb4885ea91dc, type: 3}
+  DefaultImage: {fileID: 1808289795, guid: a6500ba23575a6a459bbc8ca554f8796, type: 3}
+  ActiveImage: {fileID: -1099915598, guid: f5b94041198d89d4981cdb4885ea91dc, type: 3}
+  CharacterSpec: {fileID: -804645609, guid: f5b94041198d89d4981cdb4885ea91dc, type: 3}
+  SelectedImage: {fileID: 1848673353, guid: e9f1cb058efa2274d89268fad529e2e0, type: 3}
