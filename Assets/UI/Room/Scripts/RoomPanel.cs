@@ -67,11 +67,11 @@ namespace RoomUI
 			{
 				// 플레이어가 방으로 돌아갔을때 구현
 
-                NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{PhotonNetwork.NickName}님이 참가하셨습니다.");
+                // NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{PhotonNetwork.NickName}님이 참가하셨습니다.");
                 PhotonHashtable property = new PhotonHashtable();
                 property[RoomProp.ROOM_PLAYING] = false;
                 PhotonNetwork.CurrentRoom.SetCustomProperties(property);
-                return;
+                // return;
             }
 
 			SetInPlayer();

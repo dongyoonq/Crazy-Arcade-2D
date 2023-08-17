@@ -71,7 +71,7 @@ public class LoginPanel : MonoBehaviour
                 if (!GameManager.Data.reader.IsClosed)
                     GameManager.Data.reader.Close();
 
-                sqlCommand = string.Format("INSERT INTO user_info(Id, Password, Exp, Money) VALUES ('{0}', '{1}', '{2}', '{3}');", id, password, 0f, 0f);
+                sqlCommand = string.Format("INSERT INTO user_info(Id, Password, Level, Exp, ExpMax, Money, Win, Draw, Lose, Introduce) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}');", id, password, 0, 0f, 400f, 100f, 0, 0, 0, " ");
 
                 cmd = new MySqlCommand(sqlCommand, GameManager.Data.Connection);
                 if (cmd.ExecuteNonQuery() == 1)

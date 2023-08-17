@@ -59,6 +59,8 @@ namespace KDY
 
 		private void OnEnable()
 		{
+            ReadSqlData();
+
             if (chatClient.TryGetChannel(currentChannelName, out ChatChannel channel))
             {
                 UpdatePlayerList(channel);
@@ -69,7 +71,6 @@ namespace KDY
 
 		private void Update()
         {
-            ReadSqlData();
         }
 
         private void OnDisable()
@@ -102,6 +103,9 @@ namespace KDY
 
                     playerExp.text = $"{(Mathf.Round((exp / expMax) * 100) * 0.01f) * 100.0f}%";
                 }
+
+                if (!GameManager.Data.reader.IsClosed)
+                    GameManager.Data.reader.Close();
 
                 return;
             }
@@ -204,7 +208,7 @@ namespace KDY
             RoomMode mode = createRoomPanel.roomMode.GetSeletedRoom();
 
             int maxPlayer = 8;
-            int roomNumber = GetRoomNumber();
+            int roomNumber = PhotonNetwork.CountOfRooms + 1;//GetRoomNumber();
             
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = maxPlayer;
