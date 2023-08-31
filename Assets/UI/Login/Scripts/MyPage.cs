@@ -71,6 +71,9 @@ public class MyPage : MonoBehaviour
                 expPerText.text = $"{expPer}%";
                 expText.text = $"{readExp} / {readExpMax}";
             }
+
+            if (!GameManager.Data.reader.IsClosed)
+                GameManager.Data.reader.Close();
         }
     }
 

@@ -19,7 +19,7 @@ public class DataManager : MonoBehaviour
     {
         try
         {
-            string serverInfo = "Server=127.0.0.1; Database=userdata; Uid=root; Pwd=1234; Port=3306; CharSet=utf8;";
+            string serverInfo = "Server=192.168.0.182; Database=crazyarcade; Uid=root; Pwd=pkb7018; Port=3306; CharSet=utf8;";
             Connection = new MySqlConnection(serverInfo);
             Connection.Open();
 

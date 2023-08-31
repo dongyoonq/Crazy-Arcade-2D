@@ -88,7 +88,7 @@ namespace KDY
 
         private bool CheckUpBomb()
         {
-            Vector3 start = transform.position + (transform.up * 0.5f) + (transform.right * -0.2f);
+            Vector3 start = transform.position + (transform.up * 0.6f) + (transform.right * -0.2f);
             RaycastHit2D hit = Physics2D.Raycast(start, Vector2.right, 0.4f, LayerMask.GetMask("Bomb"));
 
             if (hit)
@@ -99,7 +99,7 @@ namespace KDY
 
         private bool CheckDownBomb()
         {
-            Vector3 start = transform.position + (transform.up * -0.5f) + (transform.right * -0.2f);
+            Vector3 start = transform.position + (transform.up * -0.6f) + (transform.right * -0.2f);
             RaycastHit2D hit = Physics2D.Raycast(start, Vector2.right, 0.4f, LayerMask.GetMask("Bomb"));
 
             if (hit)
@@ -110,7 +110,7 @@ namespace KDY
 
         private bool CheckLeftBomb()
         {
-            Vector3 start = transform.position + (transform.right * -0.5f) + (transform.up * -0.2f);
+            Vector3 start = transform.position + (transform.right * -0.6f) + (transform.up * -0.2f);
             RaycastHit2D hit = Physics2D.Raycast(start, Vector2.up, 0.4f, LayerMask.GetMask("Bomb"));
 
             if (hit)
@@ -121,7 +121,7 @@ namespace KDY
 
         private bool CheckRightBomb()
         {
-            Vector3 start = transform.position + (transform.right * 0.5f) + (transform.up * -0.2f);
+            Vector3 start = transform.position + (transform.right * 0.6f) + (transform.up * -0.2f);
             RaycastHit2D hit = Physics2D.Raycast(start, Vector2.up, 0.4f, LayerMask.GetMask("Bomb"));
 
             if (hit)
@@ -133,8 +133,8 @@ namespace KDY
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.cyan;
-            Vector3 start = transform.position + (transform.up * 1f) + (transform.right * -0.2f);
-            Gizmos.DrawLine(transform.position + (transform.up * 1f) + (transform.right * -0.2f), start + (transform.right * 0.4f));
+            Vector3 start = transform.position + (transform.up * 0.6f) + (transform.right * -0.2f);
+            Gizmos.DrawLine(transform.position + (transform.up * 0.6f) + (transform.right * -0.2f), start + (transform.right * 0.4f));
         }
 
         private bool CheckBomb()
