@@ -15,16 +15,18 @@ namespace RoomUI.PlayerSetting
 
 		public List<CharacterData> CharacterDatas { get; private set; }
 
+		private BtnSetPlayer[] btnContents;
+
 		private void Awake()
 		{
-			var contents = characterContents.GetComponentsInChildren<BtnSetPlayer>();
-			foreach(var item in contents)
+			btnContents = characterContents.GetComponentsInChildren<BtnSetPlayer>();
+			foreach(var item in btnContents)
 			{
 				item.OnChooseCharacter += SelectedCharacter;
 			}
-			currentSetData = contents[1];
+			currentSetData = btnContents[1];
 
-			CharacterDatas = contents.Select(x => x.CharacterData).ToList();
+			CharacterDatas = btnContents.Select(x => x.CharacterData).ToList();
 		}
 
 		private void Start()
@@ -49,6 +51,14 @@ namespace RoomUI.PlayerSetting
 			{
 				SelectedCharacter(btnPlayer);
 			}
+		}
+
+		public void InitCharacterSetter()
+		{
+			currentSetData.InitButton(false);
+			
+			currentSetData = btnContents[1];
+			currentSetData.InitButton(true);
 		}
 	}
 }

@@ -10,6 +10,17 @@ namespace RoomUI.PlayerSetting
 {
 	public class WaitPlayerSetting : MonoBehaviourPun
 	{
+		private CharacterData _charData;
+		public CharacterData CharData 
+		{ 
+			get { return _charData; }
+			set
+			{
+				_charData = value;
+				PlayerImg.sprite = _charData.Character;
+			}
+		}
+
 		public Image PlayerImg;
 
 		public Image LevelImg;

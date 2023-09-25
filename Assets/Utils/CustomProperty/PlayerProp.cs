@@ -22,5 +22,8 @@ namespace CustomProperty
 
         // CHARACTER is selected room character, used Room : set, Game : instantiate
         public const string CHARACTER = "Character";
+
+		// SLOT_NUMBER is current slot position
+		public const string SLOT_NUMBER = "SlotNumber";
 	}
 }

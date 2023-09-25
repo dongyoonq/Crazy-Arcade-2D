@@ -12,9 +12,12 @@ namespace RoomUI.PlayerSetting
 		[SerializeField]
 		private CharacterData selectedData;
 
+		private CharacterData initData;
+
 		private void Awake()
 		{
 			imgCharacterExplain = gameObject.GetComponent<Image>();
+			initData = selectedData;
 		}
 
 		private void Start()
@@ -38,6 +41,11 @@ namespace RoomUI.PlayerSetting
 		public void OnFocusOffCharacter()
 		{
 			imgCharacterExplain.sprite = selectedData.Description;
+		}
+
+		public void InitExplainPlayer()
+		{
+			OnChangeCharacter(initData);
 		}
 	}
 }

@@ -16,7 +16,8 @@ namespace RoomUI.Chat
 	{
 		Normal,
 		Warning,
-		Critical
+		Critical,
+		Log
 	}
 
 	public class ChatView : MonoBehaviourPunCallbacks

@@ -6605,6 +6605,7 @@ MonoBehaviour:
   roomInfo: {fileID: 7863408655802947833}
   playerContent: {fileID: 7863408655366406280}
   characterSetter: {fileID: 6765605730405494850}
+  explainPlayer: {fileID: 7863408655797794214}
   pickedTeam: {fileID: 7863408656138242991}
   pickedMap: {fileID: 7863408656006838488}
   gameStartController: {fileID: 7863408656821868422}

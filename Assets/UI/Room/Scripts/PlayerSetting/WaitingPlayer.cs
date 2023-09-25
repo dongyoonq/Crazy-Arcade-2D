@@ -84,7 +84,7 @@ namespace RoomUI.PlayerSetting
 
 		public void OnChangeCharacter(CharacterData data)
 		{
-			PlayerSet.PlayerImg.sprite = data.Character;
+			PlayerSet.CharData = data;
 			player.SetPlayerProperty(PlayerProp.CHARACTER, data.CharacterEnum);
 		}
 
@@ -135,6 +135,8 @@ namespace RoomUI.PlayerSetting
 			slot.SlotCurState = SlotState.Open;
 
 			playerWaitState.UpdateReadyInfo(false);
+
+			CharacterChanger.OnChangedCharacter -= OnChangeCharacter;
 		}
 	}
 }

@@ -19,6 +19,7 @@ using CustomProperty;
 using static Extension;
 using UnityEngine.Networking.Types;
 using UnityEngine.Events;
+using Unity.VisualScripting;
 
 namespace RoomUI
 {
@@ -32,6 +33,9 @@ namespace RoomUI
 
 		[SerializeField]
 		private PlayerCharacterSetter characterSetter;
+
+		[SerializeField]
+		private ExplainPlayer explainPlayer;
 
 		[SerializeField]
 		private PickedTeam pickedTeam;
@@ -75,6 +79,8 @@ namespace RoomUI
 			{
 				 playerDictionary[actorNumber].InitWaitState();
 			}
+			InitRoom();
+
 			playerDictionary.Clear();
 			pickedMap.ResetChooseID();
 		}
@@ -94,7 +100,7 @@ namespace RoomUI
 
 		public void EntryPlayer(Player player)
 		{
-			InstantiatePlayer(player);
+			InstantiatePlayer(player,  playerContent.GetComponentsInChildren<WaitingPlayer>());
 			CheckPlayerReadyState();
 		}
 
@@ -111,7 +117,6 @@ namespace RoomUI
 
 			if(PhotonNetwork.IsMasterClient)
 				NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{leavePlayer.NickName}님이 퇴장하셨습니다,");
-
 		}
 
 		private void AddPlayer()
@@ -126,31 +131,55 @@ namespace RoomUI
 
 		private void SetInPlayer()
 		{
-			var contents = playerContent.GetComponentInChildren<WaitingPlayer>();
+			if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(RoomProp.SLOT_STATE))
+			{
+				UpdateOtherPlayerSlot((byte)PhotonNetwork.CurrentRoom.CustomProperties[RoomProp.SLOT_STATE]);
+			}
+
+			var contents = playerContent.GetComponentsInChildren<WaitingPlayer>();
 			foreach (Player player in PhotonNetwork.PlayerList)
 			{
-				InstantiatePlayer(player);
+				InstantiatePlayer(player, contents);
 			}
 		}
 
-		private void InstantiatePlayer(Player player)
+		private void InstantiatePlayer(Player player, WaitingPlayer[] contents)
 		{
-			int index = playerDictionary.Count();
+			int slotNum = -1;
+			WaitingPlayer waitingPlayer = null;
+			if (player.CustomProperties.ContainsKey(PlayerProp.SLOT_NUMBER))
+				slotNum = (int)player.CustomProperties[PlayerProp.SLOT_NUMBER];
 
-			if (index == 8)
+			if (slotNum >= 0)
+				waitingPlayer = contents.Where(x => x.SlotNumber == slotNum).FirstOrDefault();
+			else
+			{
+				waitingPlayer = contents.Where(x => x.CurrentSlotState == SlotState.Open).FirstOrDefault();
+				player.SetPlayerProperty(PlayerProp.SLOT_NUMBER, waitingPlayer.SlotNumber);
+			}
+		
+			if (waitingPlayer == null)
 				return;
-
-			WaitingPlayer waitingPlayer = playerContent.GetComponentsInChildren<WaitingPlayer>()[index];
 
 			waitingPlayer.SetPlayer(player);
 			playerDictionary.Add(player.ActorNumber, waitingPlayer);
 
-			if (player.IsLocal)
+			//if (player.IsLocal)
+			//{
+			//	if (PhotonNetwork.CurrentRoom.GetRoomProperty(RoomProp.ROOM_PLAYING, true) == false)
+			//	{
+			//		pickedTeam.InitTeam(player);
+			//		InitCharacter(player);
+			//	}
+			//}
+
+			if (player.CustomProperties.ContainsKey(PlayerProp.CHARACTER))
 			{
-				pickedTeam.InitTeam(player);
-				InitCharacter(player);
+				CharacterEnum character = (CharacterEnum)Enum.Parse(typeof(CharacterEnum), player.CustomProperties[PlayerProp.CHARACTER].ToString());
+				Debug.Log($"[InstantiatePlayer] {character.ToString()} / {player.CustomProperties[PlayerProp.CHARACTER].ToString()}");
+
+				UpdateOtherPlayerCharacter(waitingPlayer, player.CustomProperties[PlayerProp.CHARACTER].ToString());
 			}
-			PlayerPropertiesUpdate(player, player.CustomProperties);
 		}
 
         public void PlayerPropertiesUpdate(Player player, PhotonHashtable changedProps)
@@ -179,8 +208,18 @@ namespace RoomUI
 
 			if (changedProps.ContainsKey(PlayerProp.CHARACTER))
 			{
+				CharacterEnum character = (CharacterEnum)Enum.Parse(typeof(CharacterEnum), player.CustomProperties[PlayerProp.CHARACTER].ToString());
+				Debug.Log($"[PlayerPropertiesUpdate] {character.ToString()}");
+
 				UpdateOtherPlayerCharacter(updatedPlayer, player.CustomProperties[PlayerProp.CHARACTER].ToString());
 			}
+		}
+
+		private void InitRoom()
+		{
+			pickedTeam.InitTeam();
+			characterSetter.InitCharacterSetter();
+			explainPlayer.InitExplainPlayer();
 		}
 
 		public void RoomPropertiesUpdate(PhotonHashtable changedProps)
@@ -208,17 +247,20 @@ namespace RoomUI
 
 			if(changedProps.ContainsKey(RoomProp.SLOT_STATE))
 			{
-				UpdateOtherPlayerSlot(changedProps[RoomProp.SLOT_STATE].ToString());
+				UpdateOtherPlayerSlot((byte)changedProps[RoomProp.SLOT_STATE]);
 			}
 
 			roomInfo.SetChangedRoomInfo(changedProps);
 		}
 
-		private void UpdateOtherPlayerSlot(string state)
+		private void UpdateOtherPlayerSlot(byte state)
 		{
 			var changedSlots = playerContent.GetComponentsInChildren<WaitingPlayer>();
 
-			char[] states = state.ToCharArray();
+			string slotState = Convert.ToString(state, 2).PadLeft(8, '0');
+
+			char[] states = slotState.ToCharArray();
+			Array.Reverse(states);
 
 			int index = -1;
 			if (changedSlots != null)
@@ -230,11 +272,11 @@ namespace RoomUI
 					if (slot.CurrentSlotState == SlotState.Use)
 						continue;
 
-					if(states[index++] == '0' && slot.CurrentSlotState != SlotState.Close) 
+					if(states[index] == '0' && slot.CurrentSlotState != SlotState.Close) 
 					{
 						slot.UpdateSlotState(SlotState.Close);
 					}
-					else if (states[index++] == '1' && slot.CurrentSlotState != SlotState.Open) 
+					else if (states[index] == '1' && slot.CurrentSlotState != SlotState.Open) 
 					{
 						slot.UpdateSlotState(SlotState.Open);
 					}
@@ -261,12 +303,18 @@ namespace RoomUI
 
 		private void UpdateOtherPlayerCharacter(WaitingPlayer player, string characterKey)
 		{
+			Debug.Log($"[UpdateOtherPlayerCharacter] {player.name} / {characterKey}");
+
 			CharacterEnum character = (CharacterEnum)Enum.Parse(typeof(CharacterEnum), characterKey);
 
-			CharacterData data = GetCharacterData((CharacterEnum)character);
+			CharacterData data = GetCharacterData(character);
 			if (data != null)
 			{
-				player.PlayerSet.PlayerImg.sprite = data.Character;
+				Debug.Log($"[UpdateOtherPlayerCharacter] data != null : {data}");
+
+				player.PlayerSet.CharData = data;
+
+				Debug.Log($"[UpdateOtherPlayerCharacter] player.PlayerSet.CharData  : {player.PlayerSet.CharData}");
 			}
 		}
 
@@ -378,13 +426,10 @@ namespace RoomUI
 
 		private void InitCharacter(Player player)
 		{
-			if(player.CustomProperties.ContainsKey(PlayerProp.CHARACTER) ==false)
-			{
-				PhotonHashtable property = new PhotonHashtable();
-				property[PlayerProp.CHARACTER] = CharacterEnum.Dao;
-				PhotonNetwork.LocalPlayer.SetCustomProperties(property);
-			}
-        }
+			PhotonHashtable property = new PhotonHashtable();
+			property[PlayerProp.CHARACTER] = CharacterEnum.Dao;
+			PhotonNetwork.LocalPlayer.SetCustomProperties(property);
+		}
 
 		private void LoadMapScene()
 		{

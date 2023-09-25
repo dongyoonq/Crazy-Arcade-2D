@@ -5,8 +5,11 @@ using LobbyUI.QuickStart;
 using Photon.Pun;
 using Photon.Realtime;
 using RoomUI;
+using RoomUI.ChooseTeam;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static Extension;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
@@ -31,7 +34,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public Panel curPanel;
     public Panel prevPanel;
 
-    private void Start()
+    private string defaultTeamColor = $"#{Color.red.ToHexString()}";
+
+	private void Start()
     {
         SetActivePanel(Panel.Login);
 
@@ -74,6 +79,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 			PhotonHashtable playerProperty = new PhotonHashtable();
 			playerProperty[PlayerProp.READY] = PhotonNetwork.IsMasterClient;
 			playerProperty[PlayerProp.LOAD] = false;
+            playerProperty[PlayerProp.CHARACTER] = CharacterEnum.Dao.ToString();
+			playerProperty[PlayerProp.TEAM] = "Red";
+			playerProperty[PlayerProp.TEAMCOLOR] = defaultTeamColor;
 			PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperty);
 		}
     }
@@ -97,7 +105,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.AutomaticallySyncScene = false;
         SetActivePanel(Panel.Lobby);
-    }
+
+		PhotonHashtable playerProperty = new PhotonHashtable();
+        playerProperty[PlayerProp.SLOT_NUMBER] = -1;
+		PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperty);
+	}
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {

@@ -45,7 +45,7 @@ namespace RoomUI.PlayerSetting
 		/// </summary>
 		public void RemoveCloseSlot()
 		{
-			BtnChangeSlot.onClick.RemoveAllListeners();
+			//BtnChangeSlot.onClick.RemoveAllListeners();
 		}
 
 		/// <summary>
@@ -63,19 +63,30 @@ namespace RoomUI.PlayerSetting
 				if (SlotCurState == SlotState.Use)
 					return;
 
-				byte state = (byte)PhotonNetwork.CurrentRoom.CustomProperties[RoomProp.SLOT_STATE];
+				Debug.Log("ChangedSlotState");
 
-				if(SlotCurState == SlotState.Open)
+				byte state = (byte)PhotonNetwork.CurrentRoom.CustomProperties[RoomProp.SLOT_STATE];
+				
+				byte[] stateBit = BitConverter.GetBytes(state);
+				byte[] curSlotBit = BitConverter.GetBytes((byte)Math.Pow(2, SlotNumber));
+
+				byte result;
+
+				if (SlotCurState == SlotState.Open)
 				{
+					Debug.Log("OPEN");
+
 					//close
+					result = (byte)(stateBit[0] & ~curSlotBit[0]);
 				}
 				else
 				{
-					//open
-				}
+					Debug.Log($"{Convert.ToString(stateBit[0], 2)} ^ {Convert.ToString(curSlotBit[0], 2)} = {Convert.ToString((stateBit[0] ^ curSlotBit[0]), 2)}");
 
-				
-				PhotonNetwork.CurrentRoom.SetRoomProperty(RoomProp.SLOT_STATE, Convert.ToString(state, 2));
+					//open
+					result = (byte)(stateBit[0] ^ curSlotBit[0]);
+				}
+				PhotonNetwork.CurrentRoom.SetRoomProperty(RoomProp.SLOT_STATE, result);
 			}
 		}
 
@@ -91,6 +102,8 @@ namespace RoomUI.PlayerSetting
 			bool isOpen = state == SlotState.Open;
 			OpenSlot.gameObject.SetActive(isOpen);
 			CloseSlot.gameObject.SetActive(!isOpen);
+
+			SlotCurState = state;
 		}
 	}
 }

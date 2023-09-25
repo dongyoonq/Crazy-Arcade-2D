@@ -19,6 +19,8 @@ namespace RoomUI.ChooseTeam
 
 		private ToggleGroup toggleGroup;
 
+		private BtnTeam[] btnTeams;
+
 		private void Awake()
 		{
 			toggleGroup = GetComponent<ToggleGroup>();
@@ -34,45 +36,47 @@ namespace RoomUI.ChooseTeam
 
 		private void SetTeamInfo()
 		{
-			var teams = transform.GetComponentsInChildren<BtnTeam>();
+			btnTeams = transform.GetComponentsInChildren<BtnTeam>();
 			int index = 0;
 			foreach(var data in TempDatas)
 			{
-				teams[index].teamData = data;
-				teams[index].togChecked.group = toggleGroup;
-				teams[index].togChecked.isOn = false;
+				btnTeams[index].teamData = data;
+				btnTeams[index].togChecked.group = toggleGroup;
+				btnTeams[index].togChecked.isOn = false;
 				index++;
 			}
-			teams[0].togChecked.isOn = true;
+			btnTeams[0].togChecked.isOn = true;
 		}
 
         private void SetReturnTeamInfo()
         {
-            var teams = transform.GetComponentsInChildren<BtnTeam>();
+			btnTeams = transform.GetComponentsInChildren<BtnTeam>();
             int index = 0;
             foreach (var data in TempDatas)
             {
-                teams[index].teamData = data;
-                teams[index].togChecked.group = toggleGroup;
-                teams[index].togChecked.isOn = false;
+                btnTeams[index].teamData = data;
+                btnTeams[index].togChecked.group = toggleGroup;
+				btnTeams[index].togChecked.isOn = false;
                 index++;
             }
 
 			PhotonHashtable property = PhotonNetwork.LocalPlayer.CustomProperties;
-			BtnTeam findTeam = Array.Find(teams, x => x.teamData.TeamName == (string)property[PlayerProp.TEAM]);
+			BtnTeam findTeam = Array.Find(btnTeams, x => x.teamData.TeamName == (string)property[PlayerProp.TEAM]);
 			findTeam.togChecked.isOn = true;
         }
 
         public void InitTeam(Player player)
 		{
-			if(player.CustomProperties.ContainsKey(PlayerProp.TEAM) == false) 
-			{
-				PhotonHashtable property = new PhotonHashtable();
-				property[PlayerProp.TEAMCOLOR] = $"#{TempDatas[0].TeamColor.ToHexString()}";
-				property[PlayerProp.TEAM] = TempDatas[0].TeamName;
-				PhotonNetwork.LocalPlayer.SetCustomProperties(property);
-			}
+			PhotonHashtable property = new PhotonHashtable();
+			property[PlayerProp.TEAMCOLOR] = $"#{TempDatas[0].TeamColor.ToHexString()}";
+			property[PlayerProp.TEAM] = TempDatas[0].TeamName;
+			PhotonNetwork.LocalPlayer.SetCustomProperties(property);
 		}
+
+		public void InitTeam()
+		{
+			btnTeams[0].togChecked.isOn = true;
+		}	
 
         private bool CheckPlayingRoom()
         {
