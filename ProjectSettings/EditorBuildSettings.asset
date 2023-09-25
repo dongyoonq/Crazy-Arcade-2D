@@ -5,7 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/BeforeGameScene.unity
+    guid: 5b9a8c8e83fd12e46a7eec294d849c76
+  - enabled: 0
+    path: Assets/Game/KDY/GameScene.unity
+    guid: a2066de2a20992c40bcdf19fdb10d711
   - enabled: 1
-    path: Assets/Scenes/GuideLine.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/UI/Room/Scenes/RoomScene ver 4/BeforeScene.unity
+    guid: e57ce8400b0a3854199595ce797db4de
+  - enabled: 1
+    path: Assets/UI/Room/Scenes/RoomScene ver 4/GameScene.unity
+    guid: 6e4391f06719f7845b6d0622610e1a3e
   m_configObjects: {}

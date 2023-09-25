@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb3d9ed9455d2e42bd1868935633a7c, type: 3}
+  m_Name: Ethi
+  m_EditorClassIdentifier: 
+  Name: Ethi
+  NameKOR: "\uC5D0\uB760"
+  CharacterEnum: 5
+  Character: {fileID: 808675773, guid: 8d9b7413e16e2d44481f5d43a4f038bd, type: 3}
+  Description: {fileID: -2030123038, guid: f8de21b5ba8da0843acc97dff0637fb8, type: 3}
+  DefaultImage: {fileID: 706330257, guid: 24a02945d6efc7a4e8bcb925ec1635f7, type: 3}
+  ActiveImage: {fileID: -2053798779, guid: f8de21b5ba8da0843acc97dff0637fb8, type: 3}
+  CharacterSpec: {fileID: -1435011571, guid: f8de21b5ba8da0843acc97dff0637fb8, type: 3}
+  SelectedImage: {fileID: -1827242821, guid: e9f1cb058efa2274d89268fad529e2e0, type: 3}

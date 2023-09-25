@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb3d9ed9455d2e42bd1868935633a7c, type: 3}
+  m_Name: Dizni
+  m_EditorClassIdentifier: 
+  Name: Dizni
+  NameKOR: "\uB514\uC9C0\uB2C8"
+  CharacterEnum: 4
+  Character: {fileID: 1731076645, guid: 8d9b7413e16e2d44481f5d43a4f038bd, type: 3}
+  Description: {fileID: -207465292, guid: 43de1a56bc3dd1342886883c1f8af642, type: 3}
+  DefaultImage: {fileID: 1400349588, guid: a6500ba23575a6a459bbc8ca554f8796, type: 3}
+  ActiveImage: {fileID: -928153102, guid: 43de1a56bc3dd1342886883c1f8af642, type: 3}
+  CharacterSpec: {fileID: -1399470846, guid: 43de1a56bc3dd1342886883c1f8af642, type: 3}
+  SelectedImage: {fileID: -1568300200, guid: e9f1cb058efa2274d89268fad529e2e0, type: 3}

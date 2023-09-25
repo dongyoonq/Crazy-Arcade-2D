@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1cd927a6a63a0244974b5077334bf13, type: 3}
+  m_Name: FluidData
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 3758880888686213737, guid: 1d4e6a4010a2ee140b38a491e8e6ba59, type: 3}
+  price: 0
+  description: "\uBB3C\uC904\uAE30\uAC00 \uC384\uC9C0\uB294 \uC544\uC774\uD15C"
