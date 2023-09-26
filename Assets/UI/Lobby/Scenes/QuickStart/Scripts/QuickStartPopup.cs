@@ -8,6 +8,7 @@ using RoomUI.PlayerSetting;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
@@ -114,7 +115,6 @@ public class QuickStartPopup : MonoBehaviourPunCallbacks
 		PhotonHashtable playerProperty = new PhotonHashtable();
 		playerProperty[PlayerProp.READY] = true;
 		playerProperty[PlayerProp.CHARACTER] = chooseCharacter.CurrentCharInfo.characterData.CharacterEnum;
-		playerProperty[PlayerProp.TEAM] = ((Extension.TEAM)Random.Range(0, 8)).ToString();
 		PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperty);
 
 		RoomOptions roomOptions = new RoomOptions();

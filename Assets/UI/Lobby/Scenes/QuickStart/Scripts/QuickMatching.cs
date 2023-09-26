@@ -4,10 +4,12 @@ using KDY;
 using Photon.Pun;
 using Photon.Realtime;
 using RoomUI.Chat;
+using RoomUI.ChooseTeam;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static Extension;
@@ -39,6 +41,9 @@ namespace LobbyUI.QuickStart
 		[SerializeField]
 		private Scrollbar scrollbar;
 
+		[SerializeField]
+		private List<TeamData> teamColors;
+
 		private Coroutine changeScrollbarSizeRoutine;
 
 		private int mapId;
@@ -66,6 +71,9 @@ namespace LobbyUI.QuickStart
 
 		private void SetInPlayer()
 		{
+			
+			
+
 			CheckMatching();
 		}
 
@@ -74,8 +82,23 @@ namespace LobbyUI.QuickStart
 			if(PhotonNetwork.IsMasterClient)
 			{
 				if (PhotonNetwork.PlayerList.Count() > 1)
+				{
+					foreach (var player in PhotonNetwork.PlayerList)
+						SetTeam(player);
+
 					PhotonNetwork.LoadLevel("GameScene");
+				}	
 			}
+		}
+
+		private void SetTeam(Player player)
+		{
+			var teamNum = UnityEngine.Random.Range(0, 8);
+
+			PhotonHashtable playerProperty = new PhotonHashtable();
+			playerProperty[PlayerProp.TEAM] = teamColors[teamNum].TeamName;
+			playerProperty[PlayerProp.TEAMCOLOR] = $"#{(teamColors[teamNum].TeamColor).ToHexString()}";
+			player.SetCustomProperties(playerProperty);
 		}
 
 		private void MatchingFailed()

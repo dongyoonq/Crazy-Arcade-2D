@@ -377,11 +377,13 @@ namespace RoomUI
 										Count = x.Count()
 									});
 
-				int CntByTeam = teams.Count() / totalPlayer;
+				if (teams == null || teams.Count() == 0)
+					return false;
 
-				if(teams.Any(x => x.Count != CntByTeam))
+				int CntByTeam = totalPlayer / teams.Count();
+
+                if (teams.Any(x => x.Count != CntByTeam))
 				{
-					//roomNotifyPopup.OnNotifyPopup("팀 구성이 맞지 않아 게임을 시작할 수 없습니다.");
 					NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Critical, "팀 구성이 맞지 않아 게임을 시작할 수 없습니다."); 
 					return false;
 				}
