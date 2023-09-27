@@ -79,9 +79,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 			PhotonHashtable playerProperty = new PhotonHashtable();
 			playerProperty[PlayerProp.READY] = PhotonNetwork.IsMasterClient;
 			playerProperty[PlayerProp.LOAD] = false;
-            playerProperty[PlayerProp.CHARACTER] = CharacterEnum.Dao.ToString();
-			playerProperty[PlayerProp.TEAM] = "Red";
-			playerProperty[PlayerProp.TEAMCOLOR] = defaultTeamColor;
+
+            if(PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(RoomProp.ROOM_PLAYING) == false || (bool)PhotonNetwork.CurrentRoom.CustomProperties[RoomProp.ROOM_PLAYING] == false)
+            {
+				playerProperty[PlayerProp.CHARACTER] = CharacterEnum.Dao.ToString();
+				playerProperty[PlayerProp.TEAM] = "Red";
+				playerProperty[PlayerProp.TEAMCOLOR] = defaultTeamColor;
+			}
 			PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperty);
 		}
     }

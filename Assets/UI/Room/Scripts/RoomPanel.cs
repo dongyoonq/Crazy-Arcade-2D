@@ -70,7 +70,14 @@ namespace RoomUI
 			SetInPlayer();
 			CheckPlayerReadyState();
 
-			NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{PhotonNetwork.NickName}님이 참가하셨습니다.");		
+			NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Warning, $"{PhotonNetwork.NickName}님이 참가하셨습니다.");
+
+			if ((bool)PhotonNetwork.CurrentRoom.CustomProperties[RoomProp.ROOM_PLAYING] == true)
+			{
+				PhotonHashtable property = new PhotonHashtable();
+				property[RoomProp.ROOM_PLAYING] = false;
+				PhotonNetwork.CurrentRoom.SetCustomProperties(property);
+			}
 		}
 
 		private void OnDisable()
@@ -365,27 +372,43 @@ namespace RoomUI
 		{
 			RoomMode mode = (RoomMode)Enum.Parse(typeof(RoomMode), PhotonNetwork.CurrentRoom.CustomProperties[RoomProp.ROOM_MODE].ToString());
 
+			Debug.Log($"[CheckPlayerTeamBalance] {mode}");
+
 			if(mode == RoomMode.Manner)
 			{
 				var userList = playerDictionary.Where(x => x.Value.CurrentSlotState == SlotState.Use);
 
+
 				int totalPlayer = userList.Count();
+
 				var teams = userList.GroupBy(x => x.Value.PlayerSet.Team)
 									.Select(x => new
 									{
 										Team = x.Key,
 										Count = x.Count()
-									});
+									}).ToList();
 
 				if (teams == null || teams.Count() == 0)
 					return false;
 
-				int CntByTeam = totalPlayer / teams.Count();
-
-                if (teams.Any(x => x.Count != CntByTeam))
+				if (totalPlayer == 2)
 				{
-					NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Critical, "팀 구성이 맞지 않아 게임을 시작할 수 없습니다."); 
-					return false;
+					if (teams.Count() < 2)
+					{
+						NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Critical, "팀 구성이 맞지 않아 게임을 시작할 수 없습니다.");
+						return false;
+					}
+				}
+				else
+				{
+					int CntByTeam = totalPlayer / teams.Count();
+					Debug.Log($"[CheckPlayerTeamBalance] totalPlayer : {totalPlayer} / teams.Count() {teams.Count()} = {CntByTeam}");
+
+					if (teams.Any(x => x.Count != CntByTeam))
+					{
+						NotifyChat.OnNotifyChat?.Invoke(NotifyChatType.Critical, "팀 구성이 맞지 않아 게임을 시작할 수 없습니다.");
+						return false;
+					}
 				}
 			}
 			return true;
